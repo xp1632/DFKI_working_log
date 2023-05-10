@@ -1,0 +1,125 @@
+Issues 1005:
+-----------------------------------------
+1. Check SVGIcons in MUI https://mui.com/material-ui/material-icons/
+	-How to add icon
+		For reroute Icon, import RouteIcon from '@mui/icons-material/Route';
+		For comment Icon, import CommentIcon from '@mui/icons-material/Comment';
+	
+	-where to add Icon for search menu
+		We need to modify the StyledTreeItem.tsx
+		- How to only modify specific items in the tree
+			-check the example in official website https://mui.com/material-ui/react-tree-view/	
+			-The customization example and gmail clone example might work
+			-The customization example work for customization of same EndIcon, ExpandIcon, not suitable in our case
+			
+			-The gmail clone example that each item has a different icon works
+				just apply different icons for different treeitem
+				<StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
+			
+			-Now we need to find where we should add this in our code
+				-Before we modify the <StyleTreeItemRoot/> in StyledTreeItem
+					But it add same icon to every item includs parent and children
+				- In SearchTreeView.tsx, however, we find function renderTreeItem
+					It has different behavior for item.root and item.children
+			
+			
+	-What kind of Icon we're using now?
+		We are using Icon in filled style
+	
+ 
+1.1 Check IconButton in MUI https://mui.com/material-ui/api/icon-button/
+
+
+2. modify SearchInput
+	-Change the padding 
+	in SearchInput.tsx, function SearchInput 
+	we modify the padding in <Input> to top right bottom left(4px,0px,0px,4px)
+	
+	-Change the Icon in SearchBar
+	we noticed that it's a tenrnary expression input? ClearButton :SearchButton
+	The ClearButton is wrapped in <IconButton> while SearchButton not
+	
+	The style of both ClearButton and SearchButton are set as 
+	sx={{ width: '20px', marginRight: '-4px', paddingBottom: '2px' }}
+	
+
+3. Check API for Treeitem :https://mui.com/material-ui/api/tree-item/
+
+4. Check interface in Typescript https://typescript.bootcss.com/interfaces.html
+-Interfaces defines the shape of type for certain value
+-? means optionally
+
+TreeItemData defines interface with id,name that is must-have
+here id is NodeId, name is labelText
+
+5. In function nodeConfigToTreeItemData()
+we return treeItemData and here we define if a treeItem has children
+based on its children.length, if the length>0 then children, else undefined
+
+6.To set different icon for 'Add Comment' Item
+	-I would like to modify in SearchedTreeView.tsx renderTreeItem
+	-add if else based on labelText we get from item:TreeItemData
+	-and set labeIcon accordingly as in <StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
+
+【】Another way is to modify a higher level interface, which is TreeItemData,
+We add labelIcon prop to it and also add the labelIcon to
+its related function commandsToTreeData
+
+7.Check Overflow-x https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-x
+	-when overflowX is auto, the default scroll bar should be hidden
+	-however ours is not hidden, the reason is we have horizontal paddings 
+	  in MenuItem, which is beyond the range of X-axis
+	-Thus we need to shorten TreeItem
+	-Or enlarge the default menu 
+	
+	 -Also maybe the padding is caused by the search bar on top,
+	 but when we changed the width of search bar, the x scoller bar still exist
+	 
+	【】Solevd: The padding is from the theme of styled function in StyledTreeItemRoot
+	in StyleTreeItem.tsx, set the paddingRight:theme.spacing(0),paddingLeft:theme.spacing(0)
+	
+	We add some padding to icon in SearchedTreeView.tsx, <TreeView>
+	
+-------------------------------------------
+Main task today:
+
+1. Search Menu
+	-Modify the searchinput component
+	-Add icon or reduce the left padding space to 'Add Comment' the menu 
+	-hide the overflowX scorll bar in default and show it when needed
+
+2. NodeExtension component styling as in jupyter
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. First define what's the problem, then check is there official API,
+ is there similar usecase/example in official website that we can modify
+ 
+ 2. A & in TS in the context of a types means an intersection type.
+It merges all properties of 2 object types together and creates a new type
+
+3.Abstract the if-else to upper interface and add attribute there is a better way
+for object-oriented coding
+
+4. Use search(ctrl shift f)
+/find all references more instead of scanning the code by your eyes
+
+------------------------
+Tomorrow:
+
+Edge Menu Margin
+NodeExtension 
+
+
+ 
+ 
