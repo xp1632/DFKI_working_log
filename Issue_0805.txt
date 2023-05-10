@@ -1,0 +1,111 @@
+Issues 0805:
+-----------------------------------------
+0. After pull the project
+DO NOT npm audit after npm install the environment
+
+1. Delete CR in every end of line
+Solved in git bash :
+git config --global core.autocrlf false
+Then pull the project again
+
+2. Why the code is in Typescript instead of JS?
+TS is a superset of JS, which can define the datatype
+
+-Learn high-level knowledge of TS https://blog.csdn.net/gao511147456/article/details/125809525
+-Example code of TS 
+<script type="text/typescript">
+	var hw:string="Hello World!";
+	document.write(<h1>"+hw+"<h1>);
+</script>
+
+3. Tortoise Git
+How to use it
+
+4. Jupterlab 
+-How to install:
+install in cmd 
+pip install jupyterlab
+
+-How to start 
+type in cmd
+jupyter lab
+
+5.Getting to know the project
+
+Find the code location of Context Menu by dev Tool
+-Found the div and class of context menu but we need to find the code that generate the elements
+
+Found the gui/EdgeMenu.tsx to generate the menu
+-Need to find where to modify the css code, because MUI styles seem to wrapped in pre-defined component <Menu/> 
+
+Check the custimization in MUI website to find out where to modify the size and padding etc.
+-found the way to custimize style of component
+example code:
+--------------------
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
+const CustomButton = styled(Button)({
+  // your custom styles go here
+}) as typeof Button;
+---------------------
+
+Another way to modify the menu is to use the internall parameter
+[sx]
+https://mui.com/system/getting-started/the-sx-prop/
+Get to learn more about 
+
+Final solution of custom components : https://mui.com/system/getting-started/custom-components/
+6. How to modify Menu component in MUI:
+
+-<MenuList dense> when the list is long
+-<Paper sx={{ width: 320, maxWidth: '100%' }}>  to change width
+
+-------------------------------------------
+
+Main task today:
+
+0. Learn Basic TS to understand the project code: https://blog.csdn.net/gao511147456/article/details/125809525
+
+0.5 Learn MUI fast and know its useful component,such Menu
+	-to understand menu component, go through https://mui.com/material-ui/react-menu/ 
+	-to understand sx props, go through https://mui.com/system/getting-started/the-sx-prop/
+	-to understand list component,go through https://mui.com/material-ui/react-list/
+
+1. take the style of jupterlab's context menu and extensions as reference
+
+
+2. modify the style in four context menu
+	The four context menus are
+	-Background menu(search menu)
+	-Node menu
+	-Node point menu(handle menu)
+	-Node line menu(edge menu)
+	
+	
+----------------------------------------------
+My thoughts:
+
+1. The interactivity of line and nodepoint are not obvious, more hints need to be added
+- such as in https://mui.com/material-ui/react-progress/ to show the functioning line with animation
+- Or hovering effect
+
+2.Snack bar could be a good hint for telling the state of node 
+https://mui.com/material-ui/react-snackbar/
+
+3. Tooltip is also a good way for hint of specific small functioning
+https://mui.com/material-ui/react-tooltip/
+
+--------------------------------------------
+Take away:
+-Use dev tool to locate more
+-use !important to apply some rules first
+
+
+
+
+
+
+
+
+

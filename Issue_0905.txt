@@ -1,0 +1,130 @@
+Issues 0905:
+-----------------------------------------
+1.Modify the padding of MenuItem 
+ -The extra left padding from MeneItem is removed
+ -The extra top/bottom padding also need to be removed
+	- the padding is changed to 2px as in jupyter
+  
+ 
+2.Change the size and padding of SVG ICON
+- size to 16x16px
+
+3.Change the size of listitem or menu item to make it longer
+-the width of listitemtext is set to 256px
+
+4.Add the cutting line between the iconed item and the last 'Break Node Link' item
+-Its called divider in MUI 
+
+5.decrease the shadow of the menu edge -not important
+
+6.change the font size of text
+font size- 15px
+
+7. Add the underline for first Letter -not important
+
+8. Color of right side text to black 
+
+9. Check the usage of typography
+https://mui.com/material-ui/api/typography/
+
+10. Check the referce table of name of props in CSS and MUI
+https://mui.com/system/properties/
+
+11. Check the legend in MUI
+
+1 spacing equals 8 pixel
+-------
+<Button sx={{ mb: 3 }} />
+
+// is equivalent to
+<Button sx={{ marginBottom: theme => theme.spacing(3)}} />
+-------
+equals in CSS
+.my-class {
+  margin-bottom: 24px;
+}
+-------
+
+12. change MUIlist width to make the menu more square-like
+<MenuList> 's width is set as 230px
+
+14. Check TreeView in MUI https://mui.com/material-ui/react-tree-view/
+
+15. The structure of Search menu is a little complicated
+- It seems to have a struture(top to bottom) of 
+   [SearchMenu-> SearchedTreeView-> StyledTreeItem -> TreeItem]
+   
+Need to find the correct place to add styling
+In StyledTreeItem.tsx, <StyledTreeItem>--><Box>--><Typography>
+
+
+-------------------------------------------
+Main task today:
+
+1. Mock  the exact style of Jupyter's context menu
+ -make the right margin of text same as the left
+ -shorter in width in whole 
+ -text of ctrl , the same with jupyter menu
+ 
+ -set the top/bottom padding of the MenuList to 4px
+ -force the fontSize to 15px
+ 
+2. Search Menu
+ -Add Typography to text in order to keep same font and size
+	-Need to find TreeItem
+	-In StyledTreeItem.tsx, <StyledTreeItem>--><Box>--><Typography> change font
+	-In StyledTreeItem.tsx, <StyledTreeItem>--><Box> change padding
+	
+ -Remove extra spaces at the bottom of the search menu 
+	-But not too small ,better 'auto' in height
+		-set <TreeView> 's sx as height:'auto' in SearchedTreeView.tsx
+		-set maxHeight to 230px
+		
+	-because the items in the tree view coudl be a lot 
+	
+ - consider adding two icon before 'Add Comment' 'Add Reroute'
+
+----------------------------------------------
+My thoughts:
+
+1. Now when we have multiple MeneItem,
+and we would like to change the style of it,
+we change it multiple times in different places
+It's hard to maintain the code in this way
+
+-Better create a theme to make the code more concise.
+- We could parameterise the theme after we have an initial version
+
+2. Also If we have a lot of requirements in customizing style,
+is it better that we use the Basic UI that privide by MUI
+then we do not need to spend a lot of time in removing the paddings from default MUI style 
+ 
+ -Check Basic MUI, next step
+ 
+	2.1. I find an easier way to remove default paddings
+		for example in MeneItem https://mui.com/material-ui/api/menu-item/
+		-we have dense(bool) prop for dense padding designed for keyboard
+		-and disableGutter(bool) prop to remove left,right padding
+	
+3. Is it okay that the padding and font are set with pixel?
+When zoom in and zoom out, it might cause problems
+
+-No problem
+
+--------------------------------------------
+Take away:
+
+1. The padding : 2 and padding:"2px" is different in MUI,
+	MUI uses theme.spacing, 1 default spacing is 8 px
+	https://mui.com/system/properties/#legend
+	
+2. parameterise the style later when we have a initial version
+
+3. Only give access to the data that we don't want to hide from the user
+
+4. Commit when one unit function is finished , keep lastest version with server
+
+-----
+Tomorrow:
+
+Add icon or reduce the left padding space to 'Add Comment' the menu 
