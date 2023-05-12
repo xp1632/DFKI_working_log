@@ -1,0 +1,129 @@
+Issues 1205:
+-----------------------------------------
+1. Check the theme in MUI, because we've met it twice in project
+	https://mui.com/material-ui/customization/theming/#themeprovider
+	https://mui.com/material-ui/experimental-api/css-theme-variables/usage/
+	
+	ThemeProvider should be the parent of the components you are trying to customize
+		-didn't look too deeper, just for understanding the usage
+		
+	-theme.palette defines the color theme https://mui.com/material-ui/customization/palette/
+	-theme.typography defines the font family and font size https://mui.com/material-ui/customization/typography/
+	-theme.spacing defines the space unit, default 1 spacing = 8 pixel https://mui.com/material-ui/customization/spacing/
+	-theme.breakpoints defines different screen size(xs,sm,md,lg,xl) for responsive design https://mui.com/material-ui/customization/breakpoints/
+	-theme.z-index defines a third axis to arrange content https://mui.com/material-ui/customization/z-index/
+	-theme.transition defines simple interactive animation for components https://mui.com/material-ui/customization/transitions/
+	-theme.components, we can define default style for each components https://mui.com/material-ui/customization/theme-components/
+	
+	-Nest theme:
+	Innertheme would override outer Theme when themes are nested
+	
+	-useTheme hook, we can use hook useTheme inside the components:
+		function DeepChild() {
+		  const theme = useTheme();
+		  return <span>{`spacing ${theme.spacing}`}</span>;
+		}
+	
+2.Check Accordion: https://mui.com/material-ui/react-accordion/
+	
+-Acoordion consists of <AccordionSummary> as item title
+					<AccordionDetails> as item content
+	2.1 The Accordion Component in NodeLibraryList.tsx	is styled <MuiAccordion>
+	
+3. Modify AccordionSummary(Title)
+	-remove the background color in the theme of styled AccordionSummary
+	-modify the Icon of expansion from ArrowForward to PlayArrowIcon
+		-slight modify the width of icon later
+	-change the letter space of font
+		-1px
+	-change the font of title 
+		-Jupyter used font apple 12.5px, we used Roboto 12.5
+	-Add hover effect for Title 
+	-change the left padding of title or Icon
+		-the padding of icon is set as 8px
+	-remove the right border,right border in the theme
+	
+	-Why is this title so tall in height?
+		We have disableGutters prop in MUIAccordion, could it be the reason?
+		-No.
+		
+		The height is becase the AccordionDetails is that tall
+		The Title keeps the height from the item. Yes, they are both 947px x 64
+		
+		Why?
+		in the Customization example :https://mui.com/material-ui/react-accordion/
+		The Title doesn't have the same height with the content
+		
+		-The default minHeight from the MUI css is 48px
+		 we changed it to 20px and set the currentHeight to 32px
+	
+
+	
+4. Modify the bottom border of the items in the panel <AccordionDetails> (Content)
+			Where's the bottom border?
+			The bottom border is defined in another file
+			NodeLibraryItem.tsx
+			The structure is <AccordionDetails> --> <NodeLibraryItem>
+
+5. Modify the search bar
+	in SearchInput.tsx,change the width to 100%
+	change the border
+	-if we should move the place of Icon to the right, later
+
+6. Modify the NodeLibraryItem's title,description, button
+
+	for button, we need to define hover effect
+-------------------------------------------
+Main task today:
+
+1.Finish checking MUI.theme
+2.Check Accordion Components
+
+3. Modify NodeExtension Layout
+	-Mock the style of jupyter extension side bar
+	-pay attention to if the content looks the same when in the page and when in sidebar
+		The Divider Component's width should be '100%'
+		The MenuItem's width is flexiable and the content in it is auto
+		We don't have a ICON for package, do we need one?
+	
+	-The color of the menuitem title is not correct
+	-The color of the menuitem discription is not correct
+	-The color of divider line is not correct
+	
+	-The icon/font of 'Installed' is not the same
+		
+	-The button should be no border, no default color, with hover effect
+	
+	-The transition speed of jupyter is 0s
+	
+	-The 'install' button needs more padding and no border 
+	
+	-The search bar is a part of this, it also needs modification
+		-but we'll start from the accordion 
+		-The border of search bar should be 4 ways and flex to whole page
+
+--------------------------------------------
+Take away:
+1. we create a mui theme with help of this tool: 
+https://zenoo.github.io/mui-theme-creator/
+
+2. Innertheme would override outer Theme when themes are nested
+
+3. We can use hook useTheme inside the components:
+function DeepChild() {
+  const theme = useTheme();
+  return <span>{`spacing ${theme.spacing}`}</span>;
+}
+
+4.When testing with random numbers, test both largest and smallest
+
+--------------------------
+Next Week:
+
+1. Remove Round corner of drop and drag file opened
+
+2. encapsule our code 
+3. How to use other people's code, set clear boundary between our code and others
+ set a specific interface to use third-party function
+ 
+Button,event, passing props
