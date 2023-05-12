@@ -1,0 +1,73 @@
+Issues 1105:
+-----------------------------------------
+1. Locate NodeExtension's code in the project
+	-Search 'this is a package including...' and find src-->NodeTypeExtension
+	-The text is in __init__.json respectively
+	
+	-Search for 'MuiAccordionDetails' ,
+		Find the file NodeLibraryList.tsx
+
+2. We start modifying from MUI's Accordion Component 
+	-Check Accordion in https://mui.com/material-ui/react-accordion/
+	
+3. Aria label is semantic tags for Accessibility of disabled people https://legacy.reactjs.org/docs/accessibility.html
+
+4. Check the theme in MUI, because we've met it twice in project
+	https://mui.com/material-ui/customization/theming/#themeprovider
+	https://mui.com/material-ui/experimental-api/css-theme-variables/usage/
+	
+	ThemeProvider should be the parent of the components you are trying to customize
+		-didn't look too deeper, just for understanding the usage
+		
+	-theme.palette defines the color theme https://mui.com/material-ui/customization/palette/
+	-theme.typography defines the font family and font size https://mui.com/material-ui/customization/typography/
+	-theme.spacing defines the space unit, default 1 spacing = 8 pixel https://mui.com/material-ui/customization/spacing/
+	-theme.breakpoints defines different screen size(xs,sm,md,lg,xl) for responsive design https://mui.com/material-ui/customization/breakpoints/
+	-theme.z-index defines a third axis to arrange content https://mui.com/material-ui/customization/z-index/
+	-theme.transition defines simple interactive animation 
+	
+-------------------------------------------
+Main task today:
+
+1.Edge Menu,Handle Menu's Padding
+	-changed to <MenuList> 's padding to 4px in the top and bottom as in NodeMenu
+
+2.NodeExtension  
+	-Mock the style of jupyter extension side bar
+	-pay attention to if the content looks the same when in the page and when in sidebar
+		The Divider Component's width should be '100%'
+		The MenuItem's width is flexiable and the content in it is auto
+		We don't have a ICON for package, do we need one?
+	
+	-The color of the menuitem title is not correct
+	-The color of the menuitem discription is not correct
+	-The color of divider line is not correct
+	
+	-The icon/font of 'Installed' is not the same
+	-The button should be no border, no default color, with hover effect
+	
+	
+----------------------------------------------
+My thoughts:
+
+1. I would like to know how to evoke different context menu base on cursor location
+2. I would like to start the UI layout design course in coursera
+
+
+--------------------------------------------
+Take away:
+
+1. In github, when we commit we can refer the issue we solve in commit msg:
+as : (#174) ;Or we could link the commit to the issue, 
+<Code> -->your branch --> 344 commits--> Copy the issue number
+---> Add the issue number in the comments of cerntain issue
+
+2.ThemeProvider should be the parent of the components you are trying to customize
+	
+3. Material UI uses rem units for the font size, rem is root em
+
+---------------------
+Tomorrow:
+1.Finish checking theme
+2.Check Accordion Components
+3. Modify NodeExtension Layout
