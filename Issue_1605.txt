@@ -1,0 +1,169 @@
+Issues 1605:
+-----------------------------------------
+1.How to toggle the state of input?
+	-double-clicked state is too annoying, we use isDisabled instead
+	-You can not disable a component and try to enable it by adding event 
+	to itself, after a component is disabled, it doesn't accept further event
+
+	
+2. The toggle problem is solved in another way
+	-We define a parent div for controling editable state, 
+	 onDoubleClick, the editable state would be changed from
+	 default false to true
+	 
+	-Inside the parent div, 
+		We define two component
+		-A <div> that only show up when !editable
+			{!editable &&(<div>...</div>)}
+		-A <textarea> that only show up when editable
+			<textarea style={{display:editable? 'block':'none'}}>
+		
+		We define a if/else inside useEffect
+		-When editable is true, 
+			inputAreaRef(The reference from useRef of TextArea)
+				inputAreaRef.current.focus();
+		-Else , inputAreaRef.current.blur();
+		-This function would render when [editable] changes
+		-It forces focus,blur event based on editable state we defined
+		
+		We define event of onBlur and onKeyDown as setEditable(false);
+
+3. We have resize bugs, initial node width conflict  fixed by Fei
+
+4. When the text in textarea is too many lines,
+it exceed its parent node, and show in the outside of parent container
+
+	-check overflow:https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-wrap
+		-overflow-wrap is how to deal with a long-word
+		-normally overflow:scroll would solve the problem of exceeding the edge
+		
+	-However, the problem is TextArea has an auto height and width
+	-while the parent node of TextArea, Comment Node 
+
+-------------------------------------------
+Main task today:
+
+1. A detailed implementation would be:
+	-encalpusulate the code in Titleinput.tsx
+	-import Titleinput in src/index.tsx for testing 
+	-Define the default boolean state of input
+		-when single click, no change would happen, prevent default
+		-Define the interface for double-click,keydown('Enter')
+		-Define the default css
+		-The input is not editable in this state
+		
+	-Define the double-clicked state of input
+		-Define the double-clicked css
+		-Define the clicked css (which should be the same as default)
+		-The input is editable in this state
+
+	-Define the setState function that changes the bool state
+		-Define the function of double-click
+		-Define the function of Keydown('Enter')
+-----We have another two-component solution
+
+At last we use a component hide/show trick to solve the problem
+
+2. After the double click, when the text inside comment node
+enters editing mode, there's a movement caused by border.
+We do not want this movement.
+	-The reason we see the movement is that
+	-We have 1pixel border in <TextArea>, and we don't have padding/border in
+		Static <div> that we hide when we enter edit mode
+	-So during the hide/show of two components, we see a movement
+	
+	Solution: add same padding 
+	
+	-2.1 The padding 8px topbottem, 10px leftright of node header
+		are from the VPEditor.css --> .node__header
+	[VPEditor.css] is quite important, the root of node style is defined here
+	
+	
+3. placeholder of 'Please double-click to edit the comment'
+didn't work, we still have 'This is a comment node'
+	
+
+4. Modify the CommentNode to NoteNode
+	-commit the CommentNode code with auto overflow as a start
+	-add a new note component branch
+	
+	- modify the node.header, body
+		-move the orginal textarea functionbility from header to body
+		-or delete Node.body, Node.header, and use div instead?
+	
+	- modify the handle's css to make the resize function more clear
+	
+	- Add two buttons 
+	
+	- Add pin/unpin function button, this body enable dragable or not for node
+	
+	- Add Color picker function button: Color Chooser Node https://reactflow.dev/docs/guides/state-management/#add-a-color-chooser-node
+
+5. CommentArea:tbc
+
+6. MiniMap :tbc
+
+--------------------------------------------
+Take away:
+
+1. You can not disable a component by its click event then
+want it to accept another event to enable it
+
+2.The toggle problem is solved in another way
+	-We define a parent div for controling editable state, 
+	 onDoubleClick, the editable state would be changed from
+	 default false to true
+	 
+	-Inside the parent div, 
+		We define two component
+		-A <div> that only show up when !editable
+			{!editable &&(<div>...</div>)}
+		-A <textarea> that only show up when editable
+			<textarea style={{display:editable? 'block':'none'}}>
+		
+		We define a if/else inside useEffect
+		-When editable is true, 
+			inputAreaRef(The reference from useRef of TextArea)
+				inputAreaRef.current.focus();
+		-Else , inputAreaRef.current.blur();
+		-This function would render when [editable] changes
+		-It forces focus,blur event based on editable state we defined
+		
+		We define event of onBlur and onKeyDown as setEditable(false);
+		
+3. Difference of Readonly and disabled:
+
+readonly indicates that the user cannot modify the value of the control. 
+Unlike the disabled attribute, 
+the readonly attribute does not prevent the user from 
+clicking or selecting in the control
+
+4. [VPEditor.css] is quite important, the root of node style is defined here
+
+5. [Rebase] in Github: 'rebase' is when you and your college both work on 
+a branch and you two start from the same base
+However, he/she finishes their part and commit/push their code first
+
+Now this branch has a new base which is different from your original
+base where you start your work from
+
+In this occasion, before you commit your part of code,
+you first pull(rebase), this action would add your college's code
+into your original base, and move you to the new base in this branch
+
+Then from this new base, your code is commit and pushed.
+
+rebase avoid unneccessary new branch
+
+6. Capture Event: 
+https://stackoverflow.com/questions/7398290/unable-to-understand-usecapture-parameter-in-addeventlistener
+
+7. How to delete branch that is not up-to-date
+	-For remote branch, in git bash, we enter:
+		git pull --prune
+	-For local branch, we use ctrl shift p to open the cmd in VS code
+		git:delete local branch
+--------------------------------------------
+Tommorow:
+
+Sticky Node
