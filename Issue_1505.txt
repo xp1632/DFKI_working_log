@@ -1,0 +1,159 @@
+Issues 1505:
+-----------------------------------------
+1.Check Text Field https://mui.com/material-ui/react-text-field/
+
+2.Where to modify the title of Comment Node?
+Check the the onClick Function of 'Add Comment' 
+	-See how the comment node is generated
+	- 'This is a comment node' text is from NodeTypeExtension/VPFileExample.json
+		-The title is stored as a Node's data:{label:'This is...'}
+		-  data: { label: <div>Default Node</div> },
+		-A React Component can also be passed as label
+		
+		
+	-The Comment node is added by SearchMenu.addNode
+		-The .addNode action is from src/widgets/VPEditor.tsx
+		-VPEditor.tsx is quite important ,check the file
+		
+
+3.Check ReactFlow https://reactflow.dev/
+	-Reactflow is a node-based application library: node,handle,edge
+	-Check Custom Node https://reactflow.dev/docs/guides/custom-nodes/
+	
+	-Check useCallback, is a React Hook that lets you 
+	cache a function definition between re-renders.((),[dependency])
+	
+	-All node and edge ids need to be unique
+	
+4. Where should I add the new component? GUI?
+	-Add TitleInput.tsx in GUI folder with reference to SearchInput
+	- 
+	
+5. Return type of Typescript when defining a function
+
+6. How to toggle the state of input?
+
+-------------------------------------------
+Main task today:
+
+1. Review the pull request in Github
+
+2. #77 Edit Comment Component
+	-double-click the static title, --> 
+	change to edit mode -->
+	enter/onBlur to save
+
+bool value disable edit blabla, in place edit
+
+- two ways, css from readonly to edit
+- or change the component
+
+2.1 First Implement this TitleInput component 
+	- to test easier we test it in a new MenuItem in the EdgeMenu
+	-And we add the css class 'titleInput' we defined in index.css
+	
+	- To test it independently. we test it in src/index.tsx
+	
+2.2 Then figure out how to connect it with the Comment node
+
+2.3 focus is not suitable for double-click
+	add a boolean value of clicked and if editable 
+	onKeydown 
+	
+	prevent default
+
+2.4 A detailed implementation would be:
+	-encalpusulate the code in Titleinput.tsx
+	-import Titleinput in src/index.tsx for testing 
+	-Define the default boolean state of input
+		-when single click, no change would happen, prevent default
+		-Define the interface for double-click,keydown('Enter')
+		-Define the default css
+		-The input is not editable in this state
+		
+	-Define the double-clicked state of input
+		-Define the double-clicked css
+		-Define the clicked css (which should be the same as default)
+		-The input is editable in this state
+
+	-Define the setState function that changes the bool state
+		-Define the function of double-click
+		-Define the function of Keydown('Enter')
+	
+
+----------------------------------------------
+My thoughts:
+
+Single click has influence on double click event
+we need to solve it with a timer
+https://blog.csdn.net/first_shun/article/details/93378412
+
+Follow this :
+https://blog.csdn.net/Charonmomo/article/details/122432811
+
+Or we should follow Fei's solution which is easier, we modify the css file
+
+and in input we set the click event as 
+
+		onDoubleClick={(e) => {
+
+          (e.target as HTMLElement).focus();
+
+        }}
+
+        onClick={(e) => {
+
+          (e.target as HTMLElement).blur();
+
+        }}
+
+
+--------------------------------------------
+Take away:
+1. We can change the position of Adornment simply
+by changing from 'startAdorment' to 'endAdorment' in SearchInput component
+
+2.Start Jupyter Lab in Cmd by typing jupyter lab
+
+3.inside sx, we add hover,focused effect by
+' '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+          borderColor: 'none',
+        }, '
+		
+4. We align Items in the menu by 
+' 		display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+'
+
+5.Now we have independent css file for NodeLibraryList
+
+6.We can add class and external css file for the items that we use 
+in multiple places
+
+-we set the className VP_MenuList for MenuList, 
+-import index.css in index.ts file-> import './index.css';
+-in index.css we define the universal style
+	.VP_MenuList {
+	  padding-top: 0px !important;
+	  padding-bottom: 0px !important;
+	  margin: 6px !important;
+	}
+
+7.When modifying the styles, we prefer to change a parent node first
+in order to keep the generalization
+
+-For example, when we would like to add some space 
+to a MenuList on a MenuPanel,
+it would be better if we first add universal margin to a class 
+of MenuList;
+then we add universal padding to a class of MenuItem
+
+This would be better comparing with modifying paddings in
+each MenuItem manually 
+
+8. When creating branch, remember to update the local repo
+And creat from remote lastest version
+
+9. Test the component in a independent environment
+	-for example, in src/index.tsx
