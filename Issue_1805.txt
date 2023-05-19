@@ -1,0 +1,107 @@
+Issues 1805:
+-----------------------------------------
+1. Change the area that could be drag,which is changing the draghandle for node:
+	https://reactflow.dev/docs/examples/nodes/drag-handle/
+	
+	-[!!]However, we find out that both Comment node and StickyNote can only be dragged
+	on the top of the node, it caused by dragHandle 
+	in extension/buildin.json
+	and
+	editor/Deserializer.tsx
+	
+	-Acoording to the example in website, dragHandle just except a string
+	which is the className of element like <div> we defined by ourself
+
+	-After remove the dragHandle for stickyNode , we can still only drag it by Textarea
+		-Might caused by the 'enable'-focus logic from <InPlaceTextarea/>  
+		-After removing the 'enableDrag' className of parent div of <InPlaceTextarea/>
+		the drag didn't work
+		
+		-modify the original InPlaceTextarea/ is tedious, consider enlarge 
+		.node__body or Textarea
+		
+	-Or we could enlarge the .node__body only for StickyNote node
+
+	-We don't need to enlarge any element, we just move the className enableDrag logic
+	to the most outside of <div>, because the draghandle is only define by className
+	
+1.1 We'll see if we could also modify the Original CommentNode with same way
+	-I don't think commmetNode need this, consider that we're going to use it as commentarea
+	-we should only move it by it's title
+
+1.2 After we modify the the div out side the <InPlaceTextarea/>, we resize component 
+is conflicted
+	-I try to assign a new className .stickyNode__node__body for the most outer <div> of <StickyNote>
+	-and change the dragHandle in buildin, however it seems not to work
+	-need to find out why
+		-The reason is that the dragHandle is actually defined in Deserializer.tsx
+		-After we change it here,  the self-defined '.stickyNote__node__body--enabled'
+		works
+	
+	-The editing mode also didn't work as intended, 
+		check the logic of <InPlaceTextarea/> and <CommentNode> again
+		
+	-However the resize's conflict is not solved, why?
+		-Check the NodeResizer https://reactflow.dev/docs/api/nodes/node-resizer/
+		-We first find out why CommentNode doesn't have conflict
+		-At last we find out the bizzar left-top padding, come from
+		the self-defined 5px padding and default config for node
+	
+	-And the drag-handle problem is solved by expand the initial rows of textarea
+	to enlarge the draghandle 
+
+2. Add placeholder for <InplaceTextArea> component
+
+
+-------------------------------------------
+Main task today:
+
+0. change dragHandle of StickyNote into a self-define element's className
+
+1.- Add pin/unpin function button, this body enable dragable or not for node
+	
+	- Add Color picker function button:  
+		-how to update a node's color https://reactflow.dev/docs/guides/state-management/
+
+2. MiniMap :tbc
+
+3. CommentArea:tbc
+
+4.modify the handle's css to make the resize function more clear
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Why part of the Node settings are in extensoion/buildin.json
+not in VPFileExample.json, and define the draghandle etc here too?
+Is it because of blackbox?
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. When meeting a complex problem:
+ -first, simplify the testing environement, reduce the influence from others 
+ 
+ -second, go through the structure from most outer part to the inner part
+	find all the process and node involves
+	
+ -third, layer by layer, ensure each layer passed the data correctly
+ 
+ -Importantly, don't guess around, look through the actual code and documentation
+ 
+ --------------------------------
+ Tommorow:
+ 1. Add functionality to two buttons
+ 
+ 2. MiniMap
+ 
+ 

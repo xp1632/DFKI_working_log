@@ -1,0 +1,178 @@
+Issues 1705:
+-----------------------------------------
+1. How to show the sticky node on the app page?
+	-from searching 'load default', in index.tsx, we find 
+	setContent(),example with type SerializedGraph
+		-example is from 'VPFileExample.json', where all the initial value of node in the flow are defined
+			-we add the node with id 7, type:sticky-note
+				but we didn't define the sticky-note type, for now we use 'comment 'type
+				try to find out where to define this type
+		-setConetent is a hook we set the content as deepcopy of example file
+		-after the content is set from the example json, we pass it to <VPEditor>
+		
+		
+	-Now we go to <VPEditor> .tsx, to see how it consume the passed content
+		-It's basically a <reactflow/> component
+		-I need a quick through of reactflow props,mainly on customization of node
+			-Guide:https://reactflow.dev/docs/guides/custom-nodes/
+			-API: https://reactflow.dev/docs/api/nodes/custom-nodes/
+			-Example: https://reactflow.dev/docs/examples/nodes/custom-node/
+			-onSelectionDragStart? ; onSelectionStart? 
+			-nodesDraggable? selectNodesOnDrag?
+		
+	-We find in nodes/index.ts, we define other VisualNodetypes
+		-The stickyNote type is added here and in types/ file, a StickyNote type is created 
+		-However, when we try to import this type in StickyNoteNode.tsx, the module is not found
+		-The way of setting a new node type is correct, not found is caused by wrong import
+		
+		[Error]: Cannot read properties of undefined
+		-Search for the type comment, try to see where it's defined
+			-We find in Deserializer and Serializer.ts
+			-We also need to define the type StickyNote in these two files
+			
+		-And we find buildin.json where the packages is defined
+		-And the buildin.json is passed to LoadDefaultModule() where we load the packages in to repo
+		
+		-Then we also add the stickynode in buildin.json
+	
+	!!!!Now we have a new type of node: stickyNote, it would appears as part of the default too
+	
+
+	
+2. How to remove the original header/body structure in Node?
+	-In StickyNoteNode.tsx, the node__body <div> is easily removed
+		-But the bottom border from node__head class css remains
+		-We would like to remove it
+
+	-We find the universal css style is defined in VPEditor.css
+		-Here .node__head is defined with border_bottom
+		-I think we should not modify the style of node__head
+		-We should move it to head body instead
+	
+	-We move the inPlaceTextArea widget into node__body
+	-And we change the dragHandle of stickyNote in Deserializer
+	from '.node__head--enabled'
+	to '.node__body--enabled'
+	
+	- And inStickyNoteNode we change the className of parent div of <InPlaceTextArea> to
+	className={enableDrag  
+			? 'node__body node__body--enabled'
+            : 'node__body node__body--disabled'
+        }}
+	enableDrag is a boolean state that we defined with default value false
+
+2.1 Change the area that could be drag,which is changing the draghandle for node:
+	https://reactflow.dev/docs/examples/nodes/drag-handle/
+	
+	-[!!]However, we find out that both Comment node and StickyNote can only be dragged
+	on the top of the node, it caused by dragHandle 
+	in extension/buildin.json
+	and
+	editor/Deserializer.tsx
+	
+	-Acoording to the example in website, dragHandle just except a string
+	which is the className of element like <div> we defined by ourself
+
+	
+-------------------------------------------------------------------------
+3. The TextArea is moved to node__body, however a horizional
+	bar we would not want is showed
+		-I would like to fix this by adjust the text content and textarea width
+		from 100% to 95%
+		-However, this makes the text in the textarea not in the center
+		-There's unexpected right margin
+	-We change the width in InPlaceTextArea's display text and textarea to 'auto'
+		This makes the stickyNote works, however there's problem for commentNode
+		Also it caused problem when the node resize
+	-We need another solution, maybe just make the node larger? --Not the reason, check the devTool again
+
+We add padding to the parenet node of resize and inplacetextarea, problem solved
+	
+3.1 We would like to enlarge the default area of textarea for StickyNote
+Or we could remove the border of textarea when focus
+
+	
+
+4. Custom Node in reactflow : https://reactflow.dev/docs/api/nodes/custom-nodes/
+	-Node Options--> type: ('input' | 'output' | 'default') & CustomNodeypes
+	-Node Options--> type:draggable? If option is not set, the node is draggable (overwrites general nodesDraggable option)
+	-Node Types --> we have default node type: 
+					{
+					  input: InputNode,
+					  default: DefaultNode,
+					  output: OutputNode
+					  group: GroupNode
+					}
+	The keys represent the type names and the values are the components that get rendered
+
+
+-------------------------------------------
+Main task today:
+
+1. Modify the CommentNode to NoteNode
+
+	- define a new node type : stickyNote
+
+	- modify the node.header, body
+		-move the orginal textarea functionbility from header to body
+		-or delete Node.body, Node.header, and use div instead?
+	
+	- modify the handle's css to make the resize function more clear
+	
+	- Add two buttons // through NodeToolbar
+	
+	- Add pin/unpin function button, this body enable dragable or not for node
+	
+	- Add Color picker function button:  
+		-how to update a node's color https://reactflow.dev/docs/guides/state-management/
+	Color Chooser Node https://reactflow.dev/docs/guides/state-management/#add-a-color-chooser-node
+
+2.The floating toolbar might be easier than add two more buttons:
+<NodeToolbar /> https://reactflow.dev/docs/api/nodes/node-toolbar/
+
+3. The other way is to modify the node type, but I'm not sure if it's a better solution
+
+
+
+----------------------------------------------
+My thoughts:
+
+1.Fei's double-click edit solution  in Chinese: https://juejin.cn/post/7131886494716788767
+
+2. In reactflow, the <Control> component's lock interactivity could be useful
+
+3. We could use two inner button for color and lock, instead of toolbar 
+to keep all function inside the component 
+
+
+--------------------------------------------
+Take away:
+
+1.remember to check the index.tsx in the project
+because that's normally where the root function locates
+
+2.remember to useCallback() to change the state inside reactflow etc
+for example: 
+ const onStartEdit = useCallback(() => {
+    setEnableDrag(false);
+  }, []);
+
+3. Unwanted scoller bar normally appears when the inner space of parenet node is too small
+-We can easily solve it by adding padding to parenet and give more space for children node
+
+4. How to rebase in another way:
+https://verdantfox.com/blog/view/how-to-git-rebase-mainmaster-onto-your-feature-branch-even-with-merge-conflicts
+
+--------------------------------------------
+Tomorrow:
+
+0. change dragHandle of StickyNote into a self-define element's className
+
+1.- Add pin/unpin function button, this body enable dragable or not for node
+	
+	- Add Color picker function button:  
+		-how to update a node's color https://reactflow.dev/docs/guides/state-management/
+
+2. MiniMap :tbc
+
+3. CommentArea:tbc
