@@ -1,0 +1,87 @@
+Issues 1905:
+-----------------------------------------
+1. The original icons are not satisfying, we choose another color icon from MUI
+and the possible pin icon may need to be found in other website
+
+2. We start from the color picker buttuon beacause we already have component in Reactflow
+	check the color chooser here:
+	https://reactflow.dev/docs/guides/state-management/
+	and 
+	https://reactflow.dev/docs/examples/nodes/custom-node/
+	check the update node here: https://reactflow.dev/docs/examples/nodes/update-node/
+	
+	-They use another state management library zustand, should I also use it?
+	-Or we only use part of it
+		-where does the Color palette panel come from?
+
+2.1 Check useNodeState hook: 
+https://reactflow.dev/docs/api/hooks/use-nodes-state/
+
+The example is too complicated, the only thing we need to use is <input type:'color'/>
+
+However they recommend Zustand as state management library
+
+2.2 We need to figure out how to keep the button for show and the functional inoput color
+in the same place
+	-We can not give a icon to input element because it doesn't accept children
+	-We can put them in a <div> and set different z value for them
+	-Ugly, maybe just remove the button
+
+2.3 Where to set the color, at first we set the color to the parent node 
+
+3. Remember to test resize after the color set problem is solved
+	We need to minus the height of new button bar we add
+	
+	
+4.With Pinned function, we might need a good encapusulation for it because we may use this 
+wiget elewhere
+
+	-And a button click visual effect is needed 
+	-className="nodrag" could easily forbid the user from dragging
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1.- Add Color picker function button:  
+		-how to update a node's color https://reactflow.dev/docs/guides/state-management/
+		
+	detailed implementation:
+	1. We click the button on a specific node 
+		//Now we click the button, the bgColor changes from white to black
+		
+	2. A color palette panel pop up
+		// we only need to figure out where's panel comes from and should it be a input
+		it comes from <input type="color">
+	3. user choose a color 
+		//we pass the color value to background color
+	4. Cureent node's background color is updated
+	
+	
+2. - Add pin/unpin function button, this body enable dragable or not for node
+	1. first find out how to show svg in button
+	2. It shows behind the lock Icon
+	3. Too annoying, maybe do the dragable first
+	
+3. React svg icon
+https://www.freecodecamp.org/news/how-to-use-svg-icons-in-react-with-react-icons-and-font-awesome/
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
