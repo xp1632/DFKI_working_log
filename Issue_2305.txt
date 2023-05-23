@@ -1,0 +1,163 @@
+Issues 2305:
+-----------------------------------------
+1.Minimap
+
+	- Why the customized minimap appeared at the bottom right while the buttons define around it is
+at the top of the window?
+
+	- Minimap seems to be a float svg that is fixed-located at bottom-right
+	
+	-How should we make the button around it?
+
+2. Check the <Controls/> component in reactflow
+https://reactflow.dev/docs/api/plugin-components/controls/#extended-controls
+
+	-Check how control panel lock the interactivity of all nodes 
+		-Will it be confilict with our pin?
+		
+	-Can we use control button to control the map two?
+		-That we move the control component to the bottom-right as well
+		-Then we add another button to it, and this button controls the hide/show minimap
+		
+2.1 After editing the control button's display from flex to inline-block
+Now the buttons in the control panel are located horizontally
+
+	-Maybe instead of define new buttons that float around MiniMap,
+	we could add a horizontal control panel inside MiniMap  
+	
+	-I'll try this way first, if it doesn't work, I'll continue the customized div around 
+	minimap
+	
+	-I didn't see control panels after adding control panel to Minimap, why?
+	-Because it's hidden behind the map,how should I change the control panel's location?
+		-We cannot set 'relative' position in <Controls/> component
+		-We can try wrap the panel into a div and let the div to be relative to minimap
+		
+	
+3. Ways to hide an element:
+	There are two ways to hide element:
+		-display:none
+		-visibility:hidden
+		
+	-The difference is that visibility way still occupies the original element's place
+it's just we could not see it
+	-The display:none would let the element fully disappear
+
+
+4. To move the top-left buttons around the bottom-right minimap:
+
+we add a container which is parent node to both buttons and map
+then we add
+
+      style={{
+        position: 'absolute',
+        bottom: '30px',
+        right: '30px',
+      }}
+
+5. Why the button click doesn't work?
+
+becase it's hid behind other elements, problem solved with a new zIndex
+
+
+
+
+-------------------------------------------
+Main task today:
+1. Modify the padding edge of pinbutton and color-picker button in sticky node
+
+2. Change the break-word in Intextarea's css
+
+3. Minimap
+
+4. Check this pull request of how to clean the code
+	https://github.com/Max-ChenFei/VisualProgrammingEditor/pull/197
+
+--------------------------------------------
+Take away:
+
+1. Ways to hide an element:
+	There are two ways to hide element:
+		-display:none
+		-visibility:hidden
+		
+	-The difference is that visibility way still occupies the original element's place
+it's just we could not see it
+	-The display:none would let the element fully disappear
+	
+
+2. Avoid duplicate menu item patten creation 
+https://github.com/Max-ChenFei/VisualProgrammingEditor/pull/197/commits/3aece3a928b302987384611e5330834adbec51f0
+
+To avoid duplication,
+
+- we could first define an interface for the Item
+- then we define the unified format and type of this item, such as:
+
+	interface IMenuItem {
+	  title: string;
+	  action?: () => void;
+	  icon?: any;
+	  subtitle?: string;
+	  disabled?: boolean;
+	  titleStyle?: Record<string, string>;
+	}
+- we pass the item.data in the format of this type:
+	const items: IMenuItem[] = [
+    {
+      title: 'Cut',
+      action: onCut,
+      icon: ContentCut,
+      subtitle: 'Ctrl+X',
+    },
+    {
+      title: 'Copy',
+      action: onCopy,
+      icon: ContentCopy,
+      subtitle: 'Ctrl+C',
+    },]
+-then we define a function that create and return MenuItem based on items value
+	-there're certain rules to use the item data
+	
+-At last inside the <MenuList/>, we create and map the MenuItems     {items.map((item) => createMenuItemElement(item))}
+
+2.1 Further more, we could extract the upper to a function that create menu
+https://github.com/Max-ChenFei/VisualProgrammingEditor/pull/197/commits/c4f08725c6c6e5a4006f17a1757405c7600e710a
+	
+Then we just pass diffrent item.data when we need difference menu
+
+const items: IMenuItem[] = [
+    {
+      title: 'Delete',
+      action: () => {
+        onDelete?.();
+        onClose();
+      },
+      icon: DeleteIcon,
+      subtitle: 'Del',
+    },
+  ];
+  return CreateMenu(open, onClose, anchorPosition, items);
+}	
+
+3. We can have more clean import path by https://github.com/Max-ChenFei/VisualProgrammingEditor/pull/197/commits/a10ef6fcc146653610bc0fbb407609dbac04388f#diff-7cfb6c54b12b3598413a4814306a0523b60fbe3f717d5d316b731bcec69ed462
+
+-Add a index.ts to the folder elements, and export all the modules inside this folder in index.ts
+-Then when we wants to import the components in elements folder, we don't need a long and accurate path
+-we could just import from ./elements
+
+4. How can we modify the createMenu function and add more parameter to it:
+https://github.com/Max-ChenFei/VisualProgrammingEditor/pull/197/commits/c6d28682133ceaa9795448eb840476c7f9a26ed4
+
+-We define new parameters at the top of the function
+-use it to replace the hard-code inside the body of function
+-and pass the new-added parameter when creating new instance
+
+
+--------------------------------------------
+
+This week: 
+
+1. Theme the project 
+2. Use case
+3. css of other panel
