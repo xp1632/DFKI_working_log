@@ -1,0 +1,91 @@
+Issues 2405:
+-----------------------------------------
+1.Check MUI themeing: https://mui.com/material-ui/customization/theming/
+	-Themes let you apply a consistent tone
+	-ThemeProvider is based on React's context feature
+		-so just like other provider
+		-ThemeProvider should be the parent of the components that we
+		would like to get the theme
+	
+	
+2.Check useCallback and useEffect
+ https://react.dev/reference/react 
+ https://blog.51cto.com/u_15127496/2664294
+ https://www.jianshu.com/p/3c68580eae70
+
+3.Check flexGrow https://juejin.cn/post/6844904105362587661
+
+4. Check https://refactoring.guru/ for better code
+
+-------------------------------------------
+Main task today:
+
+1. Summarize the two git pulls
+
+
+2. Use the MUI theming, to unify the css of different component
+
+	-check two issues in github that related to theme
+	-it contains the atttributes that we want to include in theme
+
+
+--------------------------------------------
+Take away:
+
+1. When define a new type, remember to add it in the type folder's index.ts
+so we'll have a more clean import path
+
+2.
+----------------------------------------------
+Code Rules Summary:
+
+-Naming Rules
+
+	-Naming should consider scope
+	-Naming should tell its function 
+	-Naming should keep consistent form 
+	-No 'Customized'
+	
+-Renaming Rules
+	-After renaming a function name with 'Rename Symbol',
+	remember to change it manually in its component folder's index.ts
+
+-CSS Rules
+
+	-When the content is not fixed-sized,we prefer to use display:flex 
+		instead of hard code padding px
+	-However, if the content is fixed-sized, when we have to use hard code or relative
+	position, we can use it.
+	
+	-When should we set the css in .css file, when should we just keep it styled inline
+		-for the styles that we want the user to modify in future
+		we keep it in css file
+		-for the styles that are finalized by us and wanna no change by others
+		we keep it inline, so no one modifies the inside of blackbox except us
+		
+
+-Import Rules
+	-Keep a clean import path by encapsulate function in its folder module,
+	which is export it in parent folder's index.ts
+	-Keep the third party import at the top and our functions at the bottom
+	
+
+-Div Hierarchy Rules
+	-Review the hierarchy of <div> after finishing the code
+	-Remove unused <div>
+	-Make sure from top element to bottom element, all layers of elements 
+	are correctly sized and located
+		-which means the children element is nicely wrapped by parent element,
+		with proper and necessary padding if needed
+		
+	
+-Delete Rules
+	-Delete the code that only 'could be useful' 'in future', 
+	we need to keep current code clean
+	-Delete the code that has redundant function with others, keep the code simple
+
+-----------------------------------
+-Abtraction Rules
+
+	
+	
