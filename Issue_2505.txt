@@ -1,0 +1,296 @@
+Issues 2505
+-----------------------------------------
+1.Check MUI themeing: https://mui.com/material-ui/customization/theming/
+	-Themes let you apply a consistent tone
+	-ThemeProvider is based on React's context feature
+		-so just like other provider
+		-ThemeProvider should be the parent of the components that we
+		would like to get the theme\
+		
+!- Where's root component of VPEditor?
+which part should we wrap into <ThemeProvider> <App/> </ThemeProvider>
+
+1.1 Color in MUI:https://mui.com/material-ui/customization/palette/
+	-The Palette color is define based on context:
+	-'primary' color to indicate primary elements, most freuquently color for components
+	-'secondary' color is optional, to indicate secondary elements, add accent to product
+	-'error' color represent elements that user should be aware of
+	-'warning' color represent dangerous actions or important messages
+	-'info' color for neutral, not so important information
+	-'success' color to indicate success of an action that user triggered
+
+1.2 Typography:
+	-Varients:
+	h1,h2,h3,h4,h5,h6,subtitle1,subtitle2,body1,body2,button,caption,overline
+
+1.3 Spacing: https://mui.com/material-ui/customization/spacing/
+	-default spacing 1 = 8px
+	
+	const theme = createTheme({
+	  spacing: 4,
+	});
+
+	theme.spacing(2); // `${4 * 2}px` = '8px'
+
+	-Or we define margin based on it
+	margin: theme.spacing(1, 'auto'), // '8px auto'
+	
+	-Or we use a function to calculate rem
+	const theme = createTheme({
+	  spacing: (factor) => `${0.25 * factor}rem`, // (Bootstrap strategy)
+	});
+
+	theme.spacing(2); // = 0.25 * 2rem = 0.5rem = 8px
+
+1.4 breakpoint is for multi-size device, we only need desktop version
+
+1.5 density is a prop that makes the components looks more dense
+https://mui.com/material-ui/customization/density/
+
+1.6 transitions: 
+	
+2.It seems to be easy to define theme for MUI components, how should I add theme to
+react flow components?
+
+	-Reactflow
+		-We Have Node,Edge,Handle, Backgroundin reactflow
+		
+	-MUI components:
+		-We Have Toolbar, ContextMenu, Acoordion, Typography,Divider,
+		Search Bar, Input Adornments, List
+		
+
+3. How should I add color to MUI componets?
+	-just use color attribute in <Component />, and set it with predefined class:
+		'primary','secondary'....
+	such as:
+	<Button variant="contained" color="success">
+		Success
+	</Button>
+	
+	-We can override default theme or create our theme and use it everywhere
+	
+4. MUI has a new version, check the new component:
+	
+-Button:https://mui.com/material-ui/react-button/
+	-Button has different  varient :
+	'text'(no border), ---->
+	'contained'(filled color),---->
+	'outlined' (no bgcolor, with border)---->
+	
+	-Button has different size: 'small','medium','large'
+
+-Floating Action Button :https://mui.com/material-ui/react-floating-action-button/
+	A circular shape button with an icon
+	-Perform most freuquent actions
+
+-TextField have attribute margin: 'none','dense','normal'
+
+-Chip is a grey rounded rectangle for user to: https://mui.com/material-ui/react-chip/
+enter information, make selections, filter content, or trigger actions.
+
+-[The MUI components]:  that is not checked this time:
+https://mui.com/material-ui/react-typography/
+[Feedback], [Navigation],[Layout],
+
+
+5. The components that need theme most is the sx ones
+	-because sx is like an injection of styles
+	
+6. How to style Component without className?
+	-For component that could be add a className:
+		Add a classname for it
+	-For the component that doesn't accept more parameters
+		Styled function it 
+	Search Customization in https://mui.com/material-ui/react-table/
+
+7. Semantic self-defined css name: By checking the style in jupyter lab,
+ -I found out in the index.css, 
+ :root{}
+ The color,font,width we defined has meaningful name that tells where it is used
+ 
+ for example: 
+ here --xxxxx is the self-defined property that has certain value
+ var() is the place where the self-defined property is called
+ 
+ -Color:
+    --jp-border-color0: var(--md-grey-400);
+    --jp-border-color1: var(--md-grey-400);
+    --jp-border-color2: var(--md-grey-300);
+    --jp-border-color3: var(--md-grey-200);
+	
+-Border radius, font size, font-family
+    --jp-border-radius: 2px;
+    --jp-ui-font-scale-factor: 1.2;
+    --jp-ui-font-size0: 0.83333em;
+    --jp-ui-font-size1: 13px;
+    --jp-ui-font-size2: 1.2em;
+    --jp-ui-font-size3: 1.44em;
+    --jp-ui-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+ 
+    --jp-code-font-family-default: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    --jp-code-font-family: var(--jp-code-font-family-default);
+
+8.Where should I Create and put theme?
+	
+	-in a large theme file, and useTheme in components?
+	
+	import { useTheme } from '@mui/material/styles';
+
+	function DeepChild() {
+	  const theme = useTheme();
+	  return <span>{`spacing ${theme.spacing}`}</span>;
+	}
+
+9. What should be included in the theme?
+
+	-Only the properties that we wanne modification by user, right?
+	
+
+-------------------------------------------
+Main task today:
+1. use MUI Theme creator to create theme
+	https://zenoo.github.io/mui-theme-creator/
+
+1.5 We first define the self-defined color, and style overwrite The MUI components
+
+2. We start update theme in node folder or gui folder
+
+3. This is a good exmaple of styling components with complicated-self-defined css
+https://codesandbox.io/s/9isft6?file=/demo.tsx
+
+	-Basically  we style a component from MUI and style it,
+	-'& .MuiSlider-thumb' means we have further setting 
+	for an element with Classname MuiSlider-thumb
+		-this element's focus, hover effect are also defined inside its {}
+			'& :focus, &:hover':{}
+-------------------------------------------------------------
+const IOSSlider = styled(Slider)(({ theme }) => ({
+  color: theme.palette.mode === 'dark' ? '#3880ff' : '#3880ff',
+  height: 2,
+  padding: '15px 0',
+  '& .MuiSlider-thumb': {
+    height: 28,
+    width: 28,
+    backgroundColor: '#fff',
+    boxShadow: iOSBoxShadow,
+    '&:focus, &:hover, &.Mui-active': {
+      boxShadow:
+        '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
+      // Reset on touch devices, it doesn't add specificity
+      '@media (hover: none)': {
+        boxShadow: iOSBoxShadow,
+      },
+    },
+  },
+  '& .MuiSlider-valueLabel': {
+    fontSize: 12,
+    fontWeight: 'normal',
+    top: -6,
+    backgroundColor: 'unset',
+    color: theme.palette.text.primary,
+    '&:before': {
+      display: 'none',
+    },
+    '& *': {
+      background: 'transparent',
+      color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+    },
+  },
+  '& .MuiSlider-track': {
+    border: 'none',
+  },
+  '& .MuiSlider-rail': {
+    opacity: 0.5,
+    backgroundColor: '#bfbfbf',
+  },
+  '& .MuiSlider-mark': {
+    backgroundColor: '#bfbfbf',
+    height: 8,
+    width: 1,
+    '&.MuiSlider-markActive': {
+      opacity: 1,
+      backgroundColor: 'currentColor',
+    },
+  },
+}));
+-------------------------------------------------------------
+
+4.!!!! This is how we use customTheme style overrides API
+https://codesandbox.io/s/uthf9l?file=/demo.tsx
+
+5, This is how to style specific components such as Textarea
+----------------------------------------------
+My thoughts:
+
+1. I find an component that aimed for the first-time instruction, 
+it could be usefule for VPEditor: intro.js-react:
+
+https://introjs.com/docs/wrappers/react
+Code: https://github.com/HiDeoo/intro.js-react#example
+Demo: https://codesandbox.io/embed/o2A4gwXE3?hidenavigation=1
+
+2. To fix error: ResizeObserver loop limit exceeded
+
+https://stackoverflow.com/questions/75774800/how-to-stop-resizeobserver-loop-limit-exceeded-error-from-appearing-in-react-a
+
+
+3. Dark mode for theming by the switch button here:
+https://mui.com/material-ui/react-switch/
+--------------------------------------------
+Take away:
+0. the props in theme :https://mui.com/material-ui/customization/default-theme/?expand-path=$.zIndex
+1. customTheme: https://codesandbox.io/s/uthf9l?file=/demo.tsx
+
+2. meaning of -- and var() : https://developer.mozilla.org/en-US/docs/Web/CSS/var
+
+	-- means this property is self-defined:
+	var() is how we use this self-defined property:
+	for example:
+	
+	:root {
+	  --main-bg-color: pink;
+	}
+	body {
+	  background-color: var(--main-bg-color);
+	}
+
+	-[The var -- could be nested], for example:
+		1. we define a color --md-grey-400: #bdbdbd
+		2. we define an usecase for this color, which is border:
+		--jp-border-color0: var(--md-grey-400)
+		3. and we can use this border property in a more detailed version of border:
+		
+		--jp-toolbar-border-color : --jp-border-color0
+
+
+!!!! we can not use var() in MUI creatTheme
+https://mui.com/material-ui/customization/theming/#theme-configuration-variables
+⚠️ vars is a private field for CSS theme variables. 
+It will throw an error if you try to pass a value to it:
+
+3. Icon: fontawesome.com is convenient for searching for icons
+
+4. for toggle darker mode: https://codesandbox.io/s/jmyfkf?file=/demo.tsx
+	dark mode later
+	
+5. For MUI components, if we want a global theme, in the createTheme({});
+	we styleOverrides it:
+	
+	const theme = createTheme({
+	  components: {
+		// Name of the component
+		MuiButton: {
+		  styleOverrides: {
+			// Name of the slot
+			root: {
+			  // Some CSS
+			  fontSize: '1rem',
+			},
+		  },
+		},
+	  },
+	});
+	
+6. if we want a nested theme, which i prefer not to,
+check this first: https://mui.com/system/styles/advanced/#theme-nesting

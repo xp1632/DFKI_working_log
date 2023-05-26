@@ -1,0 +1,161 @@
+Issues 2605:
+-----------------------------------------
+1.!- Where's root component of VPEditor?
+
+which part should we wrap into <ThemeProvider> <App/> </ThemeProvider>
+
+2. For MUI components,  we overwrites them in theme.component.THIScomponent.styleOverrides
+	For <div> or other Components that is not a part of MUI,
+	we:
+	1. call the hook useTheme 
+	2. get the 'theme' that we defined
+	3. use it in the components' style :
+	
+----------------------------------------
+import React from 'react';
+import { useTheme } from '@mui/material/styles';
+import { Handle, NodeProps, Position } from 'react-flow-renderer';
+
+interface CustomNodeProps extends NodeProps {
+  position: Position;
+}
+
+export default function CustomNode({ id, type, data, position }: CustomNodeProps): JSX.Element {
+  const theme = useTheme();
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        backgroundColor: theme.palette.primary.main,
+        borderRadius: theme.shape.borderRadius,
+        boxShadow: theme.shadows[0],
+        padding: theme.spacing(1),
+        top: position.y,
+        left: position.x,
+      }}
+    >
+      <Handle type="target" position="left" style={{ backgroundColor: theme.palette.secondary.main }} />
+      <div>{data.label}</div>
+      <Handle type="source" position="right" style={{ backgroundColor: theme.palette.secondary.main }} />
+    </div>
+  );
+}
+---------------------------------------------------------
+
+3. For components that uses sx, use sx means it is MUI components:
+	-we either define the style in the theme's overwrite
+	-Or if one components needs different styles in different places,we just replace some attribute
+	with theme.xxxx
+
+4. Check the demos in codesandbox, 
+	other demos are in likes in codesandbox.io
+	
+	-How to define diffrent blue, or different grey: https://codesandbox.io/s/58ko6i?file=/demo.js
+	export default function EmptyTextarea() {
+	  const blue = {
+		100: '#DAECFF',
+		200: '#b6daff',
+		400: '#3399FF',
+		500: '#007FFF',
+		600: '#0072E5',
+		900: '#003A75',
+	  };
+
+	  const grey = {
+		50: '#f6f8fa',
+		100: '#eaeef2',
+		200: '#d0d7de',
+		300: '#afb8c1',
+		400: '#8c959f',
+		500: '#6e7781',
+		600: '#57606a',
+		700: '#424a53',
+		800: '#32383f',
+		900: '#24292f',
+	  };
+
+	  const StyledTextarea = styled(TextareaAutosize)(
+		({ theme }) => `
+		width: 320px;
+		font-family: IBM Plex Sans, sans-serif;
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.5;
+		padding: 12px;
+		border-radius: 12px 12px 0 12px;
+		color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+		background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+		border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+		box-shadow: 0px 2px 24px ${
+		  theme.palette.mode === 'dark' ? blue[900] : blue[100]
+		};
+	  
+		&:hover {
+		  border-color: ${blue[400]};
+		}
+	  
+		&:focus {
+		  border-color: ${blue[400]};
+		  box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+		}
+	  
+		// firefox
+		&:focus-visible {
+		  outline: 0;
+		}
+	  `,
+	  );
+
+	  return <StyledTextarea aria-label="empty textarea" placeholder="Empty" />;
+	}
+------------------------------------------------------------
+	
+
+-------------------------------------------
+Main task today:
+
+1. find where we should useTheme
+	-searching for from '@mui' and find 15files that uses MUI components:
+
+2. find where we should wrap it with <ThemeProvider>
+	-by checking index.tsx in the outest layer of project
+	-we find the outer structure of VP project is :
+		<App /> ---> <MainArea /> ----> 
+	{<Progeress/>, <NodeLibraryList/>, <VPEditor />}
+
+	-we first try wrap the theme outside of <App/> as the example code do
+
+3. According to the 15files that contains @mui, we start from 
+
+	1. <Minimap />  2.<StickyNoteNode />
+
+	-They have <Button />, we can define the theme for button with:
+		padding,
+
+4. Level of abstraction:
+
+https://hanxiao.io/2020/08/02/Layer-of-Abstraction-when-Building-Tensorflow-for-Search/
+		
+
+--------------------------------------------
+Take away:
+
+- Currently the global theme we developed has limitation, we consider a layered-abstraction
+css management system
+
+-Other options to manage CSS in your project. 
+
+Here are a few alternatives:
+
+-CSS Modules: CSS Modules is a popular approach to managing CSS in React projects.
+	It allows you to write CSS styles in a modular way, where each component has its own CSS file. 
+	CSS Modules also provides a way to generate unique class names for each component, which helps to avoid naming conflicts.
+
+-Styled Components: Styled Components is a library that allows you to write CSS styles using JavaScript. 
+	It provides a way to create styled components that encapsulate both the markup and the styles. 
+	Styled Components also supports theming, which allows you to define a set of styles that can be reused across your app.
+
+-Sass: Sass is a preprocessor for CSS that allows you to write CSS styles using variables,
+	mixins, and other features that are not available in plain CSS. 
+	Sass can be used in combination with React to manage CSS styles in your app.
