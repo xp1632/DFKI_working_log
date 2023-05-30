@@ -1,0 +1,163 @@
+Issues 3005:
+-----------------------------------------
+1.I've create a new branch Feat/theming based on the newest version of main
+
+2. Check two or three ariticles about css code management:
+	BEM Naming Rule:  https://zhuanlan.zhihu.com/p/57712910
+
+	https://juejin.cn/post/6863361715158024205
+	
+	https://floatdai.com/blog/CSS/%E5%87%A0%E7%A7%8DCSS%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/
+	
+
+2.1 CSS Naming Rule-BEM:
+	BEM: Block element modifier, 
+	
+	.block{} : block means higher abstraction level of components
+	.block__element{} : block__block means a part of block, we need it for forming a complete block
+	.block--modifier{} : block--modifier means different version/state of block
+	
+	-Normal CSS naming: 
+	<div class="student">
+		<div class="content">
+		  <button class="button-primary"></button>
+		  <button class="button-success"></button>
+		</div>
+	</div>
+
+	-BEM CSS naming:
+	<div class="student">
+    <div class="student__content">
+      <button class="student__contentv--primary"></button>
+      <button class="student__content--success"></button>
+    </div>
+  </div>
+
+3. Check CSS Modules, it seems to be different than I thought:
+	https://www.ruanyifeng.com/blog/2016/06/css_modules.html
+	
+4. Check Less: https://less.bootcss.com/
+
+5. According to the screenshot that Fei sent, what he means is:
+
+	-we have different layers of css
+	-each layer's css only contain and be in charge of its own scope of stylings
+	-the common attribute is defined use -- and var() as in jupyter's css
+
+5.1 However, what should we do with sx, the MUI components style? 
+	Or what does Fei mean by 'theme':
+	Fei's theme is to define the most-used values as variables
+	
+	for example:
+	-in src/editor/gui/elements/Menu.tsx:
+	the fontsize and 
+-------------------------------------------
+Main task today:
+
+1. According to the screenshot that Fei sent, what he means is:
+
+	-we have different layers of css
+	-each layer's css only contain and be in charge of its own scope of stylings
+	-the common attribute is defined use -- and var() as in jupyter's css
+	
+2. Check CSS Modules
+	Use CSS Modules to manage the css files in the project?
+
+
+----------------------------------------------
+My thoughts:
+1. Read one of the article before leaving:
+	-event bubble  https://stackoverflow.com/questions/7398290/unable-to-understand-usecapture-parameter-in-addeventlistener
+	-refactory guru https://refactoring.guru/
+	-abstraction ? https://hanxiao.io/2020/08/02/Layer-of-Abstraction-when-Building-Tensorflow-for-Search/
+
+	-zustand  -state management library https://dev.to/franklin030601/using-zustand-with-react-js-9di
+
+2. Read paper:
+	https://arxiv.org/pdf/2202.08946.pdf
+	
+3. I found a state management library called 
+
+	Redux: https://cn.redux.js.org/
+	We could compare it with zustand 
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. How to clear unused local and remote branches in VS code
+
+For local branch:
+	- change to another branch that we would like to keep
+	- git branch -d  <local_branch_name>
+
+For remote branch that we've already delete but is not synchronized with our local git
+	-git fetch -p
+	
+2. A good vision of software engineering:
+	-Decoupling: lower the dependency across components https://juejin.cn/post/7168276922667892772
+	
+3. All the native css rules are global,
+	the only way to have a 'scoped' css rule is to have a unique className
+	
+4. Three ways of manage css files in large project:
+
+	1. Css Modules
+	
+	2. BEM naming rules(Ours)
+	
+	3. CSS in JS (not recommanded anymore) https://juejin.cn/post/7165670146017591309
+
+5. Our css management using var():
+
+	[-]for external css file
+	we define the property at the top
+	:root {
+	  --my-color: #ff0000;
+	}
+	then use it as :
+	
+	backgroundcolor: var(--my-color);
+	
+	[-]for inline css, style={}
+	we can define the property in css file or in a style block in the head of html file
+	
+	then we use it as :
+	<div style={{color:'var(--my-color)'}}> </div>
+	
+	[-] for MUI components' sx
+	const CustomButton = styled('button')(({ theme }) => ({
+	  backgroundColor: theme.palette.primary.main,
+	  color: theme.palette.primary.contrastText,
+	  borderRadius: theme.shape.borderRadius,
+	  padding: theme.spacing(1),
+	  border: 'none',
+	  cursor: 'pointer',
+	  fontSize: 'var(--my-font-size)',
+	}));
+
+	export default function MyComponent(): JSX.Element {
+	  return (
+		<div>
+		  <CustomButton sx={{ '--my-font-size': '16px' }}>Click me</CustomButton>
+		</div>
+	  );
+	}
+	
+6. Paper Symphony: Composing Interactive Interfaces for Machine Learning
+https://arxiv.org/pdf/2202.08946.pdf
+
+-Shortcoming for existing ML interfaces: not designed to be reused/explored and shared in cross-functional team
+
+-Our framework can be used accross platform, from computational notebook to web dashboard
+
+-they cited interactive programming widgets (e.g., ipywidgets [32], Streamlit [31]) that
+give practitioners insights into what their datasets contain and
+how their models behave, they also that these widgets are lack of usage of unstructured data such as images, audio
+
+-Our framework Symphony has a code environment like Jupyter, and a non-code environment as web-based UIs
+
+
+
