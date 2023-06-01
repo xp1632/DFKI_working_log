@@ -1,0 +1,110 @@
+Issues 3105:
+-----------------------------------------
+1. Check normal CSS theming:
+	https://blog.logrocket.com/a-guide-to-theming-in-css/
+	
+	-css variables or called custom property
+		define in root:
+		:root {
+	   --black: #000;
+		}
+		use elsewhere:
+		a {
+	   color: var(--black);
+		}
+2.  Searched for styled():
+	-We use styledTreeItem 
+	-And StyledAccordion
+
+	try deleting the useless property and move the important ones to sx
+
+2.1 The styledTreeItemRoot is used in SearchedTreeView and ConnectionTip
+	-We find that the original styledTreeView is a little ugly
+	-we need to remove the css that is not functioning
+	-only keep the ones that works 
+	-then put them in the correct sx part
+	
+2.2 After putting it in sx, we notice some visual change for other menu
+	Why?
+	We are only modifying the treeview
+	it should not be like this 
+	
+	-The Menu.tsx is exactly the same
+	-The index.css is exactly the same
+		-the difference seems to be the 0px!important works in outside but
+		not the inside of var 
+
+
+-------------------------------------------
+Main task today:
+
+ 1. Clean the MUI's styled() style into sx
+
+----------------------------------------------
+My thoughts:
+
+1.Check useCallback and useEffect
+ https://react.dev/reference/react 
+ https://blog.51cto.com/u_15127496/2664294
+ https://www.jianshu.com/p/3c68580eae70
+
+2.Check flexGrow https://juejin.cn/post/6844904105362587661
+
+
+--------------------------------------------
+Reading:
+
+1. Read one of the article before leaving:
+	-event bubble  https://stackoverflow.com/questions/7398290/unable-to-understand-usecapture-parameter-in-addeventlistener
+	-refactory guru https://refactoring.guru/
+	-abstraction ? https://hanxiao.io/2020/08/02/Layer-of-Abstraction-when-Building-Tensorflow-for-Search/
+
+	-zustand  -state management library https://dev.to/franklin030601/using-zustand-with-react-js-9di
+
+2. Read paper:
+	https://arxiv.org/pdf/2202.08946.pdf
+	
+3. I found a state management library called 
+
+	Redux: https://cn.redux.js.org/
+	We could compare it with zustand 
+
+
+--------------------------------------------
+Take away:
+
+1. when use var() and !important at the same time
+
+remember to put !important outside of the definition of --mycolor
+
+for example: 
+	--mycolor: #222 !important
+	then use this property somewhere:
+	backgroundcolor: var(--mycolor)
+	
+	in this case, the !important would not work;
+	
+	the correct way is define --mycolor:#222
+	and use important outside of var()
+	backgroundcolor:var(--mycolor) !important
+	
+2. Paper: 
+	
+	-Symphony can import/export the components to a self-contained,web-based UI
+	-Data functions: 
+		-modular visualization for dataset 
+		-for unstructured data:image, a repackage of lots of other visual tools
+	-Link the information by providing both coding environment and non-coding
+	-Support ant JS-based visualization
+	-Symphony Components could also be used in other framework
+	
+	-Usecase for ML interfaces:
+		-ML interfaces need to be flexiable to support needs from different stakeholders
+		-lack of adequate tool leads to using one-off manual own tool 
+		-other tools require specific format only for visualization
+			-they don't want a tool that requires more than 5-10 mins only for visuals
+		-Need visualization support for more data types(image/video) and models
+		-Lack of communicatation with different stakeholders, hard to share insight
+	
+	
+	
