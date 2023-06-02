@@ -1,0 +1,77 @@
+Issues 0106:
+-----------------------------------------
+1. Reading the encapsulate menu,
+	- I noticed that the most important difference is in
+	hooks/useGui.ts
+	
+	-before we have a set of showNodeMenu,showEdgeMenu,showHandleMenu..
+	which is quite redundant
+
+	-Now we have a unified interface 'widget', and the different menu type 
+	is defined in widgetRegistry with type Record
+	
+	-While different menu/or widgets may have different more functions:
+	in openWidget()function:
+	set
+	
+2. In NodeLibraryList.tsx, we have three part of styled()
+	-StyledAccordion
+	-StyledAccordionSummary
+	-StyledAccordionDetails
+
+We could modify it one by one 
+
+
+
+-------------------------------------------
+Main task today:
+0. Fill the EZVE form
+
+1. Check Encapsulate the menu (#215) https://github.com/Max-ChenFei/VisualProgrammingEditor/commit/0b356858b5d3ab83c1aa21c9809d38a547b93622
+
+2. Clean the MUI's styled() style into sx -->StyledAccordion
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+------------------------------------------------
+Reading:
+
+1. Read one of the article before leaving:
+	-event bubble  https://stackoverflow.com/questions/7398290/unable-to-understand-usecapture-parameter-in-addeventlistener
+	-refactory guru https://refactoring.guru/
+	-abstraction ? https://hanxiao.io/2020/08/02/Layer-of-Abstraction-when-Building-Tensorflow-for-Search/
+
+	-zustand  -state management library https://dev.to/franklin030601/using-zustand-with-react-js-9di
+
+2. Read paper:
+	https://arxiv.org/pdf/2202.08946.pdf
+	
+	---------------------------------------------------------------------------------------
+	
+3. I found a state management library called 
+
+	Redux: https://cn.redux.js.org/
+	We could compare it with zustand 
+	
+4. Check useCallback and useEffect
+ https://react.dev/reference/react 
+ https://blog.51cto.com/u_15127496/2664294
+ https://www.jianshu.com/p/3c68580eae70
+
+5. Check flexGrow https://juejin.cn/post/6844904105362587661
+
+
+
+--------------------------------------------
+Take away:
+
+1. <Record> Type in Typescript

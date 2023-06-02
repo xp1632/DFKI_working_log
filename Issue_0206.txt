@@ -1,0 +1,25 @@
+Issues 0206:
+-----------------------------------------
+1.Check the jupyter index.css
+	-According to the comment inside the index.css
+	-It defined different modules of css:
+		-border/font/shadow/color
+	
+	-And the css variables can be nestedly called:
+	for example:
+	when we define a universal UI font size:
+	--vp-UI-font-size:14px
+	
+	And afterwards we need to define another font-size that we would like 
+	to keep the same size with the universal UI font size, 
+	
+	we can define it as:
+	--vp-menulist-item-font-size: var(--vp-UI-font-size)
+
+
+
+-------------------------------------------
+Main task today:
+1. Clean the styles for non-MUI components
+	-defined the skeleton of future css management
+	-need to talk with Fei before modifying them all
