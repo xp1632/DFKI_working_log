@@ -1,0 +1,115 @@
+Issues 0506:
+-----------------------------------------
+1. The Issues mentioned in the git is because, the shaodow and font family
+is not applied in the menuitem's class .VP_MenuItem yet
+
+Because we would like to first show it to Fei, then apply it to all
+
+2. Css layered management:
+
+To keep the css variables have their own functioning scope,
+we use have different layers of css file. The highest level is the index.css for whole 
+project, where the most common attribute locates such as : font-family, border,radius.
+
+And next layer is the larger modules: for example node module with different className,
+we also have a index.css file that contains the important attribute in this layer, 
+such as node--font.
+
+Here we define a node--font variable as the only interface for fonts in node module:
+ --node--font : var(--parent-font), 
+ where --parent-font is what we define in the highest level index.css(--parent-font: 'Roboto').
+
+And the bottom layer is the smaller assets inside modules, whose styles we do not modify
+. These styles are writtein in sx or style properties.
+
+3. We start from Top-index to module index first:
+
+	-Components/handles/index.css looks good for now
+	-For Node components, we need to check through the common attributes and add
+	the missing ones
+-- try to keep the css files in the same format
+	
+	-When defining border, according to jupyter, we need to define the border color
+	border width seperately
+	
+	-project layer index.css ---tunnel 1-->module layer index.css-
+	tunnel 2---> assets layer sx
+	
+		-we first deal with the tunnel 1, and first deal with nodes module
+		-nodes are finished
+
+4. The accordion and menu needs some internal changes, I'll think about it tomorrow
+
+-------------------------------------------
+Main task today:
+1. Continue theming of non-MUI based on the skeleton
+
+2. Continue reading the paper
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. Example of type Record in Typescript:
+
+interface CatInfo {
+  age: number;
+  breed: string;
+}
+
+type CatName = "miffy" | "boris" | "mordred";
+
+const cats: Record<CatName, CatInfo> = {
+  miffy: { age: 10, breed: "Persian" },
+  boris: { age: 5, breed: "Maine Coon" },
+  mordred: { age: 16, breed: "British Shorthair" },
+};
+
+cats.boris;
+/
+
+2. Css layered management:
+
+To keep the css variables have their own functioning scope,
+we use have different layers of css file. The highest level is the index.css for whole 
+project, where the most common attribute locates such as : font-family, border,radius.
+
+And next layer is the larger modules: for example node module with different className,
+we also have a index.css file that contains the important attribute in this layer, 
+such as node--font.
+
+Here we define a node--font variable as the only interface for fonts in node module:
+ --node--font : var(--parent-font), 
+ where --parent-font is what we define in the highest level index.css(--parent-font: 'Roboto').
+
+And the bottom layer is the smaller assets inside modules, whose styles we do not modify
+. These styles are writtein in sx or style properties.
+
+
+3. High cohsion, low coupling
+
+When designing a software, we need the module to be high in cohesion and low in coupling
+Which is inside a module, we have unified format/paramters, outside the module,
+we require low dependency from other modules.
+---------------------------------------------
+
+Tomorrow:
+
+1.change the handle of node from rectangle to triangle(to right) to show the direction
+(in css)
+
+2. the project's state management, zustand
+	-useCallback
+	-useEffect
