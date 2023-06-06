@@ -44,3 +44,9 @@ Coding Rules Summary:
 	-Delete the code that only 'could be useful' 'in future', 
 	we need to keep current code clean
 	-Delete the code that has redundant function with others, keep the code simple
+	
+
+-Module Rules
+	-Higher Cohesion, lower coupling
+		-Cohesion: the similiarity inside the module
+		-Coupleing: the dependency needed from other modules
