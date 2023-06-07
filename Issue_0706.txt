@@ -1,0 +1,262 @@
+Issues 0706:
+-----------------------------------------
+0.Test case:
+
+In src/index.css 
+/*Border*/
+
+-Change the --vp-border-radius:0px to 10px, set back to 0px after testing
+  Check if
+	-Node panel has rounded corner
+	-Menu (normal menu and treeview menu) has rounded corner
+	-Accordion panel has rounded corner
+	-SearchBar has rounded corner
+
+-Change the --vp-border-width:1px to 10px, set back to 1px after testing
+  Check if
+	-Node panel has wider border
+	-(We don't have visiable border for Menu)
+	-Accordion (including panel,summary,detail) has has wider border
+
+-Change the --vp-border-color: #e0e0e0 to #222, set back to #e0e0e0 after testing
+  Check if
+	-Node panel has black border
+	-(We don't have visiable border for Menu)
+	-Accordion panel has black border
+
+/* Shadow */	
+-Change the --vp-box-shadow: 0 4px 6px -1px rgb(0 0 0 / 15%),
+    0 2px 4px -1px rgb(0 0 0 / 8%); to none, set back after testing
+	Check if
+	-Node panel has no shadow
+	-Menu panel has no shadow
+	
+/* Layout Colors */
+
+-Change --vp-background-color: #f5f5f6f0 to #222, set back to #f5f5f6f0 after testing
+  Check if
+  -Node panel has black background-color
+		  -(Background color for Accordion is transparent)
+		  -(Background color for Menu is transparent) Fixed in white background color
+  -(Background color for StickyNote Node's body is defaultly set as red)
+ 
+
+-Change --vp-hover-background-color: #f5f5f6f0 to #222, set back to #f5f5f6f0 after testing
+  Check if 
+  -Acoordion summary on has black hover color
+  -Menu has black hover color
+  
+/* UI Fonts Size*/
+
+-Change --vp-ui-font-family:'Roboto','sans-serif' to 'sans-serif', set back after testing
+  Check if
+  -Accordion (including summary,detail,button) has font changes
+  -Node (including header,body, input) has font changes
+  -Menu has font changes
+  
+- --vp-ui-font-size0:10px is the base font size that we set, 10px =1 rem
+	normally we'll not change it
+
+-Change --vp-ui-font-size1:1.25rem to 3rem,set back to 1.25rem after testing
+  Check if
+  -Node font size enlarges
+  -Accordion Summary enlarges
+  
+-Change --vp-ui-font-size2:1.5rem to 3rem,set back to 1.5rem after testing
+  Check if
+  -Accordion Detail title enlarges
+  -Accordion Detail content enlarges
+  -Accordion button font size enlarges
+  -SearchBar font size enlarges
+
+-Change --vp-ui-font-size3:1.7rem to 3rem,set back to 1.7rem after testing
+  Check if
+  -Normal Menu title,shortcut enlarges
+  -TreeView Menu title enlarges
+
+/* UI Fonts Color*/
+
+-Change --vp-ui-font-color-black:#222 to #fff, set back to #222 after testing
+  Check if 
+  -Node text is white
+  
+-Change --vp-ui-font-color-grey:#0000008a to #fff, set back to #0000008a after testing
+  Check if 
+  -Accordion detail content/button are white
+  -Menu Icons are white
+  -Menu Shortcut(ex: Ctrl+X) are white 
+  
+-Change --vp-ui-font-color-darkgrey:#000000de to #fff, set back to #000000de  after testing
+  Check if 
+  -Normal Menu title is white
+  -Treeview Menu title is white
+  
+-Change --vp-ui-font-color-blue:#1976d2 to #fff, set back to #1976d2  after testing
+  Check if 
+  -Accordion detail title is white
+  
+/*Icon*/
+-Change --vp-icon-size:1.8rem to 5rem, set back to 5 rem after testing
+  Check if
+  -Normal Menu's icon enlagers
+  -TreeView Menu's icon enlagers
+  -StickyNotes 's icon enlargers
+  -SearchBar's icon enlargers
+
+-Change --vp-icon-color:var(--vp-ui-font-color-grey) to #fff, set back after testing
+  Check if
+  -Normal Menu's icon is white
+  -TreeView Menu's icon is white 
+  -StickyNotes 's icon is white
+  -SearchBar's icon is white
+
+  
+
+1. Issuses during testing:
+
+?	-Border-radius: do we need border-radius for accordinon?
+	
+	----Border-width: 
+		-----the border-width of searchbar and tool bar will not change
+		-----the border-width of divider line in nodemenu will not change
+	-Border-color:
+?		we have a bright color for border: #e2e8f0, do we need that?
+		-----The border color for searchbar will not change,why?
+		
+	----Shadow:
+		----the shadow for menu control is missing
+		
+	----Layout color:
+		-----The background-color of Accordion and menu
+		is white
+		-----The hover color for Menu Item is missing
+		
+	-Fonts family:
+		-----the accordinon summary, 
+		-----button has no linked font family
+		
+		-----the normal menu has no linked font family
+		-----the treeview menu has no linked font family
+		
+?		-the input in node has no linked font family,font size
+		
+?		-The filepond hint has no linked font family and proper size
+		-----the searchbar has no linked font family
+	
+	-Font size
+	
+		--vp-ui-font-size0:10px is base font size ,we'll not change
+		--vp-ui-font-size1: 1.25rem we used in 
+			-Node panel
+			-Accordion summary
+		--vp-ui-font-size2:1.5rem we used in 
+			-Accordion detail(title,content,button)
+			-Searchbar fontsize
+		--vp-ui-font-size3:1.7rem we used in
+			-Normal Menu title,shortcut 
+			-TreeView Menu title 
+	
+	-Font color 
+		--vp-ui-font-color-black: #222 we used in
+			- Node font color
+			- black is also provied for gui module,but we doesn't use it now
+		
+		--vp-ui-font-color-grey:#0000008a we used in
+     		  -Accordion detail content/button 
+			  -Menu Icons 
+			  -Menu Shortcut(ex: Ctrl+X)
+		
+		--vp-ui-font-color-darkgrey:#000000de we used in 
+			-Normal Menu title
+			-TreeView Menu title
+		
+		--vp-ui-font-color-blue:#1976d2 we used in
+			-Accordion detail title 
+	
+	-Icon
+?		-the three icons in treeview menu icon's size doesn't work
+?		-The icon's in stikcy note' size doesn't work
+		-We set the --vp-node-icon-color but we never use it
+		
+		
+		--the input in node has no linked font color
+?		-The comment node's 'This is comment node' has no linked color
+		
+	-The icon color in stikcy note icon is not linked
+	
+?	-How should we deal with minimap's css while it's in a layer without index.css
+	
+		
+	
+	-NodeLink color and width missing
+	-NodeHandle color and width missing
+
+2. Check Module css
+	-gui/index.css
+	
+
+-------------------------------------------
+Main task today:
+1. Test every item in src/index
+2. Test every item in module/index
+	-gui/index.css is checked, there are some rules that we didn't use 
+3. Check the visual change of main and theming branch
+4. Check Zustand
+5. Read the paper
+
+
+
+
+
+
+----------------------------------------------
+Remaining issues:
+
+ -Border-radius: do we need border-radius for accordinon?
+
+ ? -Border-color: we have a bright color for border: #e2e8f0, do we need that?
+
+ x -Font: the input's placeholder in Node has no linked font family, font-size
+
+ x -Font: the filepond hint label has no linked font family, font-size
+
+ x -Font: the placehoder of comment node has no linked font colot
+
+ x -Icon: the icon's size of other three icons in treeview menu doesn't work
+
+ x -Icon: the icon's size/color of stickynote node doesn't work
+
+ ? -Minimap, which layer should I put minimap's styles in? Now Minimap locates in components folder but outside of any module
+
+------------------------------------------------
+Reading:
+
+1. Read one of the article before leaving:
+	-event bubble  https://stackoverflow.com/questions/7398290/unable-to-understand-usecapture-parameter-in-addeventlistener
+	-refactory guru https://refactoring.guru/
+	-abstraction ? https://hanxiao.io/2020/08/02/Layer-of-Abstraction-when-Building-Tensorflow-for-Search/
+
+	-zustand  -state management library https://dev.to/franklin030601/using-zustand-with-react-js-9di
+
+2. Read paper:
+	https://arxiv.org/pdf/2202.08946.pdf
+	
+	---------------------------------------------------------------------------------------
+	
+3. I found a state management library called 
+
+	Redux: https://cn.redux.js.org/
+	We could compare it with zustand 
+	
+4. Check useCallback and useEffect
+ https://react.dev/reference/react 
+ https://blog.51cto.com/u_15127496/2664294
+ https://www.jianshu.com/p/3c68580eae70
+
+5. Check flexGrow https://juejin.cn/post/6844904105362587661
+
+
+
+--------------------------------------------
+Take away:
+
