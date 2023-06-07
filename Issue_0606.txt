@@ -1,0 +1,110 @@
+Issues 0606:
+-----------------------------------------
+1. First we need to carefully deal with the gui module:
+	because the accordinon and menu are all in this module,
+	now we might not only deal with tunnel 1 like yesterday, wo deal
+	with assets in it and carefully fix both tunnels
+	
+	-project layer index.css ---tunnel 1-->module layer index.css-
+	tunnel 2---> assets layer sx
+	
+	-Accordion first
+	-Then Menu
+
+2. Accordion: 
+	-we defined some css variables insided NodeLibrary.tsx
+	-if we want the gui/index.css to control it
+		-should we define it first in index.css
+		-and just use it inside it?
+			-Yes, we can do that
+			-we delete the css styles that we declare and defined in react components
+			-move it to module/index.css
+			-and only use it in react components
+		
+		-will we need to modify accordinon and menu
+			-Yes, the icon size, the font size, color, we'll need to modify it
+		
+
+2.1 We first deal with Accordion Item
+
+2.2 Then we deal with NodeLibraryList , and we'll delete NodeLibraryList.css and 
+move it elsewhere
+	-The fontSize inside the Accordion Summary needs addition
+
+
+
+3.Menu: Now we deal with Menu
+	-Border radius for menu is finished
+	-We need to add support for font color, size
+	-Hovereffect
+	-the search bar's size
+	
+	-There's problem about minHeight of the menu, the default height seems to 
+	be 48px, we need to change that
+	
+	-Also, menu we have tree-view menu and normal menu
+		-Searched treeview is not hard, we just need to add support for 
+		
+	-Now the problem occers only on normal menu
+		-We fix this first
+		-Before it's because I change the zooming in the explore,
+		-after reloading, and set the window to normal 100%
+		-The problem seems to disappear?
+			-But the font becomes really small, because the title part didn't 
+			add a specific Typography container, so it applied the default root style 
+			from MUI
+	-Now the size problem is solved, we need to add color, size, icon size to the menu
+	
+3.1 Normal Menu is finished, now we move on to tree-view menu
+
+Tree-view menu:
+
+	-Search bar, two icon, font-size
+	-tree icon
+	-font color, size
+
+4. We'll add support for icon size at last after modules are finished
+	-iconsize for normal menu is added
+	-the icon in sticky nodes,
+	-on the minimap needs further
+
+
+
+
+-------------------------------------------
+Main task today:
+
+
+1. Fill in the personal form
+2. Send Ausland an e-mail about the perimit extension 
+3. Finish theming 
+
+-------------------------------------------
+Take away:
+
+1. how should we add self-defined css properties in react component's typescript
+without external css file?
+	-we first declare a CSSProperties interface for react module:
+	-----
+	declare module 'react' {
+	  interface CSSProperties {
+		'--vp-accordion-item-border-color'?: string;
+		'--vp-accordion-item-title-font-size'?: string;
+	  }
+	}
+	-----
+	-the in one parent element in return(),
+	we define the value of css properties:
+	
+	----
+	return(
+		<li
+		style ={{
+		
+		'--vp-accordion-item-border-color': 'var(--vp-gui-font-color)',
+        '--vp-accordion-item-title-font-size': '15.5px',
+		
+		}}
+		>
+		...
+	----
