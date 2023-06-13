@@ -1,0 +1,199 @@
+Issues 0906:
+
+----------------------------------------------
+
+0. Met github buiding issues:
+
+Remaining issues:
+
+ ? -Border-radius: do we need border-radius for accordinon?
+
+ ? -Border-color: we have a bright color for border: #e2e8f0, do we need that?
+
+-------
+ x -Font: the input's placeholder in Node has no linked font family, font-size
+
+ x -Font: the filepond hint label has no linked font family, font-size
+
+ x -Font: the placehoder of comment node has no linked font colot
+
+ x -Icon: the icon's size of other three icons in treeview menu doesn't work
+
+ x -Icon: the icon's size/color of stickynote node doesn't work
+
+ ? -Minimap, which layer should I put minimap's styles in? Now Minimap locates in components folder but outside of any module
+ 
+ x -color and width missing for NodeLink
+
+ x -color and width missing for NodeHandle
+ 
+-----------------------------------------------
+Main task today:
+
+1. Fix the remaming x issues of theming
+2. Read Paper
+
+
+
+
+
+------------------------------------------------
+Reading:
+
+1. Read one of the article before leaving:
+	-event bubble  https://stackoverflow.com/questions/7398290/unable-to-understand-usecapture-parameter-in-addeventlistener
+	-refactory guru https://refactoring.guru/
+	-abstraction ? https://hanxiao.io/2020/08/02/Layer-of-Abstraction-when-Building-Tensorflow-for-Search/
+
+	-zustand  -state management library https://dev.to/franklin030601/using-zustand-with-react-js-9di
+
+2. 【X】 Read paper:
+	https://arxiv.org/pdf/2202.08946.pdf
+	
+	---------------------------------------------------------------------------------------
+	
+3. I found a state management library called 
+
+	Redux: https://cn.redux.js.org/
+	We could compare it with zustand 
+	
+4. Check useCallback and useEffect
+ https://react.dev/reference/react 
+ https://blog.51cto.com/u_15127496/2664294
+ https://www.jianshu.com/p/3c68580eae70
+
+5. Check flexGrow https://juejin.cn/post/6844904105362587661
+
+
+
+
+
+
+----------------------------------------------
+Paper Chapter 5:
+
+
+-Feature 1:  Modular Components
+	-Js-based Components, flexiable
+	-Each components is passed three parameter:
+		-meta-data table
+		-derived state variables like grouped tables
+		-reference to raw data instance like images
+
+-Feature 2: Environment Wrapper
+	-Wrappers as backing platform to connect components
+	-programming environment wrappers for explorary analysis
+	-web-based UI for sharing insights
+	
+	-Python Wrapper
+	-ipywidget API renders web-based widgets in the Jupyter notebook UI
+	and synchronizes its variables with the Python kernel
+	-Support for pandas dataframe
+	
+	-Web-based dashboard wrappers
+	-the programming environment is exported as a statically host websites
+	-Components can be configured before export to fit in particular usecase
+	
+
+-Feature 3: Interaction Tools
+	-Each components has same interaction tools 
+	-And changes are synchronized between jupyter notebook and web-based
+	
+	-In web-based, state changes are also saved in URL
+	
+	-Three ways of using tools:
+		-UI toolbar(in both jupyter and web) on Fig4 right, and Fig 2 left 
+		as a sidebar(can filtering, grouping data)
+		-Componnets itself
+		-python code
+
+Chapter 6: Expand capabilities:
+
+- Added support for unstructured data like audio
+	-If the developer wants to visualize other types
+	just implement a rendering function for new data which all components can use
+
+
+-For large dataset, add self-modified pagination 
+
+-Initial components based on needs:
+------Overview of dataset
+	-Markdown description text
+	-Paginated list of instances(smaller data), support image and audio
+	-Distribution of meta-data column, to detect potential bias
+	-3D path, for health sensor data
+	-World Map for geographic data
+	
+------More complex analysis of unstructured data 
+	-Duplicate instance
+	-Familarity of instances in dataset,based on nearest neighbors algorithm
+	-2D projecttion of model to explore insights
+	
+------Analyzing and debugging
+	-Binary Confusion matrix
+	-Long Confusion matrix for classification model
+	-Fairness analysis of subgroups
+	
+-All the components are built with component 'cookiecutter' template
+	-Three methods of creating components:
+	1.JS and visualization package Vega and D3
+	2. JS library REGL Scatterplot(WebGL library) for projection component
+	3. Directly use Svelte components 
+
+Chapter 7: Case Study
+
+-Evaluation:
+
+-Stage 1 think loud during exploring data and model using Symphony
+
+-Stage 2 export coding environment to web-based dashborad
+
+-Stage 3 Ask for feedback
+
+Case study 1: Validating Data pattern
+
+	Cons:
+	-sharable repot for dataset
+	-Similarity components, filtering tool bar
+	-synchronized chart
+	
+	Limit:
+	-Introduction for complicated components
+	-More 2D graph such as heatmap
+
+Case study 2:Debugging training data
+	Cons:
+	-similirity works
+	
+	Limits:
+	-Also add model analysis 
+
+Case study 3:
+	Cons:
+	-bring data to forefront
+	
+	Limit:
+	-Link and unlink of different components and see state change
+	
+Chapter 8： Future work
+
+	-Lower the barrier of creating components using
+		UI-based visualization such as Vega ot Tableau
+	-Support lager data by using external backend/API
+		instead of web browser memory
+	-Extension use of components to non-science scenario 
+		such as instant messaging
+	
+	-Guidance for green-hand of the platform
+	
+	-Generalization of scope,not limited to ML-team
+	
+	
+	
+
+
+
+
+
+--------------------------------------------
+Take away:
