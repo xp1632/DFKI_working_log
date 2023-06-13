@@ -1,0 +1,109 @@
+Issues 1306:
+-----------------------------------------
+1. Delete round corner for accordion
+
+2. Filebond hint label font size,family
+
+3. Comment node's placeholder's font color
+	-Where to set the font color for comment node
+		-For comment node, the placeholder is put inside the .node__header
+		-We'll put the defination of comment node's header in commment node.css
+		-however it's still not working
+
+	-when we put style in input, the color is working
+	-The reason is that we didn't define color: inherit in <InplaceInput/> component
+
+4. The input in node panel is in widget, we can define the font of them there
+
+	-I'll add an index.css file for widgets component to define css variables
+	-I also add a common inputStyles in Widgets.tsx to use the css variables
+
+	
+5. Icon
+	-Treeview three icon
+		-We first start with treeview icon
+			-Check SearchedTreeView.tsx
+				-we've set --vp-treeview-icon-size for <ExpandMore/>
+				it works ,where's the rest three icons?
+			-The rest three icons are defined in SearchMenu.tsx
+		-SearchedTreeView is an element component in SearchMenu
+		-I set the MuiSvgIcon-root to icon-size, however
+		It didn't enlarge the parent node, part of the icon is covered
+		-What's the difference with the expand icon?
+		
+		-We find the reason in the parent element of it,
+		the width of the parent element is set as 15px,
+		after setting it as auto, the icon looks good and is not covered
+				
+	-Sticky node
+	
+	
+	-Minimap
+
+6. Node handle/Link
+
+7. Add comments for usage of font 
+	-if you are worried the old version has something missing
+		-just search the keyword again
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1. Fixing remaining issues in Theming
+  Used by:
+	-add comments for usage of font 1234.etc
+	-
+2. A summary for Paper
+
+3. Read the project code from top index.tsx
+	-get the relation of different component
+	-Better have a graph 
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Does the input widgets in node panel need label for it?
+	- If so, this is an example of adding label:
+	--------------------
+	export function TextInput(props: WidgetProps): JSX.Element {
+	  const { value, className, onChange, label } = props;
+	  const id = label?.toLowerCase().replace(' ', '-');
+	  return (
+		<label htmlFor={id}>
+		  {label}
+		  <input
+			id={id}
+			className={className}
+			type={'text'}
+			defaultValue={value}
+			style={inputStyles}
+			onChange={(e) => {
+			  onChange(e.target.value);
+			}}
+		  />
+		</label>
+	  );
+	}
+	-------------------
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. When you define a property in parent element,
+however the child element didn't inherit that property
+
+-The reason is that, we didn't define for example:
+color: inherit in children element
