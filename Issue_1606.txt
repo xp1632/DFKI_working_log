@@ -1,0 +1,81 @@
+Issues 1606:
+-----------------------------------------
+1. I start with index.tsx in src
+	I checked App() and the root
+
+The most top component is <MainArea>
+
+2. In <MainArea>,we have components:
+	///-Progress _MUI
+	-NodeLibraryList
+	///-InPlaceTextArea
+	-Three buttons
+	/-A regular textarea
+	-VPEditor
+
+3. /// is the components that is not quite useful
+
+4. In <NodeLibraryList>
+	-three functions are defined
+		-onUninstall 
+		-onDisable
+		-onEnable
+	which are clearly defined for buttons inside the 
+	accordion
+	
+5. Three buttons:
+
+	-Load deafult:
+		-setActivated(true)
+		-setContent(deepCopy example) here the type 
+		of example is Serializedgraph
+		
+	-Clear:
+		-setActivated(false)
+		-setContent(undefined)
+	
+	-Clear 2 (I don't quite understand the difference of
+	these two clears)
+		-sceneActions.clear()
+
+6.The regular textarea
+	shows the changedCount of <VPEditor>
+
+7. <VPEditor> has:
+
+	-id
+	-content
+	-onContentChange() //Count the number of change
+	-activated
+	-onSceneActionsInit() //Not sure about functions
+	-onSelectionChange
+	-option
+	
+	
+
+		
+		
+		
+		
+-------------------------------------------
+Main task today:
+
+1. Read the project code from top index.tsx
+	-get the relation of different component
+	-Better have a graph 
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
