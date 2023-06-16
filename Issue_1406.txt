@@ -1,0 +1,32 @@
+Issues 1406:
+-----------------------------------------
+1.
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. A summary for Paper
+
+2. Read the project code from top index.tsx
+	-get the relation of different component
+	-Better have a graph 
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:

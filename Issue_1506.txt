@@ -1,0 +1,19 @@
+Issues 1506:
+-----------------------------------------
+1. I used the tome.app to help me create the slides
+Here's the slides for summarizing Symphony paper:
+https://tome.app/neunschwanstein/the-paper-chase-a-summary-of-the-latest-research-clix275t10xmalf3axbv9wy9s
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. A summary for Paper https://tome.app/?gclid=Cj0KCQjw7aqkBhDPARIsAKGa0oL_H509ySGfoyWy5-oBaMg5dMLBTE6Hv8lKhlzyPwuaVYBWj8Gp_l8aAv3DEALw_wcB
+
+2. Read the project code from top index.tsx
+	-get the relation of different component
+	-Better have a graph 
+
+
