@@ -1,0 +1,238 @@
+Issues 2106:
+-----------------------------------------
+1. Event Bubbling: https://www.quirksmode.org/js/events_order.html#link4
+	
+	-Event bubbling and capturing are two ways of propagating events 
+	that occur in an element that is nested within another element, 
+	when both elements have registered a handle for that event.
+	
+	-useCapture is a property we can set true or false in addeventlistener()
+	
+	-----------------------------------
+	| element1                        |
+	|   -------------------------     |
+	|   |element2               |     |
+	|   -------------------------     |
+	|                                 |
+	-----------------------------------
+--------------------------------------------------------------
+	-Event CAPTURING 
+	-When using event capturing, order is from out to inside
+	first evolking element1(outside)'s event 
+	then element2(inside)'s event:
+	
+	               | |
+	---------------| |-----------------
+	| element1     | |                |
+	|   -----------| |-----------     |
+	|   |element2  \ /          |     |
+	|   -------------------------     |
+	|        Event CAPTURING          |
+	-----------------------------------
+--------------------------------------------------------------	
+	-Event Bubbling
+	-When using Event Bubbling, order is from inside to out (since the bubbling woudl float)
+	first evolking element2 (inside)'s event
+	then element1(outside)'s event
+	
+					/ \
+	---------------| |-----------------
+	| element1     | |                |
+	|   -----------| |-----------     |
+	|   |element2  | |          |     |
+	|   -------------------------     |
+	|        Event BUBBLING           |
+	-----------------------------------
+--------------------------------------------------------------	
+
+	-W3C model uses a middle solution
+	-Always First from ancestor(top) capture, 
+	then from target(inside) element bubble up
+	
+					 | |  / \
+	-----------------| |--| |-----------------
+	| element1       | |  | |                |
+	|   -------------| |--| |-----------     |
+	|   |element2    \ /  | |          |     |
+	|   --------------------------------     |
+	|        W3C event model                 |
+	------------------------------------------
+
+An example:
+
+If we define:
+
+element1.addEventListener('click', doSomething2, useCapture:true)
+element2.addEventListener('click',doSomething,useCapture:false)
+
+We click element2:
+
+1. First capture phase: 
+	we check if element2 has ancestor that has capture event
+
+2. We find element 1, so element1's Event doSomething2() is executed
+
+3. Then target phase:
+	No more capture is found in target element, then we go to bubble phase:
+
+4. Last Bubble phase:
+	element2 is set as useCapture:false, so we bubble element2's event 
+	doSomething()
+
+5. And to finish bubble phase,
+	We go up to ancestor of element2 to find more bubbling element, in this case, nothing happens
+
+So the final event order is : doSomething2() --> doSomething()
+---------------------------------------------------------------------------
+
+Another reverse example:
+
+If we define:
+
+element1.addEventListener('click', doSomething2, useCapture:false)
+element2.addEventListener('click',doSomething,useCapture:false)
+
+When we click element2:
+
+1. First Capture Phase: we first check the ancestor of element2,
+if they have elements that useCapture,
+since Element1 has false useCapture, so we don't find any
+
+2. Then we go to target phase, element 2 has false useCapture, so no event either
+
+3. We go to bubbling phase, we start from element2, doSomething() is executed
+
+4. Then we go up and check the ancestor of element2, we find element1, doSomething2() is executed
+
+
+---------------------------------------------
+
+2. Flex Layout review: https://juejin.cn/post/6844904105362587661
+
+[]	1. We first need a container to contain the item
+	and set the container to display: flex,
+	such as :
+	.container{
+		display:flex
+	}
+	
+	Or we could set the display as inline-flex
+	then the background container would fit the size of items inside
+	
+[]	2. Then we set the property of flex in container:
+	
+	-flex-direction, the default is row, we can also set it as column
+	.container{
+	  display: flex;
+	  flex-direction: column;
+	}
+	
+	-flex-wrap: if we'll auto-change the row when the content is more than the width
+	default is non-wrap, we could set is as flex-wrap
+	.container{
+	  display: flex;
+	  flex-wrap: wrap;
+	}
+	
+	-flex-flow is the combination of flex-direction and flex-wrap:
+	.container{
+	  display: flex;
+	  flex-flow: row-reverse wrap;
+	}
+	We also have column-reverse, wrap-reverse for the order
+	
+	-justify-content:(where the location of items start)
+	.container{
+	  display: flex;
+	  justify-content: flex-end;
+	}
+	the default is flex-start, we can also let the items locate in the center by:
+	justify-content:center
+	
+	Or locate all items evenly in the space of container 
+	.container{
+	  display: flex;
+	  justify-content: space-between;
+	}
+	space-around is also leave space between item and parent container, while space-between not
+
+
+	-align-items (how the items align with each other)
+	the default is align-items:stretch
+	.container{
+	  display: flex;
+	  justify-content: space-around;
+	  height: 300px;
+	}
+	when we set the height of container to 300px, the items inside is also stretch to 300px height 
+	
+	We can also use align-items:flex-start, then we'll not get stretched items
+	We'll get items aligns at the top of the container
+	
+	.container{
+	  display: flex;
+	  justify-content: space-around;
+	  height: 300px;
+	  align-items: center;
+	}
+	For align-items:center, we'll get the items aligns in the middle of container with 300px
+	and not stretched
+	
+	For align-items:flex-end, the items would align at the bottom of container
+	
+	align-contents has same logic as align-items
+	
+[]	3. Last we set the property of items
+
+	-order, we can set the order of flex items by set values (...-1,0,1... from left to right)
+	the default order values for items are 0
+	
+	.item-1{
+	  order: 1;
+	}
+	.item-6{
+	  order: -1;
+	}
+	In this case, item6 is at the most left and item1 is at most right while other items keeps usual order
+	-> Item 6, 2, 3, 4, 5, 1
+	
+	-flex-grow :https://www.zhangxinxu.com/wordpress/2019/12/css-flex-deep/
+
+-------------------------------------------
+Main task today:
+
+1. Read Event Bubble and abstraction in reading to reduce the workload
+
+2. Review flex layout
+
+
+
+
+
+----------------------------------------------
+Reading:
+
+1. Read one of the article before leaving:
+	x -event bubble  https://stackoverflow.com/questions/7398290/unable-to-understand-usecapture-parameter-in-addeventlistener
+	-refactory guru https://refactoring.guru/
+	x -abstraction ? https://hanxiao.io/2020/08/02/Layer-of-Abstraction-when-Building-Tensorflow-for-Search/
+
+	-zustand  -state management library https://dev.to/franklin030601/using-zustand-with-react-js-9di
+
+	
+2. Check useCallback and useEffect
+ https://react.dev/reference/react 
+ https://blog.51cto.com/u_15127496/2664294
+ https://www.jianshu.com/p/3c68580eae70
+
+3. Check flexGrow https://juejin.cn/post/6844904105362587661
+
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
