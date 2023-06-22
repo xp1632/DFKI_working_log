@@ -1,0 +1,100 @@
+Issues 2206:
+-----------------------------------------
+1.flex property for items: https://www.zhangxinxu.com/wordpress/2019/12/css-flex-deep/
+
+flex has flex-basis,flex-grow,flex-shrink
+
+-flex-basis is the fixed unit of space
+-flex-grow is how to distribute spare space
+-flex-shrink is how to distribute space when space is not enough
+
+-Let's check the rule of flex:
+
+flex: none | auto | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+
+- | : means the property around this symbol is Exclusive(排他)，
+	 can not appear at the same time with other properties
+	 
+- []: means rule range
+
+Thus all the followings are correct:
+
+flex: auto;
+flex: none;
+/* 3个值 */
+flex: 1 1 100px;
+
+- let's check the symbols inside []:
+
+- ? : ? around flex-shrink means, flex-shrink is not obligatory
+	we can have value of flex-shrink, or we can omit it
+	such as flex: flex-grow: 1 flex-basis: 100px
+
+- || : means OR, which means we could use the conditions around ||
+	are both correct. flex-grow+flex-shrink   OR flex-basis 
+
+For example:
+
+flex: auto;
+flex: none;
+/* 1个值，flex-grow */
+flex: 1;
+/* 1个值，flex-basis */
+flex: 100px;
+/* 2个值，flex-grow和flex-basis */
+flex: 1 100px;
+/* 2个值，flex-grow和flex-shrink */
+flex: 1 1;
+/* 3个值 */
+flex: 1 1 100px;
+
+2. Setting values for flex item
+----------------------------------------
+-Initial values:
+	flex:initial equals flex: 0 1 auto.
+	here flex-growth is 0, flex-shrink is 1, flex-basis is auto
+	
+	which means,  
+	0:- the item would not enlarge itself to occupy spare space
+	1:- the item would decrease itself to fit in the small space
+	auto: the size would automatically adjust based on itself and container
+	
+-So if we [only] set display: flex in container:
+	the items would not occupy the spare space when the items are small
+	than contaniner;
+	the items would shrink itself to fit in the small container
+-----------------------------------------
+-Auto values:
+	flex:auto  equals flex: 1 1 auto
+	
+-So if we also add flex:auto in items:
+
+.container {
+    display: flex;
+}
+.container item {
+    flex: auto;
+}
+
+	the items would occupy the spare space when the container is too large
+	and shrink to fit in the container when the container is small
+
+--------------------------------------------
+-None values:
+	flex:none equals flex: 0 0 auto
+	
+	the items would not enlarge or shrink when the container size
+	doesn't fit
+	In this case, when the container's size is smaller than items
+	the items would exceed and overflow to the outside of container
+	
+	
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1. Finish the flex item deep review
+
