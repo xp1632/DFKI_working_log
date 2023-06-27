@@ -1,0 +1,200 @@
+Issues 2606_2706:
+-----------------------------------------
+0. < HandleConfig >
+
+
+1. We first start with < NodeLibraryList >:
+
+	-< NodeLibraryList > locates in src/gui NodeLibraryList.tsx
+	
+	-Imports, we have:
+		-react hooks
+		-MUI Accordion
+		-filepond, filepondZipper
+		-self-defined components:
+			-SearchInput from './elements'
+			-NodeLibraryItem from './NodeLibraryItem'
+		-self-defined types from ../types
+			-NodeConfig
+			-NodePackage
+			
+	- Function nodeConfigToItemList()
+		-In this function, we exrtact the title,href,description
+		from package to use them in ItemList
+		
+		-props: 
+			-nodeConfigs(Record< string,NodePackage | NodeConfig>)
+			-keyword(string)
+			-nodeConfig,nodePackage is a type in src/types/ConfigTypes
+		
+		-return type : INodeLibraryItem
+			-this type is defined in NodeLibraryItem.tsx
+			
+		
+	-Function NodeLibraryList()
+		-props:
+			-title(string)
+			-nodeExtensions(Record<string,NodePackage|NodeConfig>)
+			-onUninstall,onEnable,onDisable functions
+			which takes pkg:string as parameter and return void
+			pkg is the abbrevation of package
+			-url(string)
+			-tokens(ITokens)
+			
+		-return type : JSX.Element
+		
+	-we define a function search():
+	
+	 const search = useCallback(
+    (searchKeyword: string) => {
+      keyword.current = searchKeyword;
+      setItemList(nodeConfigsToItemList(nodeExtensions, keyword.current));
+    },
+    [nodeExtensions]
+	);
+	//The detailed explaination of useCallback and this part
+	of code is in #
+	
+	-And use it for SearchInput component's onChange 
+	< SearchInput onChange={search} />
+	
+	
+	-In return of this function, 
+	
+	-We also have <Accordion/>, we define setExpanded for its onChange
+	
+	-Inside < Accordion/>,  we have <AccordionSummary/> and 
+	< AccordionDetails/>
+	
+	-In < AccordionSummary/> ,we put the expandicon and title
+	-In < AccordionDetails/>, the itemList we setItemList before
+	, each item is map to < NodeLibraryItem />
+		-<NodeLibraryItem /> is a component that returns 
+		a <li> element with title <div>,description <div>, buttons inside
+	
+
+
+
+-------------------------------------------
+Main task today:
+1. Continue the second layer of code reading
+
+2. Learn some Typescript https://www.runoob.com/typescript/ts-type.html
+	-Interface
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. I might need to check useCallback and useEffect today,
+because they're widely used in Project
+
+2. The filepondZipper seems not to have listener as the example do:
+https://codesandbox.io/s/filepond-zipper-react-f8i8t?file=/src/App.tsx:475-483
+
+3. UseEffect() we can check it again tommorow
+	For now, we still just consider it as dependency updater
+	
+
+
+
+
+
+----------------------------------------------
+Reading:
+
+1. Zustand  -state management library 
+https://dev.to/franklin030601/using-zustand-with-react-js-9di
+
+2. Check useCallback and useEffect
+ https://react.dev/reference/react 
+ https://blog.51cto.com/u_15127496/2664294
+ https://www.jianshu.com/p/3c68580eae70
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. useCallback() and useEffect():
+
+	- Both useEffect and useCallback only re-run 
+	when their dependencies change. 
+	However, the difference between them is in what they return.
+	
+	-useEffect returns a function that can be used clean up the effect.
+	The function inside this hook us called when the components unmounts
+	or when the dependencies change and the effect is re-run.
+	So we can see useEffect is used in fetch outside data's a lot, and also
+	used to unmount and clean up resource.
+	
+	-callback function is a function that is passed as an argument
+	to another function and is executed inside that function.
+	The purpose of callback function is to allow the calling function
+	to perform some actions after the callback function has finished executing
+	
+	
+	-useCallback returns a memorized callback function. This function 
+	is only re-created if the dependencies change. This optimizes the performance
+	by preventing unnecessary re-renders if child components that 
+	depend on the function.
+	---------------------------------------------
+	in the code: 
+	
+	const search = useCallback(
+    (searchKeyword: string) => {
+      keyword.current = searchKeyword;
+      setItemList(nodeConfigsToItemList(nodeExtensions, keyword.current));
+    },
+    [nodeExtensions]
+	);
+	
+	The useCallback hook is used to memoize a function that sets the
+	search keyword and updates the item list.
+	The function is only-recreated if the nodeExtensions dependencies
+	changes, This can help optimize performance by preventing unnecessary
+	re-renders of NodeLibraryList component.
+	
+	
+	---------------------------------------
+	
+	
+
+
+2. Typescript:
+
+  -Declaration types:
+	-decalre a string parameter:
+		let myname:string = 'Runoob'
+		Here myname is parameterName,
+		string is the type
+		'Runoob' is the value
+	-declare an array:
+		let arr:number[] =[1,2];
+		or
+		let arr:Array< number > = [1,2];
+	
+	-void:
+		used for return type for functions,
+		to show the function has no return values
+	
+	-null: 
+		means the value is lacking
+		
+	-undefined:
+		used to initialize a parameter to a undefined value
+	
+	-any:
+		means any types 
+		
+  -Interface
+		
+	
+		
+	
