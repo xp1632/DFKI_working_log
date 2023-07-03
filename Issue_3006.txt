@@ -1,0 +1,133 @@
+Issues 3006:
+-----------------------------------------
+1. Three buttons in src/index.tsx
+	-the load default button 
+		-setActivated(true);
+		//Activated is a state we passed to VPEditor
+		//in VPEditor, if activated is false, we closeWidget()
+		
+		-setContent(deepCopy(example) as SerializedGraph)
+		//here example is from './VPFileExample.json'
+		
+		//type SerializedGraph is defined in types/Graph.ts
+		export interface SerializedGraph {
+		  nodes: SerializedGraphNode[];
+		  edges: SerializedGraphEdge[];
+		}
+		
+		//type SerializedGraphNode and Edge are defined in types/ConfigTypes.ts
+		? Why do we need SerializedGraphNode when we have GraphNodeConfig
+		? The SerializedGraphNode has one more prop [key:string]:any than GraphNodeConfig
+		
+		export interface SerializedGraphNode {
+		  id: string;
+		  type: string;
+		  position: { x: number; y: number };
+		  inputs?: Record<string, SerializedHandle>;
+		  outputs?: Record<string, SerializedHandle>;
+		  [key: string]: any;
+		}
+		
+		//And in types/ConfigTypes.ts
+		We have SerializedHandle as :
+		export interface SerializedHandle {
+		  value?: any;
+		  [key: string]: any;
+		}
+		
+		//Now let's see a node defined in VPFileExample.json
+		 {
+		  "id": "1",
+		  "type": "extension1.function1",
+		  "position": {
+			"x": 0,
+			"y": 0
+		  },
+		  "inputs": {
+			"input1": {
+			  "value": 10
+			},
+			"input2": {},
+			"input3": {
+			  "value": "world"
+			},
+			"input4": {}
+		  },
+		  "outputs": {
+			"output1": {},
+			"output2": {}
+		  }
+		},
+		
+		//it's exactly what we defined in 
+		SerializedGraphNode and SerializedHandle
+		
+		//And for edges: SerializedGraphEdge equals to GraphEdgeConfig
+		export interface GraphEdgeConfig {
+		  id: string;
+		  input: string;
+		  output: string;
+		  inputHandle: string;
+		  outputHandle: string;
+		  dataType?: string;
+		}
+		//Here's one example of edge:
+		    {
+			  "id": "e4-5",
+			  "output": "4",
+			  "input": "5",
+			  "outputHandle": "input-out",
+			  "inputHandle": "input1",
+			  "dataType": "float"
+			}
+		
+		
+[]	-then we go back to setContent()
+	the content is set as example.json in load button
+	
+	-or set as undefined in first clear button 
+	
+	?Where do we use the content we set?
+	-content is passed to <VPEditor/> and used in content ={content}
+	-and listen to onContentChange={setChangedCount((count)=>count+1);}
+	
+	
+2. Figure out the changedCount in normal textarea
+
+	-So Now we go inside <VPEditor/> to see 
+	how content and changedCount is used
+	
+	-in function VPEditor()
+	the initial value of content is null, type is SerializedGraph|null
+	
+	-and content is passed to <Scene/> component
+	graph={content}
+	
+[]	-We then go inside <Scene/> and see how graph is used
+	
+	-we have a hook useGraph to use graph and get graphState:
+	 const graphState = useGraph(graph);
+	 
+[]	 -we check the useGraph hook in hooks/useGraph.ts
+
+		-we get initGraph by deserializer
+		 const initGraph = deserializer.deserialize(graph);
+		
+		-so we check editor/Deserializer.ts
+			-We define a class Deserializer
+	
+	
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1. Continue the <Scene> Component code reading
+
+
+

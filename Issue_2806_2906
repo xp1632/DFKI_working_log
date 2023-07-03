@@ -1,0 +1,255 @@
+Issues 2806_2906:
+-----------------------------------------
+1. We start with <  VPEditor >
+
+	-<  VPEditor > locates in src/editor/VPEditor.tsx
+	
+	-Imports, we have:
+			-react hooks
+		?-ReactFlow
+		?-self-defined hooks: useGraph, useScene,useGUI
+			-self-defined GUI: NodeMenu, EdgeMenu, HandleMenu
+			
+		?-Setting from './VPPanelSetting'
+		??-WidgetFactoryProvider from './Context'
+		??-type SerializedGraph and selectedElementCounts from './types'
+		??-components: componentType,Background,ControlPanel,Minimap from './components'
+
+	-We define <  Scene > component:
+		-props:
+			-id:string
+			-graph: SerializedGraph|null
+			-Function on ContentChange : (graph:string) => void
+			
+			-activated: boolean
+			-Function onSceneActionInit :(actions:ISceneActions)=> void
+			-Function onSelectionChange: (counts:selectedElementCounts) => void
+			-option: IVPEditorOption
+		
+		-hooks:
+			-useState: setInitialed //Define if the scene is initialized
+			-useRef: 
+				-currentContent,sceneInstance to locate the string or ReactFlowInstance
+			-useGraph: defines the graph state
+				-graphState contains:
+					nodes,onNodesChange
+					edges,onEdgesChange
+					onConnect, fromJSON,toString
+					
+			?-sceneState = useScene()
+			?-sceneActions = sceneState?.sceneActions;
+			
+			-useKeyDown: listens the keyboard event
+			
+			-useGui:defines the gui
+			
+		-Setting from './VPPanelSetting:
+			{
+				view:viewSetting
+				select:selectSetting
+				Edge:EdgeSetting
+				background:bgSetting
+				controlPanel:cpSetting
+				minimap:minimpSetting
+			} = Setting
+		
+		-function closeWidget is called if activated is changed and set to false
+			Inside closeWidget, gui.closeWidget() is called when conditions met
+			
+		
+		-graph Initialization, useEffect(,[graph, initialized]):
+			//The graph would be updated when the graph or initBoolean changes
+			-if the graph is not initialized,
+			-we get nodes from graph 's JSON by fromJSON()
+			-then we get rect from getRectOfNodes(nodes)
+		
+		
+		-triggerContentChange():
+		content(node,edges) update when content changes
+		
+		-return:
+			-< ConnecctionTip> //we can check gui.xxx, it's widely used
+			-< SearchMenu> etc, the menu has common props:
+				-open,onClose,anchorPosition
+				-and each of Menu has their own props, we should check further
+			
+			-< ReactFlow>: 
+			Inside this we have two children components < Minimap>, < Background>
+			
+			-for ReactFlow, we have props:
+				-id 
+				-onInit-->setInitialed(true)
+				-onMouseMove
+				?-onSelectionChange 
+				-onPanelClick, onNodeClick --> closeWidget()
+				-onEdgesClick--> with ctrl, the edge is deleted
+				?-onEdgesDoubleClick --> called some sceneActions(addNode,addEdge)
+				-onPaneContextMenu,onNodeContextMenu,onEdgesContextMenu,
+					?--> pay attention to gui.openWidget
+					it opens different types of menu by keyword 'search', 'handle'
+					'node','edge'
+				
+				?-ref : reactflowDomRef
+				-nodes, edges
+				
+				?-connectionMode-ConnectionMode.Loose
+				
+				?-onNodesChange, onEdgesChange, onConnect
+				are all defined in preivious 'graphState'
+				
+				-isValidConnection() : checks the status by isFromSource(), toDom()
+				
+				?-onConnectStart, onConnectEnd
+				in start we set param.nodeId to gui,connectionStartNodeId
+				in end we set null to it
+				
+				-use Setting's viewSetting:
+				we define minZoom,maxZoom,snapToGrid,snapGrid,onlyRenderVisibleElements
+				
+				-selectionMode is set, used selectSettings
+				
+				-multiSelctionKeyCode ="shift"
+				
+				-deleteKeyCode and selectionKeyCode are set as null
+				
+				-panOnDrag is set as right mouse button
+				
+				-connnectionLineType and connectionRadius is set by EdgeSetting
+				
+				-onNodeDragStart and onNodeDragStop are defined in sceneActions
+				
+				-onMove update mouse postion by >?mouseTracker.updateMousePos
+				
+				-onSelectionStart : closeWidget()
+				
+				-onNodeDrag also update MousePostion
+				
+				-proOptions for future options
+				
+			-< Minimap> is set with minimapSetting
+			-< Background> is set with bgSetting
+	
+	-Finally in function VPEditor's return:
+		< Scene> is showed with the wrap of < WidgetFactoryProvider>-->< ReactFlowProvider>
+		
+		< WidgetFactoryProvider>
+			< ReactFlowProvider>
+				< Scene>
+				
+				
+2. For next level, we could check:
+		
+	-type 
+	-'SerializedGraph'(./types), 
+	-'ISceneActions'(./hooks)
+	-'selectedElementCounts'
+	-'IVPEditorOption'
+	
+	-hooks:
+	-useGraph
+	!-useGui
+	!-useScene: sceneState, sceneActions
+	
+	
+	-Components:
+	-< ConnectionTip>
+	-< SearchMenu>, < NodeMenu>... 
+	//remember to check how the menus are created without further duplication
+	
+	-<  ReactFlow >
+		-'s onSelectionChange, I don't quite understand selectedCounts
+
+3. Since the main functions are based on ReactFlow, we check the documentation:
+https://reactflow.dev/docs/quickstart/
+
+
+	-   This is the most basic react-flow with some interactivity when node/edge changes
+	
+	< ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+      />
+
+4. On level 2's reading of VPEditor, we start from 
+
+		< WidgetFactoryProvider>
+			< ReactFlowProvider>
+				< Scene>
+
+
+4.1 < WidgetFactoryProvider > 
+	< WidgetFactoryProvider > is defined by
+	|
+	|
+	V
+	WidgetFactoryConetext.Provider , it's the same as ContextProvider
+	|
+	|
+	V
+	WidgetFactoryConetext is the context created based on WidgetFactory.tsx
+	|
+	|
+	V
+	In WidgetFactory.tsx, class WidgetFactory is defined 
+	|
+	|
+	V
+	In class WidgetFactory, we have 
+		-privete memebers _availableWidgets
+		-getInstance() function
+		-createWidget() 
+		// Here for efficiency ,we use cloneElement by using an exisiting element 
+		as starting point 
+
+4.2 <ReactFlowProvider> is provider we need when we work with multiple flows
+on a page, <ReactFlow> components need to be wrapped inside of it.
+
+
+-------------------------------------------
+Main task today:
+1. Continue Part of <  VPEditor >
+
+2. Interface of Typescript
+
+3. Check some part of react-flow
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. apple develper license
+2. 330 questions, and for different state
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. Interface in Typescript:
+	is a abstracted declaration of sets of methods
+	
+	interface IPerson {
+		firstName: string,
+		lastName: string,
+		sayHi :() => string
+	}
+	
+	And in class we define it more concretlt:
+	
+	var customer: IPerson = {
+		firstName:'Tom',
+		lastName:'Hanks',
+		sayHi :(): string =>{return "Hi there"}
+	}
+	
+	
+	
