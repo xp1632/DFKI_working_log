@@ -1,0 +1,74 @@
+Issues 0707:
+-----------------------------------------
+0. When solving the maxwidth Issue of Stickynote:
+
+I was bothered by the resize time loop exceed problem.
+So I try to solve it
+
+- This problem is out of my range, so I wrote down as far as I reach and go back to 
+
+1. MinHeight and minWidth problem of Stickynote
+	-After setting the min Width and height for Stickynote
+	-The inner color layer is fixed, however, the outer node is not
+	
+	-where to set the minSize of it?
+	-in nodebody?
+	-I need to check the code deeper
+	
+	-The container has a common class .vp-node-container
+	-And only width is definedd as 100% here
+	
+	-We can not set minHeight here as well, since all nodes use this class
+	
+	-So the main problem is caused by the Resize Component,
+	-after changing the minHeight in Resize Component, it works
+	
+1.1 After resizing, the color is floated to the right as 1 pixel
+
+	-Could be several reasons
+	-one is calculation error after resizing
+	
+	-another one is in somewhere, there's a border
+	
+	-it's from the box shadow we defined in .react-flow_node.selected in VPEditor.css
+	
+	- The main cause is that, the stickyNote_node__body div is larger than vp-node-container div
+		-They have 4px difference, why? 
+		-the control line of the resize?
+		
+		-It's because, the resize component should be most outside of the element,
+		-however, in our case, it's inside two other divs
+		
+		
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Careful fix of css issues in VP project
+
+2. Publish it to VP4 to see the actual effect
+
+3. Continue the last part of useGraph code reading
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:

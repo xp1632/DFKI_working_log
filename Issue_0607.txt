@@ -1,0 +1,230 @@
+Issues 0607:
+-----------------------------------------
+1. Start fixing the issues in VP project
+
+-1.1 Stickynode	-radius issues
+	-We need to find where the background is colored
+		-it's in the same layer of title 
+	-We need to only change the bottom radius of the backgroundground
+		-sovled by only changing bottom-radius
+
+-1.2 Strong the title of new create node
+	- the new node is defined in extension2 ,json 
+	- the function name we would like to strong is its title
+	
+	-why it's not as bold as other node's title?
+		-Because it's an input, it doesn't inherit the style from
+		normal node_header
+	
+	-We should set the bold weight for all node header
+	-and inherit it for input area widget
+	
+	-where's the title here in code?
+		-I know it's defined in VPFileJson
+		-how it's used and defined?
+		-where's the inputarea blabla?
+			-I didn' t find where the node is create and used this input area
+			-but I know where the widget inputarea is, so I change the source of problem
+	
+	-I'll spend 10 more mins finding out where the new node is create
+	-It's in nodes/CreateFunction.
+	
+	
+-1.3 Icon size of Tooltip , 'Types not compatiable'
+
+	-Find where the tooltip is defined
+	
+	-It's in useGraph.ts, 
+	-good chance to continue reading useGraph from line 346 to
+	where we need isValidConnection in line 446
+	
+#TODO: the is ValidConnection() in useGraph is read, but I'll put this aside for now and fix the 
+next issue first	
+
+-1.4	
+	
+
+2. Where to find css for Visual Programming package?
+	-the VP package is a published package, we do not need to modify it anymore
+	-we overwrite it in vp4 project's style
+
+	//beside the font-family, we also need to change the font weight,font size
+	[]2.1 Fontweight 
+	
+		-in gui/NodeLibraryItem.tsx need to change from 405 to 600
+	
+	
+	2.2 FontSize
+	
+	-in Accordion Summary, we need the font size to be 12px, font-weight bold, letter-spacing 1->0px
+	-in SearchBar, font-size should be 14px (it's not regualr size, it's hard code 14) 
+		-Or check jp settings:
+		
+		--jp-ui-font-scale-factor: 1.2;
+		--jp-ui-font-size0: 0.83333em;
+		--jp-ui-font-size1: 13px;
+		--jp-ui-font-size2: 1.2em;
+		--jp-ui-font-size3: 1.44em;
+	
+		--jp-content-font-size0: 0.83333em;
+		--jp-content-font-size1: 14px;
+		--jp-content-font-size2: 1.2em;
+		--jp-content-font-size3: 1.44em;
+		--jp-content-font-size4: 1.728em;
+		--jp-content-font-size5: 2.0736em;
+	
+	
+	-we can use px to fix the abnormal fontSize
+	
+	
+	
+	-2.2.1 Menu font-size looks too large after changing to em
+	-2.2.2 The file pool also looks too large 
+	
+	2.3 other css details
+	
+	[]-2.3.1 Accordion scroller
+		-Where to add the overflow property?
+			-Accordion is a MUI component
+			-we test the scorller bar by setting the max-height of MuiCollapse to 80px
+			-And we find out we already have scorllerbar
+			-because the original .css-pwcg7p-MuiCollapse-root have overflow-auto
+				-the original overflow is not auto, it's visible
+		-test by seting max-height to 80px, the scroller bar is working
+
+		-Need further test in VP4 project
+		
+	[]-2.3.2 Button to the right
+		-after changing the parent div of two buttons as float:right
+		-only the first item changes postion, why?
+		-And we find out, the buttons are only at the right corner of content.
+		not the border
+		
+		-In jupyter, it should be at the coner of the border
+		for different item has different length of content
+		
+		-SO we add width:100% for vp-nodelibrary-entry-description
+	
+	[]-2.3.3 Hover Effect for buttons and font-size minor fix
+		-The button's font-size is fixed to smaller version 12px(hard code)
+		-The hover effect added
+	
+	
+	
+	-2.3.4 Accordion Title minor fix 
+		-in Accordion Summary, we need the font size to be 12px, 
+		font-weight bold, letter-spacing 1->0px
+		
+		
+	
+
+	
+
+	
+	//- Search bar, round corner?
+	
+	2.4 How to publish new package?  we'll publish later 
+	
+	
+2.
+
+
+
+
+3. In useGraph.ts, line 346, we continue reading with
+
+-getFreeUniqueNodeIds()
+// This function is to go over the current NodeId and try to find
+a new unoccupied one
+
+-addElements()
+// to add new nodes or edges
+
+//node.selected is an option for reactflow node
+https://reactflow.dev/docs/api/nodes/node-options/#selected-1
+-Thus, selectedNodes(), selectEdge(),clearEdgeSelection()
+selectAll(), selectNode() are all modifying the selected
+boolean flag for certain edges and nodes
+
+-clear(), it setNodes([]), setEdges([]) to empty
+
+-deleteNodes() // delete node with specific nodeId by 
+//1.only setNodes without deleteNodeId
+//2. set ShouldUpdateDataTypeOfRerouteNode flag as true
+
+-deleteSelectedNodes()
+// 1. deleted Edges of selectedNodesId, source and target
+// 2. delete nodes 
+//3. update reroute
+
+-deleteSelectedElements()
+//if edge, call deleteEdges
+//if node, call deleteSelectedNodes
+
+
+-deleteAllEdgesOfNode()// deleteEdges() source and target
+
+-deleteAllEdgesOfSelectedNode() //find selected node by selectedNodes(), deleteAllEdgesOfNode()
+
+-deleteAllEdgesOfHandle
+// inputs are both nodeId and handleId
+// deleteEdges(
+        (e) =>
+          (e.source === nodeId && e.sourceHandle === handleId) ||
+          (e.target === nodeId && e.targetHandle === handleId)
+      );
+
+-We continue code reading of useGraph in line 446
+
+-isValidConnection()
+	-what's action?  What's ConnectionAction?
+	
+	in gui/elements/Menu.tsx 
+	
+	export interface IMenuItem {
+	  title: string;
+	  action?: () => void;
+	  icon?: any;
+	  subtitle?: string;
+	  disabled?: boolean;
+	  titleStyle?: Record<string, string>;
+	}
+	// we notice that action is a self-defined function in Interface ImenuItem
+	
+	
+
+
+
+
+-------------------------------------------
+Main task today:
+1. Fix some small things in VP project to get back to the table 
+
+2. Find where to modify the VP4 project's css
+
+3. Continue the code reading from useGraph in line 346
+// the most important codes in VP project are these hooks,
+ useGraph and useScene
+//Xiongqi
+
+
+
+
+
+
+
+
+----------------------------------------------
+Reading:
+
+1. There's a new file in nodes/CreateFunction ,not sure its usage now
+but looks important
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
