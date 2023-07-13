@@ -1,0 +1,103 @@
+Issues 1007:
+-----------------------------------------
+1. Find in VP4, the difference of font color
+	1.1 -the font looks a little different in the blue title
+		-check the font weight of it
+		-they use the exact same color #0d47a1, but looks different
+		- color: inherit?  or just use jp's var
+		
+		
+		-the weight of summary title is also different,
+		-even when set the summary title as the same 
+		color : #000000DE
+		font-size: 12.5px (0.833333em when root 15px)
+		weight : bold
+		-our summary title looks much bolder than it should be,
+		why?
+		
+		-After zoom in, it looks better
+		
+		-Then the problem is easy to solve, also it's really!!! important 
+		to refresh the page 
+		
+	1.2 - font size of title is a little abnormal, it should be 0.833333em 
+	and while the base font size is 15px, it is 12.5px
+		-we need to change the var font-size of it  
+	
+	
+2. Icon size
+	-Find where's the tick icon is in connection tips
+	-which is to continue reading useGraph() line 446 isValidConnection()
+	
+	-The icon locates in gui/ConnectionTip.tsx 
+	-how to modify the icon size?
+		-the answer is change the font-size of class
+		.MuiTreeItem-iconContainer .MuiSvgIcon-root
+		in gui/index.css
+		-which we can change from the most outer css
+	-At last, we keep our most outer css as 1em,
+	and only change the treeview font-size as 17
+	and we linked it with jp
+
+3. Icon for Sticky note
+
+	-How to svg to MUI Component?
+	-by using createSvgIcon, the SVG component is created
+	https://mui.com/material-ui/icons/#component-prop
+	
+	- I carefully transformed the svg pic, because the MUI svg conpoment only takes
+	view port as 24, so we transform it by the center
+	
+	const StickyNoteIcon = createSvgIcon(
+	  <svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="24px"
+		height="24px"
+		viewBox="0 0 24 24"
+		version="1.1"
+		className="MuiTreeItem-iconContainer MuiSvgIcon-root MuiSvgIcon-stickyNoteIcon"
+	  >
+		<g id="surface1" transform="translate(3, 3) scale(0.8)">
+		  <path
+			d="M 17.121094 21.472656 L 21.578125 16.867188 L 17.121094 16.867188 Z M 7.0625 16.859375 C 6.792969 16.871094 6.539062 16.738281 6.402344 16.511719 C 6.265625 16.285156 6.265625 16.003906 6.402344 15.777344 C 6.539062 15.550781 6.792969 15.417969 7.0625 15.433594 L 11.898438 15.433594 C 12.167969 15.417969 12.421875 15.550781 12.558594 15.777344 C 12.699219 16.003906 12.699219 16.285156 12.558594 16.511719 C 12.421875 16.738281 12.167969 16.871094 11.898438 16.859375 Z M 7.0625 12.046875 C 6.660156 12.046875 6.335938 11.726562 6.335938 11.332031 C 6.335938 10.9375 6.660156 10.617188 7.0625 10.617188 L 16.882812 10.617188 C 17.285156 10.617188 17.609375 10.9375 17.609375 11.332031 C 17.609375 11.726562 17.285156 12.046875 16.882812 12.046875 Z M 7.0625 7.234375 C 6.792969 7.246094 6.539062 7.113281 6.402344 6.886719 C 6.265625 6.660156 6.265625 6.378906 6.402344 6.152344 C 6.539062 5.925781 6.792969 5.792969 7.0625 5.808594 L 16.882812 5.808594 C 17.152344 5.792969 17.40625 5.925781 17.542969 6.152344 C 17.683594 6.378906 17.683594 6.660156 17.542969 6.886719 C 17.40625 7.113281 17.152344 7.246094 16.882812 7.234375 Z M 22.480469 15.429688 L 22.480469 1.445312 L 1.457031 1.445312 L 1.457031 22.507812 L 15.667969 22.507812 L 15.667969 16.148438 C 15.664062 15.753906 15.988281 15.429688 16.390625 15.425781 Z M 17.253906 23.425781 C 17.097656 23.753906 16.769531 23.96875 16.398438 23.992188 C 16.3125 23.992188 16.222656 23.976562 16.140625 23.945312 L 1.464844 23.945312 C 1.105469 23.945312 0.761719 23.8125 0.496094 23.578125 L 0.4375 23.527344 C 0.160156 23.261719 0.00390625 22.894531 0 22.515625 L 0 1.4375 C 0 0.652344 0.648438 0.0117188 1.449219 0.0117188 L 22.488281 0.0117188 C 23.289062 0.015625 23.933594 0.652344 23.9375 1.4375 L 23.9375 15.855469 C 24.054688 16.117188 24.003906 16.425781 23.800781 16.636719 Z M 17.253906 23.425781 "
+			stroke="currentColor"
+			strokeWidth="0.6"
+		  />
+		</g>
+	  </svg>,
+	  'StickyNote'
+	);
+	
+4.Handle css
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Isuues in VP:
+	-Icon size, accordion icon, menu icon
+	-font color in the list and summary
+	
+
+2. Continue the code reading in Line 446 in VP project useGraph
+
+
+3. Part 1 's lebenstest question
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+Simple Floating Edges
+https://reactflow.dev/docs/examples/edges/simple-floating-edges/
