@@ -1,0 +1,173 @@
+Issues 1207:
+-----------------------------------------
+0. While building the VP4 project again,
+
+	-same problem appears after jlpm build:
+	juyterlab dependency blabla
+	-I'll try the update method first
+	-I don't understand because I've updated it last time
+
+	-i found my jupyterlab is back to 3.6.3,
+	-So I upgrade it with 
+		pip install -U jupyterlab --user
+	
+	-then jlpm build works
+	-jlpm watch works
+!!!!!!Great!
+
+
+//Some issues are too poorly described, I can't follow,
+I'll solve it one by one
+
+1. The font of accordion is caused by different version?
+
+2. Change the focus to search bar when search menu is created
+
+	2.1 I useEffect useRef to give them the focus
+
+	2.2 press down to navigate to treeview
+	
+	-this is to add keyboard event to treeview menu/or search menu
+		-which layer?
+		-We have Menu in SearchMenu
+		-several components in SearchedTreeView
+
+	<Menu>  -> <SearchedTreeView>  -> <div className=VP_MenuList> -> <SearchInput> and <ControlledTreeView>
+
+	In <ControlledTreeView>, we have props: toExpand, treeData, onItemClick, onItemDelete
+
+	-By changing the colors of the icon, we noticed that, 
+		1. The regular treeview item is defined in gui/elements/SearchedTreeView.tsx
+			component <ControlledTreeView/>'s Normal <TreeView/>
+			
+		2.The add comment treeview item's style is in gui/elements/<StyledTreeItem>
+			-and the text(or we call command) is defined in gui/SearchMenu.tsx
+			-then the commands are transformed as TreeItemData via function commandsToTreeData()
+
+			-so as a conclusion, we change the focus according to the treeItemIds
+
+	
+
+
+-we also have a hook useKeyDown, however, this useKeyDown is for interacrion with Scene
+-I'll continue the onKeyDown event in the correct layer
+	
+	-We add the onKeydown event on ControlledTreeview
+
+	-We add a console to see the structure and value for treeDataIds,
+	it's exactly the items(including children item) in the list
+
+	-let's check which part is not working step by step:
+			
+		-focus is always null, so the focus state is never updated
+		-when should it be updated?
+		-also we may need two state, 
+			-one to keep boolean, true or false, to see if an item is focused
+			-another one to keep the index of current focused item, and traverse based on the index
+			-now they seems to be mixed
+
+	-Our Need is :
+			-first, the treeview item has no focus, the focus is in another input component
+			-now, when we press down, the item with treeDataIds[0] get the index from input component
+					-this means we also need to write Keydown event for searchinput!!!!HAHAHAHAHAHA
+					-because when Search is defaultedly focused, the keydown event we defined
+					in SearchedTreeView would never trigger!!!!!!!
+
+			-we go to the searchinput component, and define a keydown event for it
+				-to lose focus
+			
+
+
+	
+	
+	
+
+3. Handle color 
+
+4. Context search menu
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Fix issues in github
+
+2. Code Reading from usegraph line 446 to 600
+
+3. Continue test data collecting for 
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+
+0. while commiting, first pull, then push!
+
+1. How to reset your commit,
+
+-in the directory of project
+-right-click and open TortoiseGit
+-Show Log
+-choose the branch below your wannac cancle branch
+-choose Reset to....
+-choose mixed mode if you also want to keep your changes in commit
+
+2.SceneActions are defined in useScene hook
+
+3. Focus Event
+will not bubble up.
+
+For example, when we focus on the input in the following code:
+the onfocus of its parent form would never be invoked
+
+<!-- on focusing in the form -- add the class --> 
+<form onfocus="this.className='focused'"> 
+  <input type="text" name="name" value="Name"> 
+  <input type="text" name="surname" value="Surname"> 
+</form> 
+
+<style>  
+  .focused {  
+     
+    outline: 1px solid red;  
+  }  
+</style> 
+
+4. however we have :focus-within
+
+which can let it's parent get the state that its children is foucus on without any JS
+
+input {
+    ...
+    &:focus {
+        background: #00bcd4;
+    }
+}
+ 
+html:focus-within {
+    background: #e91e63;
+}
+
+https://www.cnblogs.com/coco1s/p/9406413.html
+
+
+5!!!!!!!!!!!!!!!!!!!!!!!!!
+when an element doesn't have focus, its keydown event would also not trigger.
+Because keydown event is for triggered element!!!!!!!!
