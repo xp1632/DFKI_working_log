@@ -1,0 +1,111 @@
+Issues 1407:
+-----------------------------------------
+1. To add className for connected/unconnected handle
+	1.1 We first need to know how do we know if a handle is connected
+		-By checking the official website for handles: https://reactflow.dev/docs/api/nodes/handle/#multiple-handles
+		-we have props :
+		onConnect, isValidConnection, className, style
+		-by Searching isValidConnection, I find we defined it in useGraph and useScene
+
+		-We check the Handle.tsx
+			-since we're not doing onConnect now
+			-in Original <Handle/> , we just define whether it is Connected
+			-then add className to <RFC handle>	
+				-How, currently we are adding className to the outer div,
+				-So by handleData.connection, we've add the correct className to RCHandle
+					
+				-But remember, Parameter Handles are not from Handles, we need to add it manually
+
+
+		-Also, is it correct the isConnected boolean?
+			-Because when we check it here
+			-before the node is created, we start to check the isConnected
+		
+		!-Why do we have two paramterHandle? One in CreateFunction, one 
+		in Return node?
+
+
+	1.2 Then we find where should we add the className to
+		-All the unconnected handles should be set as handle_not_connected 
+
+	1.4 Now we need to give priority to different handle style
+		now we add important to all, but it's not the good way to do it
+	
+	1.5 How do we keep the color 
+		we need to give the backgroundColor to the border 
+		Or we set the boarder the same color and set the background color 
+		to transparent when 
+		
+1.6 The basic function is finished
+	
+	-Now the remaining problem is :
+	
+	-adjust the size of handle
+	-show a completed arrowed 
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Add connected/not_connected className depending on the handle current state
+
+
+2. Continue the code reading in Line 446 in VP project useGraph
+
+
+3. Part 1 's lebenstest question
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. How to debug?
+-remember looking for the root/return of the function
+-And trace it by the clue, 
+-check the exact place, overlook the unimportant ones, 
+	for example, ignore the functions when it's a static problem
+-compare it with correct ones and see the exact differences
+
+- If a procedure is wrong and you don't know why?
+
+	-How to find where the problem locates?
+
+		-1. image you are testing a wiring connection that is not working, 
+			there are two mental stick in your hands, they will tell you 
+			if a component has electricity, when you   ..|..O..|.. put them 
+			on both sides of a component
+
+		-2. 
+
+
+
+2. CSS selector:
+-'.' = && 
+.class1.class2 {styles} means 
+the item need to have #both# class1 and class2
+,then the styles would be applied, remember there's no space after .class1
+
+-' ' = child of 
+.class1 .class2{styles} means
+with space means class2 should be child of class 1, the style applies
+
+-',' = || 
+.class1 , .class2{styles} means
+item with class 1 ,class 2 , or class1and class 2
+can apply styles
