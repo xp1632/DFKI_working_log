@@ -1,0 +1,181 @@
+Issues 1707:
+-----------------------------------------
+
+1. In Search menu, add Node by 'Enter'
+
+	-I don't quite understand about
+	'next menu', if we are creating node, why menu?
+
+	-what's the first item of the getter of setter'?
+
+
+1.1 Where to add KeyDown event for search menu item?
+	-Try where we add arrowdown event for it
+	-By searching Arrow, we find in SearchedTreeView.tsx
+		-<ControlledTreeview/> we defined onArrowUpKeyDown
+		-We defined it in the same place
+
+
+1.2 How should I add KeyDown event?
+	-We define it in <ControlledTreeview/> and trigger it in its return
+	<Treeview> onKeyDown , if (e.key ==='Enter')
+	-The function of onEnterKeyDown is defined inside <SearchedTreeview/>
+-------------------------------------------------------------------
+
+1.2.1 After reading the code, I think the Enter event should be located in
+a higher level, in the SearchedTreeView just like the item click event,
+instead of inside its children ControlledTreeview
+
+-in ControlledTreeView()'s renderTreeItem(), 
+item: TreeItemData, item has, item.onItemClick
+
+<SearchMenu/> defined on ItemClick and we pass it through,
+---> <SearchedTreeView>
+---> <ControlledTreeView />
+---> <StyledTreeItem>
+
+
+
+
+1.4 How to create respective node while certain item is presse Enter?
+
+	-we could check the click event we set for the menu
+		
+		in <StyledTreeItem/> we find the onClick we defined here,
+		it has something to do with 'item'
+	
+	-The click event is defined in MuiTreeItem
+	-addNode
+
+	1.4.1 How do we know which node are we focusing?
+		-parent item without expand
+		-child item with expand?
+
+
+	1.4.2 How to create node?
+		
+		-some node create is in useScene.ts
+			-addNode() onNodeAdd()
+		-we search addNode, and find sticky node create in useKeyDown.ts hook
+		-sceneAction?.addNode('stickyNote') is how we create StickyNote node
+
+		!-in SearchMenu.tsx, we have addNode for our menu
+		
+
+	1.4.3 How to create certain node we want?
+		
+		-we create the node by learning how the onItemClick did
+
+		-in ControlledTreeView()'s renderTreeItem(), 
+		item: TreeItemData, item has, item.onItemClick
+
+		<SearchMenu/> defined on ItemClick and we pass it through,
+		---> <SearchedTreeView>      onEnterKeyDown ={createNodeOnEnterKeyDown} 
+									in this layer we create the node based on item:TreeItemData
+		
+---> <ControlledTreeView />   get event and trigger the SearchedTreeView
+										's onEnterKeyDown()
+
+									
+											
+		---> <TreeView>
+
+		--> <StyledTreeItem> it's only an item with style
+	
+	1.4.4 What's the props for onEnterKeyDown()?
+		(e,items) or (items)
+		
+		-for onArrowKeyDown, they are under onKeyDown of <TreeView>,
+			so they are ()=> void
+		-however, their cycle ended at SearchenTreeView
+		-while our enter function should be passed to upper layer
+			SearchMenu.tsx to addNode
+		
+		-where should we catch the keyboard event?
+
+		
+	1.5 The current problem is: the onEnterKeyDown() is not broadcast
+	from <TreeView> to upper components from onKeyDown,
+	
+	we need to define something here
+
+	We have a defined TreeItemData.onClick
+
+	1.6 What's the difference between onItemClick and onClick?
+	
+
+	1.7 we don't have item in TreeView but we have item in StyledtreeView
+
+	-what should I do 55555555555555555555555555555555
+
+
+2. I am confused by the structure of Search Menu, why does it has so many 
+layers???????
+
+	-somehow, the route is clear, when we press key enter in Treeview Item, the onEnterKeyDown
+	we defined in SearchMenu is triggered
+
+	-now we have two remaining questions：
+	
+	1. get correct nodeItem in SearchedTreeView
+
+	2. create correct node in SearchMenu
+
+
+2.1 Defining onKeyDown event in StyledTreeItem is not useful
+	
+	-We go from <TreeView> in <ControlledTreeview> and directly go to SearchMenu
+
+	-What we get from focus node is 'Variable',which is a string
+	
+	-however, what we need is a treedata, then we can use it configtype and build it in SearchMenu
+	
+	-Or do we really need treedata, can we 
+
+2.2 Item click, they didn't use <TreeView> ,used <StyledTreeItem instead>
+	we can not put the event in styledTreeItem as click do,
+	we need to put it inside TreeView
+
+2.3 setFocusedNode returns string
+	however, we need TreeItem data, so that we could see if it has children array,
+	and determine not to render it because it's a parent node
+
+	How should we solve this?
+	
+	-selected prop x
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Search menu new features in github
+
+2. Continue the code reading in Line 446 in VP project useGraph
+
+3. Part 1 's lebenstest question
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. delete non-used remote branch which still exists in local
+
+git branch -d Feat/sticky-note
+git prune
