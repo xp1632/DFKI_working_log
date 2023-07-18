@@ -1,0 +1,100 @@
+Issues 1807:
+-----------------------------------------
+1. In order to find how to get the nodeId of TreeItem,
+
+we check TreeItem:  https://mui.com/material-ui/api/tree-item/
+
+- we find out every TreeItem or StyledTreeItem has nodeId
+
+- !We also have treeDataId in our code, this treeDataId is not what we finally
+used in TreeView, it's more used in creating the Treeview
+
+-! by checking treeViewref. current.children, we can make use of some of its props
+
+
+
+!1.1 what the onNodeFoucus returns, is exactly nodeId, or at least id for certain node,
+	The variables and Functions are set wrong as their id and name are the same, both variablles
+	-while the nodeID should be nummer ids?
+
+	-so now when we have the actually ids, how should we get the treeData accordingly?
+	-we find out the id in ref.current.children is different, so we neeed to use the 
+	id from focusedID, this id is consistent with the id in treeData
+	
+
+1.2 getNodeById
+	-In ISceneActions, we have getNodeById
+	-However, it's for reactflow's custom nodes?
+ 
+	
+1.4 Get to know TreeData
+	-Now what we need to solve is :
+	-we have focusedID of treeItem, we have treeData for all treeitems
+	-how could we fetch the treeItemData from treeData based focusedID
+
+
+1.5 Deep in SearchMenu.tsx,
+
+ https://github.com/Max-ChenFei/VisualProgrammingEditor/issues/305#issuecomment-1640721718
+	we have several sources of treeData, 
+	
+	-1. from commands in Search Menu
+
+	-in SearchMenu, we have extra command for 'Add comment' node
+	-we have commandsToTreeData to it
+	-to transform each new add commands into treeData Array
+
+	-We can see the nodeData we get from commands, has id the same as its name
+	such as id:'Add Comment...', name:'Add Comment...'
+
+	Add Comment.., Add Sticky Note..., Add Reroute..., Clear, Variables, Functions
+	These treeData Item are normal
+	
+	-2. from nodeConfig in SearchedTreeView
+
+	-also part of the items are from .nodeConfigsToTreeData in SearchedTreeView.tsx
+	
+!!!!	-If one command have no category,
+		-then it's a solo node in treeview, without children
+
+2. We can not make hover as selected, otherwise when we keydown the itemlist
+	every item is created
+
+
+3. I would like to try the Keydown for item,
+	after trying, we can not add onKeydown for item
+	-we need to figure out in treeview
+
+4. At least no matter what, we know the id for each treeviem item is unique
+
+
+---------
+Finished in https://github.com/Max-ChenFei/VisualProgrammingEditor/issues/305
+
+
+-------------------------------------------
+Main task today:
+1. Fix the non-match type problem in Search Menu, node creation by Enter
+
+2. Continue the code reading in Line 446 in VP project useGraph
+
+3. Part 1 's lebenstest question
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. In Javascript, undefined is false, !undefined is true
