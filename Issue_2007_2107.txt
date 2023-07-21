@@ -1,0 +1,95 @@
+Issues 2007:
+-----------------------------------------
+1. Find where's the position for search menu
+
+	-we have anchorPosition in SearchMenu,
+ 
+	-we also have useMousePosition hook
+
+2. Where' the addNode in SeachMenu from?
+	-is it the same addNode as in useScene?
+	-SeachMenu's addNode is in the action of Command
+	-Command is defined in useGui
+
+	-the mother addNode is from ISceneActions in useScene
+
+3. The problem occurs when we create node on Keyboard when mouse is far away
+	
+	-we need to give Menu anchorPosition to addNode, and somehow convert it
+	-the convert is finished
+
+	3.2 How to get the domRef of reactflow in SearchMenu?
+		or do we need it in this way?
+
+	Yes, it's about different origins. 
+	https://github.com/xp1632/DFKI_working_log/issues/12
+	
+
+	3.3 I need to figure out what do we get back from the bouding blabla function
+	
+	the getBoudingClientRect() returns the size and position of a rectangle.
+	https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+	we use it to move the origin of coordinates, see more in github issue in 3.2
+
+4. How do we finally get the reactflow DOMreference?
+	-at first, we don't want to import it to SearchMenu
+		because SearchMenu should be a self-contained front view
+	-but we need the reactflow root dom, to recalculate the coordinate we need in the scene
+
+	-how should we do it?
+	
+	-we find out the reactflow reference is defined and used in VPEditor
+	-And, we passed some mouse information from VPEditor to useScene hook
+	-and useScene is also the place we defined the scene actions to AddNode()
+	
+	-useScene as a third party, seems to be a perfect place to recalculate the coordinate
+	
+	-----------
+	-In more advanced version, we takes the same calculating part from mouseevent Calculation 
+	and keydownEvent Anchor calculation
+	-and we define a new function in utils, this function is exactly used as calculation,
+	then pass the projected coordinate out for further usage
+
+	-during the procedure, we also need to pass some functions here and there,
+	-but don't be afraid to pass things around, the functions are defined to be called here and there
+	when needed
+
+
+-------------------------------------------
+Main task today:
+
+1. pass mousePosition or search Menu position to addNode
+
+2. Check useRef
+
+3. Context of Search Menu, or auto find port
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Leben questions P1 tomorrow
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. Coordinate of web, 
+o----------->x/left
+|
+|
+|
+|
+v
+y/top
+
+
+
