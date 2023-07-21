@@ -1,0 +1,69 @@
+Issues 1807:
+-----------------------------------------
+1. Line 446 in useGraph
+
+	-useCallback with empty dependency means 
+	this function would only be recreated once when the components mounts
+ 
+	1.1 our isValidConnection():
+	-we take Connection from reactflow and return action and message 
+	-there's rules for validConnection
+		-datatype, source, target,maxConnection,
+
+	-the isValidConnection in reactflow takes edge and return boolean
+	
+	1.2  getHandleConnectionCounts()
+	-we take nodeId and handleId, return the counts of handle
+
+	
+	1.4 isAnyConnectableNodeSelected()
+	-return boolean by finding if a node has both input and output and is selected
+	1.4.1 anyConnectableNodeSelected and its setState used the boolean in 1.4
+
+	1.4.2 anyConnectionToSelectedNode to see if selectedNode has connnection by
+	checking if their inputs or outputs handles has handle.connection
+	
+
+	1.5 toString  graph as obejct {nodes,edges} to JSON string
+		serializer used
+
+	1.6 fromJSON graph as SerializedGraph to {nodes,edges}
+
+2. useScene
+	0. we have ISceneActions and ISceneState
+
+3.useGui, click, openWidget, closeWidget, and most important!!! Command is defined here
+
+4. useKeyDown keydown and trigger spefic scene actions]
+
+5. useTrackMousePos hook, get projected Pos of mouse
+
+s
+
+-------------------------------------------
+Main task today:
+
+
+1. Continue the code reading in Line 446 in VP project useGraph
+
+2. Part 1 's lebenstest question
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1.-useCallback with empty dependency means 
+	this function would only be recreated once when the components mounts
+
+2.-difference of getNode and getNodes is: one is to get one, another is to get many
