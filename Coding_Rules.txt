@@ -1,5 +1,10 @@
 Coding Rules Summary:
 
+-Simple Rules
+	-Module should be self-contained and less dependency
+	-Decrease repetition of Code
+	-Encapsulate the reusable utilities
+
 -Naming Rules
 
 	-Naming should consider scope
