@@ -1,0 +1,498 @@
+Issues 2407_2507:
+-----------------------------------------
+0. Procedures of providing context for searchmenu triggered by handle drag:
+
+	1. we first drag from a handle of a node to an empty place,
+	-an edge line is drawn from the start handle to where our mouse located
+
+	2. based on the type of this handle and our start node
+	-a searchMenu, which only appears the node that is suitable for start handle/node appears
+
+	3.user selected one node in the search menu
+	-a new node is created
+	-the new node's handle is connected with start node's start handle
+
+Other questions:
+
+0.1 should 'Add Comment' node appears in search menu?
+-I think currently the answer should be no? Because this creation is triggered from a handle
+the add comment node should be a function for clicking in the background
+
+
+1. drag from a handle, we already have a line from it
+	-we need to know,
+	
+	1.1 how and when to trigger a search menu,
+		now searchmenu is created when right click on the background
+		
+		1.1.1 example of add Node on Edge drop https://reactflow.dev/docs/examples/nodes/add-node-on-edge-drop/
+		-in onConnectionEnd when targetIsPane, we setNodes of newNode
+		
+		```
+		 const onConnectEnd = useCallback(
+			(event) => {
+			  const targetIsPane = event.target.classList.contains('react-flow__pane');
+
+			  if (targetIsPane) {
+				// we need to remove the wrapper bounds, in order to get the correct position
+				const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
+				const id = getId();
+				const newNode = {
+				  id,
+				  // we are removing the half of the node width (75) to center the new node
+				  position: project({ x: event.clientX - left - 75, y: event.clientY - top }),
+				  data: { label: `Node ${id}` },
+				};
+
+				setNodes((nds) => nds.concat(newNode));
+				setEdges((eds) => eds.concat({ id, source: connectingNodeId.current, target: id }));
+			  }
+			},
+			[project]
+		  );
+		```
+		
+		1.1.2  In project, the original SearchMenu is triggered in
+		
+		-Inside VPEditor.tsx 's <Reactflow> , we have prop
+		-onPaneContextMenu which is called when user does a right-click on canvas
+		-and inside onPaneContextMenu, we called 
+			-sceneActions?.selectAll(false); //why? what's the usage?
+			-gui.openWidget
+			
+		```
+		onPaneContextMenu={(e) => {
+            e.preventDefault();
+            sceneActions?.selectAll(false);
+            gui.openWidget(
+              'search',
+              {
+                left: e.clientX,
+                top: e.clientY,
+              },
+              {
+                addNode: sceneActions?.addNode,
+                addNodeWithSceneCoord: sceneActions?.addNodeWithSceneCoord,
+                clear: sceneActions?.clear,
+                autoLayout: sceneActions?.autoLayout,
+                moreCommands: sceneState?.extraCommands,
+              }
+            );
+          }}
+		```
+		
+		1.1.4. Thus, we should
+			-Edit the onConnectEnd/onClickConnectEnd in VPEditor
+			-check if it's on panel
+			-if so, open widget of search menu
+		
+			
+	1.2 how do we know our anchor position is on background or on handle?
+		-because when on handle, should be connection tips
+		```
+		event?.target as HTMLElement
+            )?.classList.contains('react-flow__pane');
+		```
+	1.4 what about on node? what should happened?
+	- currently, we only focus on panel
+	
+	1.5 what's the difference of onClickConnectEnd and onConnectEnd,
+	which one should we use https://reactflow.dev/docs/api/react-flow-props/#onpanecontextmenu
+	
+	-onConnectEnd is to drag and start a connection
+	-onClickConnect is to start a connection by click
+	-in our case, we use onConnectEnd
+	
+2. filtered search menu, remember to search for filtered in the project
+
+	- the filtered treedata is in SearchedTreeView, 
+	- there's also set filteredTreeItemData there
+	
+	-we also need to get the type fo the handle where we drag from
+	
+[] we could get the information about the start node in
+   in VPEditor.tsx, onConnectStart()
+   
+   ```
+   onConnectStart={(evt, params) => {
+            gui.connectionStartNodeId.current = params.nodeId;
+            closeWidget(null, true);
+          }}
+		  
+   ```
+
+	-and use this type as search keyword
+	
+
+2.1 I'm a little confused here, I also need to check the connection tips
+
+	2.1.1 in useGraph.ts, isValidConnection(takes Connection and return connectionStatus),
+	- we have also isDataTypeMatch, 
+		isDataTypeMatch(sourceHandle.dataType, targetHandle.dataType)
+	-this is to check if sourceHandle's dataType is equal to targetHandle's dataType
+	or one of it is 'any'
+	
+	from types/DataType.ts
+	```
+	export function isDataTypeMatch(type1: string, type2: string): boolean {
+	  return type1 === type2 || type1 === 'any' || type2 === 'any';
+	}
+
+	```
+	
+	-and the rules here are( param has type Connection) :
+		-do not connect own source with own target
+		-if type not match, ConnectAction.Reject 
+		-if maxConnection, ConnectAction.Replace
+		-otherwise, ConnectAction.Allowed
+
+	2.1.2  in VPEditor.tsx, we also have isValidConnection, 
+	
+	-This one is passed through sceneActions 
+	 const status = sceneActions?.isValidConnection(connection);
+	 
+	**-we first understand gui.connectingNodeId, the type is RefofObject**
+	
+	- it's declared in useGui and passed inside of interface IGui
+	- in VPEditor, onConnectStart(evt,params), 
+		params.nodeId's value is set to gui.connectingNodeId.current
+	- and these are params for onConnectStart
+	- type OnConnectStartParams = {
+		  nodeId: string | null;
+		  handleId: string | null;
+		  handleType: HandleType | null;
+		};
+		
+	- remember, we can start a connection from any node/handle
+	- but it may not be valid, so the nodeId here is just the start node
+	- not equal to the sourceNode in a real Connecttion
+	
+	**We then understand Connection**
+	```
+	type Connection = {
+	  source: string | null;
+	  target: string | null;
+	  sourceHandle: string | null;
+	  targetHandle: string | null;
+	};
+	```
+	
+	 
+	- in isValidConnection,
+	what are isFromSource,toNode,toHandle,toDom 
+		-isFromSource means a flag to see if currentStartNodeId is from source of the connection
+		
+		-For example, we have two nodes, node 10 and node 12
+		  _____			_____
+		O| 10 |O       O| 12 |O      		
+		  -----			-----
+		 
+		- to clarify, why do we only have two types of handles, because
+		-the for each node, we only have two types handle, source and target
+		-normally, source handle is on the right as output of the node
+			-and also as the source of the connection to other node
+		-target handle is on the left, which is the link target for other nodes to connect
+		-Like this :
+				  _____                 	      _____
+		(target)O| 10 |O(source)		(target)O| 12 |O(source)
+		         ------							 ------
+		
+		- if we try to link node 12 from target handle to node 10's source node
+		
+		               +------------------------+                  
+				  _____V                 	    | _____
+		(target)O| 10 |O(source)		(target)O| 12 |O(source)
+		         ------							 ------
+		
+		- it's not a tradition connection, 
+			-because traditionally we'll link from source to target
+			-right side of node to left side of node
+		
+		-however, in this case, it still works because this connection itself is valid
+		-For this connection, node10 is source, node 11 is target
+			-no matter we link node 12 to node 10, or we link node 10 to node 12
+			-it only depend on the handle type in both side of this connection
+			-the connection is always source to target
+			
+		-the only difference is the location of Connection Tooltip
+	
+	- now we are going through connection in VPEditor's code
+	-----------------------------------------------------
+		1.onConnectStart()
+		  the startnodeId (where we drag from) is set to connectionStartNodeId.current
+		
+		2. isValidConnection(connection)
+			- first the isValidConnection we defined in useGraph is called
+				if we get status as false, then return false
+			
+			-if this connection passed, now we're going to find where this connection end
+				and open connectionTip widget there
+			
+			-How can we get the end handle of a connection? 
+				-we could document.querySelector() by the handleName
+			
+			-How do we know the handleName?
+				-there's a certain logic to define the handle name:
+				 `[data-id="${toNode ?? ''}-${toHandle ?? ''}-target"]`
+				 -here toNode is the NodeId of the node we link to
+				 -toHandle is the handleName of the handle we link to
+				
+				
+			```
+			const isFromSource = (): boolean => {
+              return gui.connectionStartNodeId.current === connection.source;
+            };
+            const toNode = isFromSource()
+              ? connection.target
+              : connection.source;
+            const toHandle = isFromSource()
+              ? connection.targetHandle
+              : connection.sourceHandle;
+			```
+			
+			- So in these code, 
+			-isFromSource find out if the startNode where we drag from
+				is equal to the sourceNode of this connection
+			
+					   +------------------------+                  
+				  _____V                 	    | _____
+		(target)O| 10 |O(source)		(target)O| 12 |O(source)
+		         ------							 ------
+			- In this example, we drag from Node12, the startNodeId is 12
+				However the sourceNode of this connection is 10
+			
+			-So we didn't drag from source, then isFromSource is false,
+			-then we are dragging to source when isFromSource is false
+			-the params of this connection is 
+				connection = {source:'10',sourceHandle:'execOut',target:'12',targetHandle:'exexIn'}
+				-connection is not defined by where we drag from, no matter we drag from
+				-connection is always source to target, in this case, Node 10 to Node 12
+					-even when we first create the connection by dragging from Node 12
+				
+			-thus toNode=connection.source, in this case, Node 10
+			-toHandle = connection.sourceHandle, in this case, Node 10's sourceHandle
+			
+			```
+            const toDom =
+              document.querySelector(
+                `[data-id="${toNode ?? ''}-${toHandle ?? ''}-target"]`
+              ) ??
+              document.querySelector(
+                `[data-id="${toNode ?? ''}-${toHandle ?? ''}-source"]`
+              );
+			  
+            let bbox: DOMRect | undefined;
+            if (toDom) {
+              bbox = toDom.getBoundingClientRect();
+            }
+            gui.openWidget(
+              'connectionTip',
+              {
+                left: bbox?.left ?? 0 + 10,
+                top: bbox?.top ?? 0 + 10,
+              },
+              { connectionStatus: status }
+            );
+			```
+			
+			- And this part of code is to get HandleDom by its name and creat Widget Tip around it
+
+
+2.2 Check Handle in https://reactflow.dev/docs/api/nodes/handle/
+	
+	2.2.1 the basic handle from web is source and target
+	
+	2.2.2 Our handle has HandleData, HandleData has dataType
+	export { type Handle as HandleData } from './Handle';
+	```
+	 const sourceHandle = getNode(params.source!)?.data.outputs?.[
+      params.sourceHandle!
+    ] as HandleData;
+    const targetHandle = getNode(params.target!)?.data.inputs?.[
+      params.targetHandle!
+    ] as HandleData;
+
+	```
+	
+	we get these dataTypes from Json and types we defined,
+	
+	basically, check init.json, we have exec, integer,float, boolean, string, array
+	
+2.3 Now let's check what we have in Search Menu	
+
+- If a node is could link to another node, does it solely depend on if their handle.DataType match?
+- how do we know, which node has which kind of hanlde.DataType
+
+
+- Node Matching Rules:
+	-inputs match outputs, and vice verse, here we can check the node's defination
+		-just like we check the source or target in isFromSource
+		
+	-after matching inputs/outputs, find the node which exist same dataType
+		or its dataType is any
+	
+
+2.4 We create SearchMenu in VPEditor's onConnectEnd,
+we filter the treeData in SearchedTreeView by keyword
+
+- now we want to filter treeView by searching if the node inside the menu,
+	-has specific dataType
+
+2.4.1 We first need to check, what kind of data we get in SearchedTreeView,
+	is the node's handle type included? Or only the name of is included
+	
+	-in TreeItemData, we have id, name, configType, children
+	
+	- we have nodeConfigsToTreeData,
+		-where's the nodeConfig from?
+		-in SearchMenu, we used nodeConfigsToTreeData(nodeConfigRegistry.getAllNodeConfigs())
+		
+		-where's nodeConfigRegistry from?
+		-It's in extension/NodeConfigRegistry.ts
+			-here we save node name and its config as Record, like a dictionary
+			-  public registerNodeConfig(name: string, node: config): void {
+				this.registry[name] = node;
+			  }
+			 -this is how we register or save a node's configuration
+			 -getAllNodeConfigs returns this.registry, which is the whole registry dictionary
+			 
+			 -getNodeConfig returns the Config of a certain Node by its name(here the name 
+			 is configType)
+			 - for example, we have config type as extension1.function1
+			 -in getNodeConfig(), we'll get path = name.spilt('.')
+			 -and traverse the registry dictionary to find the node
+		
+		-Now let's see how and where we get Node configuration by debugging:
+			-In SeachMenu, when we first setTreeData, inside of it, we called
+			nodeConfigsToTreeData( nodeConfigRegistry. getAllNodeConfigs)
+			
+			-Here nodeConfigRegistry.getAllNodeConfigs is node congiguration with its name
+			
+			- for example, 'filter'  configuration, 
+			here in nodes/gaussian/inputs , in this case this node have three type of
+			inputs, which are "exec", "ndarray","float"
+			
+			```
+			{
+				"type": "filters",
+				"description": "Gaussian filter",
+				"enable": true,
+				"isPackage": true,
+				"nodes": {
+					"gaussian": {
+						"notShowInMenu": false,
+						"type": "filters.gaussian",
+						"category": "function",
+						"title": "gaussian",
+						"tooltip": "Multi-dimensional Gaussian filter.",
+						"inputs": {
+							"execIn": {
+								"title": "execIn",
+								"tooltip": "execIn",
+								"dataType": "exec",
+								"showWidget": false,
+								"showTitle": false
+							},
+							"input1": {
+								"title": "image",
+								"dataType": "ndarray"
+							},
+							"input2": {
+								"title": "sigma",
+								"dataType": "float",
+								"defaultValue": 1
+							}
+						},
+						"outputs": {
+							"execOut": {
+								"title": "execOut",
+								"tooltip": "execOut",
+								"dataType": "exec",
+								"showWidget": false,
+								"showTitle": false
+							},
+							"filtered_image": {
+								"title": "filtered_image ",
+								"dataType": "ndarray"
+							}
+						}
+					}
+				}
+			}
+			```
+			
+2.4.2 How should we find a node based on it's inputs/outsput's dataType?
+- where should we search or modify?
+- should we also pass inputs/outputs to node?
+	since now we only have -in TreeItemData, we have id, name, configType, children, tooltip
+
+-how should we pass it when there's multiple inputs handles? no problem
+
+- In nodeConfigToTreeItemData(), we could get more information from config
+when accessing all of it by 
+config = nodeConfig.nodes[name]
+
+-however, in return. we only returns id, name, configType, children, tooltip
+
+[] - I think I should modify here,nodeConfigToTreeItemData(), 
+		add inputs/outputs for TreeItemData 
+   - Then modify filter/search, to let them also search for the treedata item's input or output
+   
+
+2.5.1 Modify the nodeConfigToTreeItemData()
+	-add inputs, outputs to original TreeItemData which only includes  
+			id, name, configType, children, tooltip
+
+2.5.2 Now we have saved the respective inputs and outputs in TreeItemData
+	-How should we use it?
+	-how should we 
+		-get the input or output; handle's datatype from starthandle
+		-search matching node who has opposite input or output
+			-and handle has same datatype in SearchTreeView's treedata
+		
+	
+
+
+3. SetEdge 
+https://reactflow.dev/docs/getting-started/adding-interactivity/#handle-connections
+
+3.1 What's the difference for us if we drag from source handle or target handle
+
+
+-------------------------------------------
+Main task today:
+
+1. Context of Search Menu
+	-we first create whole searchmenu on context by drag
+	-we find out how to filter data by rules
+	-we give the filtered treeData to the SearchMenu
+
+1.2 Check the isFromSource in VPEditor
+
+2. Test data
+
+3. Check useRef, useCallback
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. What is Connection type in react flow like?
+
+https://reactflow.dev/docs/api/types/#connection
+
+type Connection = {
+  source: string | null;
+  target: string | null;
+  sourceHandle: string | null;
+  targetHandle: string | null;
+};
