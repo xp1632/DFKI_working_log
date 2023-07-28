@@ -53,5 +53,14 @@ Coding Rules Summary:
 
 -Module Rules
 	-Higher Cohesion, lower coupling
-		-Cohesion: the similiarity inside the module
-		-Coupleing: the dependency needed from other modules
+		-Cohesion: the similarity inside the module
+		-Coupling: the dependency needed from other modules
+	-For each module, give them one single job
+		-take MVC architecture as example
+		-the view module only takes care of view
+			data->[view]->graphics UI
+		-the model module only takes care of functioning
+			data->[model]->calculated data
+		-the controller module only takes care of handling
+			[model's calculated data]<-->[controller]<-->[view's data request]
+
