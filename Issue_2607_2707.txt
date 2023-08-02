@@ -1,4 +1,4 @@
-Issues 2607_2707:
+Issues 2607_2707: https://github.com/Max-ChenFei/VisualProgrammingEditor/issues/191
 -----------------------------------------
 1. To get handle data
 	(target or source handle,this handle's dataType) that we drag from
