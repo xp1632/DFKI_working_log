@@ -7,8 +7,8 @@ Coding Rules Summary:
 
 -Naming Rules
 
-	-Naming should consider scope
-	-Naming should tell its function 
+	-Naming should consider scope/domain
+	-Naming should tell its function in the domain
 	-Naming should keep consistent form 
 	-No 'Customized'
 	
