@@ -63,4 +63,7 @@ Coding Rules Summary:
 			data->[model]->calculated data
 		-the controller module only takes care of handling
 			[model's calculated data]<-->[controller]<-->[view's data request]
-
+-Domain Rules
+	-Modify the values in local variables first
+	 then pass the change to global state if needed 
+	-Do not modify a global state in a local function: https://github.com/xp1632/DFKI_working_log/issues/16
