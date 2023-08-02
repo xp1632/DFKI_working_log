@@ -1,0 +1,402 @@
+Issues 2607_2707:
+-----------------------------------------
+1. To get handle data
+	(target or source handle,this handle's dataType) that we drag from
+	
+	1.1 We check the onConnectStart in VPEditor.tsx
+	 we have the params of 
+	 
+	 	- type OnConnectStartParams = {
+		  nodeId: string | null;
+		  handleId: string | null;
+		  handleType: HandleType | null;
+		};
+		
+		-We drag and log the node10 createFunction node's first handle,
+		handleParams= {
+			"nodeId": "10",
+			"handleId": "execOut",
+			"handleType": "source"
+		}
+		
+	1.2	-handleType is clear, it's a source handle
+		-what's this handleId from, it's the name of the handle or?
+		-in website, the id for handle is :
+		You only need this when you have multiple source or target handles 
+		(otherwise the node id is used)
+		https://reactflow.dev/docs/api/nodes/handle/#prop-types
+		
+		
+		1.2.1 -is it the same as the dataType of handle? 
+		-I checked the outputs handle data for CreateFunction 
+		
+		we have output as:
+		
+		execOut:{title:'execOut',dataType:'exec'}
+		
+		-It's definately not dataType, but it is title or the key name of this object?
+		
+		-Let's check CreateFunction's handle
+		-line 200
+		```
+		  const outputHandles = [];
+		  for (const outputId in data.outputs) {
+			const handle = data.outputs[outputId];
+			if (handle.title === 'execOut')
+			  outputHandles.push(
+				<SourceHandle
+				  key={outputId}
+				  id={outputId}
+				  nodeId={id}
+				  handleData={{ ...handle, tooltip: 'exec out' }}
+				  showWidget={!!handle.showWidget}
+				  showTitle={false}
+				/>
+			  );
+		```
+		- we solved the question, 'for(const outputId in data.outputs)' 
+		handleId is the keyname of outputs[], not it's title
+		
+		-execOut:{title:'execOut',dataType:'exec'}
+		
+
+
+[]		1.2.2 Pay Attention, we also have Parameter Handle
+			-ParameterHandle is defined inside the CreateFunction
+			-and only used in Return node and CreateFunction node 
+			-and it's exported two times
+			- in the defination, the handleDatatype is source or target
+			
+	1.4 Now we get handle data from VPEditor's OnConnectStartParams
+	
+		handleParams= {
+			"nodeId": "10",
+			"handleId": "execOut",
+			"handleType": "source"
+		}
+			
+		handleId is the keyword we search in outputs/inputs[]
+		
+		1.4.1 How should we use it? Do we need to save it and pass it to somewhere?
+		
+		-Where do we do the filtering based on the handle information
+			-original filteringTreeItemData is defined in SearchedTreeView
+			-takes in item:TreeItemData, searchKeyword:string
+			
+			-we need to builld a function could search TreeItemData with
+			matching handleType(source matches data.inputs; target matches data.outputs)
+[?]			matching dataType ?( now we have handleId: execOut, we need execOut.dataType)
+
+		1.4.2 to get dataType, we check type HandleData and handles/Handle.tsx
+		- original Handle from Reactflow is used as RCHandle
+		- we also have original handleType from reactflow here, 'target' or 'source'
+		
+		```
+		export interface HandleData {
+		  title?: string;
+		  connection?: number;
+		  tooltip?: string;
+		  dataType?: string;
+		  defaultValue?: any;
+		  value?: any;
+		  showWidget?: boolean;
+		  showTitle?: boolean;
+		  deletable?: boolean;
+		}
+		```
+		
+		our Handle's props:
+		
+		  id: string;
+		  nodeId: string;
+		  handleData: HandleData;
+		  showWidget: boolean;
+		  showTitle: boolean;
+		  toHideWidgetWhenConnected: boolean;
+		  className: string;
+		  handleType: HandleType;
+		  handlePosition: Position;
+		  onValueChange?: (newVa: any, oldVa?: any) => void;
+			
+		-1.4.3 is it possible that we have handleId, nodeId, 
+		handleParams= {
+			"nodeId": "10",
+			"handleId": "execOut",
+			"handleType": "source"
+		}
+		then we also get the datatype of this handle 
+		
+[TODOL]		-is it possible that we could modify the OnConnectStartParams here?
+		
+		-I am trying to redefine a onConnectStart in Handle.tsx to also add datatype of a handle
+		
+		Original:
+		onConnectStart?
+			Description:
+			Called when user starts to drag connection line
+			Type:
+			(event: React.MouseEvent, params: OnConnectStartParams) => void
+
+		1.4.4 We test the filterwithHandleDataType in SearchedTreeView.tsx
+		
+		-find() function in JS:
+		-The hasMatchingHandleDataType() function is ready, it would return true, when 
+		find the item with matching dataType
+		
+		-We need to check why it's not filtered as it is
+			-the has function is correct
+				-the has function is missing some Item
+					-when we have Flow Control- Sequence meets the condition
+					-then Flow Control- If else which also meets the condition is omitted
+					
+			-we first check the fItem of filterFunction
+			-then we check search()
+		
+		1.4.5 Check why some child is overlooked in has Function
+		
+			-Reason 1, we return true when we find the first child that meet requirements
+				-For example, we only find Flow Control-Sequence, howwver,
+				-its' sibling Flow Control-If else is omiited because we've returned true
+				
+			-Reason 2, after the if requirements met, the {...item} we returned
+				-is the whole Flow Control data, not a small piece like Flow Control-Squence
+					-we may have to return respective child?
+		
+		1.5 we check the original search filter, see how it works
+			-By checking the filterTreeData() function
+			
+			-we find out our hasMatchingHandleDataType() is too deep
+			-because originally it's a recursion function, but in our hasMatchingHandleDataType
+			-we've go through the children and grandchildren
+			
+			-the correct format should be , in first if
+				-we only check a shallow condition
+				-for search keyword: check if item.name includes keyword
+				-for find if input exist and input.children has certain dataType
+				
+				-if we didn't find these in first if, we go to children and pass
+				children item as new father item and call this function again
+				-until all children and grandchildren are checked through
+			
+		1.5.1 So here we modify the first if condition in recursion function
+			- if (Object.prototype.hasOwnProperty.call(item, 'inputs')) {
+				  // here is correct, we check inputs then we check inputs children's dataType
+				  // that's it
+				  // the rest is to call this function recursively
+				  console.log('has inputs handle: ', item);
+				  return { ...item };
+				}
+			- we first set a really simple condition to see if the item has inputs handle
+			- and we find out the Flow Control.Sequence, and Flow Control-. If Else siblings
+				both appears
+		
+		1.5.2 we've have a correct filter function now
+
+2. only trigger our filter search menu by dragging handle to panel
+
+	-original search() in SearchedTreeView.tsx 's <SearchInput>'s onChange
+	-where do we want our filter start to work?
+		-right after we drag from start handle(onConnectStart), 
+		then land on the panel(onConnectEnd)
+	-so we would like to trigger it onConnectEnd on panel, it is not neccssary a 
+	search because we don't need enter or keyword
+	
+	- by looking at search(), we just used filteredTreeData[] to store the result
+	 and setFilteredTreeData when treeData changes
+	 
+	
+	2.1 we've give the original search menu back to normal case
+		-and build our search with datatype
+		-where should we trigger our search?
+		
+		-in onConnectEnd in VPEditor, we've open widget a search menu
+		-however, here the search menu is not filtered,
+		-we would like a filted search menu here already
+		
+		-check how this search menu is created
+		
+			-the searchMenu itself, needs creatation,
+			-we need to filter after it's mounted
+			-the treeDate for creatation is in SearchMenu.tsx, not searchedTreeview
+			-maybe we need a flag needFiltered when creating the searchmenu in onConnectEnd
+				-and pass this flag needFiltered 
+				and some startHandleinformation to searchedTreeView
+				-to setFilteredTreeData
+				
+	 2.1.1 in ControlledTreeView we have a flag toExpand, to set if the treeview should be
+	 expanded
+		-should we have a flag toFilter here?
+		-how and where should we get this flag?
+		-because we use openwidget which is React.createElement to create searchMenu
+		
+		-I was thinking to pass this toFilter Flag when we pass the other command
+			to SearchMenu, and in SearchMenu we pass the SearchedTreeView
+			-in SearchedTreeView, we get this filter flag and start filtering
+		
+		-in useGui, we've defined a connectionStartNodeId and pass it to VPEditor
+		
+		
+		-I noticed that the toFilter flag is successfully passed from VPEditor's onConnectEnd
+		to SearchedTreeView, and triggered the searchFun by useEffect
+	
+	2.1.2 the filtered treedata is triggered in SearchTreeView's useEffect
+		
+		- Problem1 : the menu is not expanded
+			-now, we'll check the toExpand
+			-let's check why searchKey could expand
+				-in search(), we setToExpand as true, and search() is used in 
+					SearchInput's onChange
+			-And our search or filter function , is called in useEffect, when 
+			we get the toFilterFlag
+			- what's the usage of setExpanded(nodeIds)
+			- and in the process, we noticed that toExpand is set as true
+			- but the list is not expanded
+			- we need to find out how to expand item in MUI's treeview
+			
+			-in MUI, the node is setExpanded by treeDataIds, and we find we've updated
+			toExpand is true, just the setExpanded is not updated in useEffect
+			
+			
+		- Problem2 :
+			-now we still have the search bar on top, but it's conflicted with our filter
+			-Solution 1:
+			We delete this search bar in this draging case
+				-caused the size change because the search menu's width is mainly depende 
+				by search bar
+			
+			- after filter we won't have many options in menu, thus search bar is unneccesary
+			- the size thing, we could modify the css of searchedTreeview's minWidth
+			
+			
+			-Solution 2:
+			We somehow pass filteredTreeData to keyword search()
+			- a little complicated, I'll need to check
+			- too complicated, delete is better
+		
+	2.1.4 From OnConnectStart, pass handleType, handle.dataType to our searchedTreeview
+	
+	Problem 1:
+	-How to get handle's dataType, where is it?
+	-we have handleId, we have nodeId, how to get dataType?
+	
+	-We search dataType to see where it is
+[]	-we should have a HandleData.dataType, but I couldn't find it
+	
+	
+	
+	Problem 2: how should we pass handle information to searchedTreeview?
+	
+		-Should we first pass the onConnectStartParams to other place and find the information
+		there
+		
+	-to pass the handle information from VPEditor to SearchedTreeView,
+		the best way is also to pass it when we create searchmenu in onConnectEnd
+	
+	-I'll create a state for startHandle to pass it to searchedTreeView,
+		-I checked SearchedTreeView,SearchMenu, not gui.xxx involved, the only interface
+		is the openwidget
+	-So I'll pass the handle information through the openwidget in onConnectEnd
+	
+	-I quickly looked through useScene and think it's too troublesome to add the 
+	handle state in scene, and it seems not that neccssary, because at least for now,
+	we don't need it in the scene
+		-maybe we'll need it when we want to connect the starthandle with our end handle
+		-but we'll see then
+		
+	
+	
+3. to connect newNode we click and select in filteredTreeData,
+	-we need startNodeId and its handleid to setEdge
+		-just like in this example :https://reactflow.dev/docs/examples/nodes/add-node-on-edge-drop/
+		
+		-edge has type (I deleted some irrelavant ones):
+		
+		type Edge<T = any> = {
+		  id: string;
+		  type?: string;
+		  source: string;
+		  target: string;
+		  sourceHandle?: string | null;
+		  targetHandle?: string | null;
+		  style?: CSSProperties;
+		  data?: T;
+		  className?: string;
+		  sourceNode?: Node;
+		  targetNode?: Node;
+		  selected?: boolean;
+		};
+	
+------------------------------------------- 
+Main task today:
+
+1. Get information of input/output, handle.datatype from startHandle
+
+2. Search matching node who has opposite input or output,
+	and handle has same datatype in SearchTreeView's treedata
+
+3. only trigger our drag search menu and filter when drag, give back the original keyword
+search for normal work
+
+4. Fix the tunnel from onConnectStart's params(handleId, NodeId, handleType) 
+	to passing to our filter function
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. find() function in JS:
+Exmaple:
+Find an object in an array by one of its properties:
+const inventory = [
+  { name: "apples", quantity: 2 },
+  { name: "bananas", quantity: 0 },
+  { name: "cherries", quantity: 5 },
+];
+
+function isCherries(fruit) {
+  return fruit.name === "cherries";
+}
+
+console.log(inventory.find(isCherries));
+// { name: 'cherries', quantity: 5 }
+
+exmaple with arrow function:
+
+const inventory = [
+  { name: "apples", quantity: 2 },
+  { name: "bananas", quantity: 0 },
+  { name: "cherries", quantity: 5 },
+];
+
+const result = inventory.find(({ name }) => name === "cherries");
+
+console.log(result); // { name: 'cherries', quantity: 5 }
+
+2. includes() 
+const pets = ['cat', 'dog', 'bat'];
+
+console.log(pets.includes('cat'));
+// Expected output: true
+
+console.log(pets.includes('at'));
+// Expected output: false
+
+3. filter()
+const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
+
+const result = words.filter(word => word.length > 6);
+
+console.log(result);
+// Expected output: Array ["exuberant", "destruction", "present"]
+
+4. in reactflow:
+

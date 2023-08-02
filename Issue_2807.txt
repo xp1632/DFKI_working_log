@@ -1,0 +1,215 @@
+Issues 2807:
+-----------------------------------------
+1. Check getNode in website and getNodeById in project
+
+1.1 React basic Node, i didn't find handle information here
+	
+	type Node<NodeData = any, NodeType extends string | undefined = string | undefined> = {
+	  id: string;
+	  position: XYPosition;
+	  data: NodeData;
+	  type?: NodeType;
+	  style?: CSSProperties;
+	  className?: string;
+	  targetPosition?: Position;
+	  sourcePosition?: Position;
+	  selected?: boolean;
+	  dragging?: boolean;
+	  draggable?: boolean;
+	  selectable?: boolean;
+	  connectable?: boolean;
+	  dragHandle?: string;
+	  };
+	};
+
+	- and we have getNode(NodeId) ==> Node information
+
+1.2 Node in our project might be extended, let's check:
+
+	1.2.1 In BasicNodeData in types/BasicNode.ts
+	
+		export interface BasicNodeData {
+		  tooltip?: string;
+		  configType?: string;
+		}
+	we Node only have tooltip and configType as information,
+	however it works as a base
+	
+	1.2.2 and other datatypes extends based on that:
+	
+	- In types/Comment.ts and StickyNote.ts, we extend BasicNodeData
+	
+	export interface Comment extends BasicNodeData {
+		  comment: string;
+		  width?: number;
+		  height?: number;
+		  defaultEditable?: boolean;
+		}
+	
+[!]	-In types/Connectable.ts, we have ConnectableData extends BasicNodeData
+	
+	export interface ConnectableData extends BasicNodeData {
+	  title: string;
+	  inputs?: Record<string, Handle>;
+	  outputs?: Record<string, Handle>;
+	  dataType?: string; ?
+	  nodeRef?: string;
+	  [key: string]: any;
+	}
+
+	-In types/Edge.ts, we have EdgeData extends BasicNodeData
+	export interface EdgeData extends BasicNodeData {
+	  dataType?: string;
+	}
+
+	1.2.3 So here we noticed that the ConnectableData stored the handle data we need 
+	-Let's check how we use ConnectableData
+	-By Searching we noticed that ConnectableData is used when we define a lot of node:
+		-CreateFunction, CreateVariable,FunctionCall,
+		-FunctionNode,MathNode,Return Node,
+		-RerouteNode, Sequence
+		
+	-And when we need to create a node such as CreateFunction Node,
+	the NodeId and data:ConnectableData is passed in
+	-then inside of that !!![since our handle is always defined inside Node]
+		-ConnectableData.inputs's value is set to Nodes' handle inside CreateFunction body
+		
+	1.2.4 So now, let's see what do we get back when we call getNodeById in our project
+	from the getNodeById(), we get nodeInfo, 
+[！]	and in nodeInfo.data.inputs/outputs[handleId].dataType
+	- we get the datatype we need
+	
+1.4 We then modified the HandleInformation type, add the datatype
+
+2. How to set edge after we click on the node in filtered search treedata?
+
+	2.1 Where to add Edge or setEdge?
+	-should be the same place where we addNode
+	
+	-where do we addNode after clicking?
+	- in SearchMenu.tsx
+		-in onItemClick and onEnterKeyDown()
+		-we trigger addNodeWithSceneCoord
+		-and this addNodeWithSceneCoord() is defined in useScenes
+		-and this addNodeWithSceneCoord() is passed through 
+			gui.openWidget in VPEditor's sceneAction
+			
+	-so first we find where's our setEdge or addEdge in project
+	
+	-in useGraph.ts, we have 
+		-addEdge(params:Connection)
+		-addElements(newNode,newEdges)
+		-setEdges: (edges: Edge[])
+		
+		-I'll use addEdge or setEgdes
+	
+	-How to use addEdge in SearchMenu
+		
+		 setEdges((eds) => eds.concat({ id, source: connectingNodeId.current, target: id }));	
+
+	2.2 To connect an edge, we need 
+		-the nodeId that we start from  (it's in startHandleInfo.nodeID)
+		-the nodeId that use clicked on and created,
+		-sourceHandle if we start from source,
+		-targetHandle in the new created node with certain dataType
+	
+		And actually it's type Connection
+
+			```
+			type Connection = {
+			  source: string | null;
+			  target: string | null;
+			  sourceHandle: string | null;
+			  targetHandle: string | null;
+			};
+			```
+		
+		-the addEdge in useGraph looks wrong
+			- I test in VPEditor, it's correct
+			
+		-so sceneAction.addEdge is lost when passed to SearchMenu
+			-do we actually need to pass the addEdge there?
+				-yes, we need, because we need to trigger it when onItemClick
+				
+Solution:	-we only pass addEdge when we create SearchMenu by draging
+			-thus the toFilter flag should be used in onItemClick
+			
+	2.3 give real data to addEdge
+		- the startNode and startHandle is passed with value of StartHandleInfo in SearchMenu
+		
+		-how do we know the item we click on, and it's NodeId, its handle with desired dataType
+		
+	
+	2.3.1 check type for Node:
+		type Node<NodeData = any, NodeType extends string | undefined = string | undefined> = {
+		  id: string;
+		  position: XYPosition;
+		  data: NodeData;
+		  type?: NodeType;
+		  style?: CSSProperties;
+		  className?: string;
+		  targetPosition?: Position;
+		  sourcePosition?: Position;
+		  selected?: boolean;
+		  dragging?: boolean;
+		  draggable?: boolean;
+		  selectable?: boolean;
+		  connectable?: boolean;
+		  dragHandle?: string;
+		  };
+		};
+		
+	2.3.2 
+	we noticed that when printing the addNodeWithSceneCoord we called in onItemClick
+	-we have the information of the Node we 're creating
+	
+	-however, when I try to access its nodeId, show the type is never
+	-I need to figure out why, Object(node), problem solved
+	
+	2.4 we find out the updateDatatypeInGraph requires target Handle from getNode(targetNode)
+		-however, by now, the newNode is not created yet, thus, we use a timeOut
+		-to make sure the new node is created first then we addEdge
+	
+	
+	
+-------------------------------------------
+Main task today:
+1. Find handle type through node, node information could be fetched by getNodeById
+
+2. build a edge after the user clicks at the filtered TreeItem
+the edge is between our startHandle and user's clicked treeItem's matching handle
+(the handle with correct handleType and dataType)
+
+3. add any dataType condition when filtering
+
+4. move the filtering from SearchTreeView to SearchMenu
+
+5. move getHandleDataType to utils
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. MVC Module Rules:
+
+For each module, give them one single job
+	-take MVC architecture as example
+	-the view module only takes care of view
+		data->[view]->graphics UI
+	-the model module only takes care of functioning
+		data->[model]->calculated data
+	-the controller module only takes care of handling
+		[model's calculated data]<-->[controller]<-->[view's data request]
