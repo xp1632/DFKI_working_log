@@ -1,0 +1,157 @@
+Issues 3107_0108:
+-----------------------------------------
+1. Add 'any' datatype to filter
+
+	1.1 We noticed that, since we only filtered the node from config
+	and no Command TreeView data is filtered
+	
+	-because the command treeview data normally has no handles
+	-except reroute 
+	
+	-moving the filter to Search Menu may solve this problem
+
+2. Move the filtering one level up, from SearchTreeView to SearchMenu
+
+-do the filtering in the nofigtoTreeData Part
+
+2.1 How to deal with ToExpand?
+	-we can keep the TOFilter Flag, when this flag, expand
+	
+2.2 And we do not need to send the startHandleInfo to SearchTreeView anymore,
+To SearchMenu is enough
+
+2.3 For ToExpand, we could leave the toFilter in child level to control the ToExpand
+
+2.4 We need to pass the filteredTreedata to child 
+
+-Currently, 
+-we have original treedata from both config and commands
+
+-and we filter the treedata with datatype, and passed the filteredData To child
+
+We want:
+
+- we first filter data from only config
+
+-we have the filterDataV1 
+
+- we add the commandsToTreeData to filterDataV1 and get filterDataV2
+
+-we pass filterDataV2 to child
+
+
+- Now we debug and check how the menu is mounted
+
+2.5 We find out, it's a little hard to addCommand after filtering 
+, when we set the [] for useEffect as commands, we'll have multiple commandsmenu
+because commands is go through multiple times. When we put it as filteredTreedata, also wrong
+,because the filteredTreedata is constantly changing, we can not render the menu all the time.
+
+- So for now, I only keep the [] as empty,
+- then the commandsmenu would only be add the filterData once when it's mounted
+
+
+
+
+---------------------------
+
+3. CreateVariable , createFunction node's name need to be unique
+
+-In our project, we have utils/uniquePools.ts
+
+
+-in useScene.ts we also return varsNamePool and funNamePool
+	const varsNamePool = useRef<IUniqueNamePool>(new UniqueNamePool());
+	const funNamePool = useRef<IUniqueNamePool>(new UniqueNamePool());
+	-which are instances fo UniqueNamePool()
+
+
+-Let's check CreateVariable and CreateFunction()
+
+3.1 what' the name in this issue?
+
+-is it some id, or title, or name property in some data
+-So let's create a Function and see its data
+
+- By adding breakpoint in CreateFunction.tsx
+
+- we noticed that we return a <div>
+and the div's title is title={`add a new function named ${title}`}
+
+-and inside the <div>, we have <div> node__header
+
+-and inside node_header we have <InplaceInput> with text ={title}
+
+-and <div> node__header has siblings node__body
+
+3.1.1  Find title in CreateFunction
+- For CreateFunction, we have id as nodeId when create it for the first time
+- and we get title from the data 
+- we get data passed to CreateFunction as type ConnectableData
+
+
+-here title is set as newFdun_0 all the time because that's what we get from 'data'
+
+- we also have a function updateName to update the title when we edit it in inPlaceText
+
+3.1.2 is there certain logic of Functions name? should it be newFdun_num ?
+
+-Let's check the namePool and see how it works
+
+
+3.1.4 When creating the function node multiple times ,we already have newFdun_num logic
+
+- how did it happen?
+
+
+
+
+
+3.2 In useGraph.ts, we have useEffect() about createFunction and toBeUpdated
+
+
+3.3 In useScene,ts, we have extra rules when onNodeAdd and onNodeDelete
+
+
+3.4 that's it? I expected also a openWidget in VPEditor
+
+
+3.5 What's the usage of CreateFunction and CreateVariable?
+- from the definition of CreateFunction, there's no functions for it
+
+
+
+	
+	
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1. Last steps of Search Context menu:
+	1.1 add any datatype in filter condition
+	1.2 move the filtering from SearchTreeView to SearchMenu
+	1.4 move getHandleDataType to utils
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
