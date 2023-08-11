@@ -4,6 +4,13 @@ Coding Rules Summary:
 	-Module should be self-contained and less dependency
 	-Decrease repetition of Code
 	-Encapsulate the reusable utilities
+	-Try solving the question with 'small knife' first, 
+		if can't, update the tool by more complex external tools
+	-If/Else/True/False:
+		when we have both if and else to set the State
+		use the setState(passingProp)
+		or setState(!passingProp)
+		or setState(!!passingProp) instead to keep simplicity
 
 -Naming Rules
 
