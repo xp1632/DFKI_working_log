@@ -1,0 +1,124 @@
+Issues 1008_1108:
+-----------------------------------------
+1. How to modify the onBlur event for CreatFunction?
+
+- in Widgets.tsx or in CreateFunction?
+- I think in both, because we do the basic in Widgets.tsx and value-related in CreateFunction
+
+
+- I need to figure out, the parent- child relation of TextInput in Widgets
+-From parent to child the relation is
+ 
+ --[CreateFunction]--> [ParemeterHandle] -->[TextInput]
+ 
+1.1 Need to figure out how the prop is triggered and passed 
+-And the event order is:
+
+-I kind of don't want to read and understand the event order of it
+
+
+1.2 I want onChange to save tempValue, and only pass this tempValue onBlur
+- before we just save it somewhere
+
+1.4 We want the pool in CreateFunction
+- and we can update the pool in ParemeterHandle's onBlur
+
+-which means we have the access of Pool and setPool in CreateFunction's child-->ParemeterHandle
+
+1.5 Do we need a UniqueNamePool, which link respect handleNames to its reference?
+
+- We may need that, because what we modified now is just one node during the creation
+- we may not need that, because the namePool is seperated from different node
+
+1.6 How should we delete the name that has been modified in textInput?
+- we set the oldVar and filter it
+
+[!]1.7 Delete the handleName from Pool after deleting the handle 
+
+	- To make sure after deleting, the deleted handle's title is also deleted
+	-should run through the node to set a new handleNamePool when the handle is added or deleted
+	
+	
+[1.8] To set the old, we kind of need to put the check duplication from updateHandlePool
+back into Handler
+
+
+1.9 I would like to rename some parameters
+
+1.10 Should validate duplication and updateHandlePool be two seperated functions?
+
+-yes, I'll have two functions now
+
+-where should we check the duplication?
+
+-----------------------------------------------------------------------------
+
+2 I missed two parts when solving this question:
+
+2.1 I don't need a pool to save the name, I could just run through handleData
+
+2.2 one importent thing is that, since we create the titleInput inside ParemeterHandle by
+
+giving it handleData.title , thus this is the origin of 'value' we see in onChange
+
+-thus, when we want like the textInput to show different 'value', we should also change 
+from the origin, which is the handleData when createtion
+
+
+-so what we should do it when onBlur, in handleBlur in CreateFunction
+
+-2.3 where should handleBlur locate, what we do in onBlur?
+
+1. check if the current input value is duplicated with all handles in this Node
+2. how should we know which handle, which original value?
+3. Or just ignore？ but when ignore, how to update to original value?
+
+2.4 Now we may have two question, why newValue is old value?
+
+
+-Now the onChange would updated to title immediatly because we call setNode in handleChange
+
+-why, when we enter new_out_2, the value in onBlur(value)'s value is still new_out_1?
+it should be new_out_2 of our edit, we didn't save this new_out_2?
+
+-because the value we passed inside TextInput from ParemeterHandle is not updated
+-we could we useEffect to update when the value changes
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. onEnter or onBlur, update the title
+
+2. A array [] to save  the handle names in a creatFunction Node
+
+3. give the oldVar back to setTempValue and update the TextInput again
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. To solve the question, start with 'small knife',
+	if the 'small knife' can not fullfill the requirement
+		then update the tool by using more complex external library
+		
+
+2. when we have both if and else to set the State
+	use the setState(passingProp)
+	or setState(!passingProp)
+	or setState(!!passingProp) instead to keep simplicity
+	
+	
