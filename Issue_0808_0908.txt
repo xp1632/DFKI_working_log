@@ -1,0 +1,401 @@
+Issues 0808_0908: 
+context checkbox: https://github.com/Max-ChenFei/VisualProgrammingEditor/issues/211
+-----------------------------------------
+1. Add text and checkbox component to SearchMenu
+
+- is it possible that we only extend the SearchMenu and only trigger it in ContextSearchMenu?
+	-pay attention, the trigger condition of ContextSearchMenu is also changed
+	-it's triggered when we start a connect and didn't finish a connection
+	
+-because the vanilla SearchMenu we trigger on right click, has no context and no filter
+
+- where should we modify the SearchMenu?
+	-I don't like the idea of modify the original SearchMenu
+	-because for the searchMenu we trigger from right click,
+		-the context checkbox is misleading and non-functional
+[!]	-I'll have another component called ContextSearchMenu which pass the filter flag
+		to its child component SearchMenu
+	-And this ContextSearchMenu would be triggered when start a connect and didn't finish connection
+
+
+1.1 where should ContextSearchMenu get TreeData?
+ we certainly should not get TreeData from SearchMenu
+ - thinking about domain, the ContextSearchMenu should only takes care of context
+ -which is pass flag of toFilter or not to SearchMenu
+ 
+ - Now the toFilter is a flag that we define by the existence of startHandleInfo
+ - after modifying, toFilter should be a flag
+	that we pass from ContextSearchMenu, controlled by checkbox
+
+
+1.2 Another thing is that, we'll get a lot of scene actions when we creat it
+in openWidget, what should we do?
+
+-autoLayout/addNodeWithSceneCoord/startHandleInfo/toFilter/moreCommands/addEdge
+
+-should we just get it and pass it to normal SearchMenu?
+
+-----------------------------------------------
+
+2. I'll add the checkbox as and text as a tenary expression 
+	inside SearchMenu' < Menu > component
+	
+	-because an extra ContextSearchMenu is redundant and 
+	the checkbox is not in the correct place, 
+	not inside of menu panel but on top-left of page
+	
+	
+- So we modify the SearchMenu itself
+- and update the toFilter flag based on the change of checkbox
+
+
+2.1 Now the checkbox would only show when ToFilter is true
+
+[!] Steps:
+
+-We need to use grid to arrage the position of checkbox and searchTreeView
+
+-We need to update toFilter flag when the checkbox changes
+
+[Todo]2.2 The grid is done, there's some css issues, 
+which invovled padddings etc, I'll deal with that later
+
+2.3 I would like to modify the handleChange and the ToFilter()
+
+	-Oringinally, we have a ToFilter() Function, which give true or false,
+	-based on if there's startHandleInfo defined
+	
+	-now I would like to update the filterFlag when the checkBox is checked or unchecked
+	
+[!]	- we solved the problem with a default filterFlag that depend on the startHanlde
+	- and a local filter depend on the checked or not
+
+
+2.4 Where shoudl we add the min-width to the SearchMenu?
+	- If adding min width for menu is not useful
+	-we could add min-width for Box Container
+	
+2.5 When add padding to contentbox part, do we need a class?
+	no, because we'll not use the same css again
+--------------------------------------------------------------------------------------------
+
+
+
+3. Check the uniquePools.ts in utils
+	- what this class does is to keep record of name and its reference
+	- which has key-value pair as name:reference
+	- and itemRef() returns all the refs that use the same prefix when we createNew()
+	
+	-how creatNew() works:
+	
+	`
+	  createNew(prefix?: string): string {
+    let counter = 0;
+    const namePrefix = prefix ?? 'item';
+    let name = `${namePrefix}_${counter}`;
+    while (this._pool.includes(name)) {
+      counter++;
+      name = `${namePrefix}_${counter}`;
+    }
+    return name;
+  }
+	`
+	
+	- we takes in prefix, if none, take 'item'
+	-we generate new name by concatenate prefix and number counter
+	-we continue to add the counter++, until we find a unique new name in _pool
+
+3.1 Find where's the handle name generate and stored 
+when we create new handles in CreateFunction
+
+
+3.1.1 The create of new handle is by clicking the round plus button in CreateFunction Node
+
+- in CreateFunction.tsx, 
+	-we first find the circle icon 
+	-then we find the onClick function addNewHandle for it
+	-what's the usage of addNewHandle()?
+	
+
+- in line 223, at the end of outputHandles[], 
+we also need to add the iconButton for adding new handles
+
+-when creating a handle in function, it seems that we also registerVariableRef for it
+
+
+3.2 there's a util.ts in the editor, 
+where we do copynode() and registVariableRef and FunctionRef
+
+- the registVariableRef() and registFunctionRef() are both addRef() with node
+
+3.3 we also have FunctionCall.tsx and FunctionNode.tsx
+
+
+[!]3.4 What's the usage of getter and setter Node?
+
+	[?]3.1.2 Why getter Node invovled in GetterNode?
+	- there's outputHandles involved, I am not sure if it's relevant
+
+	-then setterNode is also involved
+
+
+4. In CreateFunction Node, 
+	-we have execIn and execOut as main input and output with type 'exec'
+	-which has symbol as triangle, 
+	-and these two handles's showWidget and showTitle are set false in FunctionCall.tsx
+	
+	-where's the new_out_0 from? is it come with execOut?
+	`
+		  const addNewHandle = useCallback(() => {
+		const title = `new_out_${handleCount.current++}`;
+		const value = {
+		  dataType: 'boolean',
+		  title: `new_out_${handleCount.current}`,
+		  showWidget: false,
+		  deletable: true,
+		};
+	`
+	-it may be caused the current and current++, current is default set as 0
+	-and we use ++
+	
+	-in onEditChange() we can set the new name for the node(not the handle)
+		-and updateName
+
+
+		5.Copy and paste mode are in useScene
+
+6.in useScene, we also have a function called getUniqueNameOfHandle, this give a format
+for naming node's handle
+
+`
+  const getUniqueNameOfHandle = (node: Node, handleId: string): string => {
+    if (node.type === 'setter' || node.type === 'getter')
+      return `${
+        (node.data.outputs.setter_out?.title ??
+          node.data.outputs.getter?.title) as string
+      }`;
+    return `Node_${node.id}_${handleId}_Handle`;
+  };
+`
+
+7. Since I could not find where we actually add the handle's widget,
+I search for the css element 'select' and 'input'
+
+	-And we find the select and textinput are all defined in widgets/Widget.tsx
+	-As TextInput and EnumSelect
+	-Now let's check where do we use this TextInput and how we save its name
+	
+-And this leads us to WidgetFactory.tsx
+-And WidgetFactory leads to 'DataTypes'
+
+-DataTypes type is used in Handle.tsx, and showWidget, is also there
+-let's check this file, 
+	-we find Handle consist of HandleElement which is originally RFHandle
+	-And outside HandleElement, we can add labels or widget around it
+	
+
+[!!]8. By searching for HandleElement, 
+
+we find out! where and how we defined the complicated Handle in CreateFunction and Return
+
+-It's in the Parameter Handle that we overlooked before,
+let's check the CreateFunction again
+
+-In types/DataTypes.ts, we defined a interface called DataType
+
+`
+export interface DataType {
+  defaultValue?: any;
+  shownInColor: string;
+  widget?: string;
+  options?: any;
+}
+`
+in DataType, we defined the color we use and what kind of widget we use, and the defaultValue
+
+And we set our default DataTypes which is a Record of keyName,DataTypeInterface
+
+`
+export const DataTypes: Record<string, DataType> = {
+  DataType: {
+    shownInColor: `${hsl(154, 26, 44)}`,
+    defaultValue: 'boolean',
+  },
+  float: {
+    defaultValue: 0.0,
+    widget: 'NumberInput',
+    shownInColor: `${hsl(240)}`,
+  },
+  integer: {
+    defaultValue: 0,
+    widget: 'IntegerInput',
+    shownInColor: `${hsl(120)}`,
+  },
+  boolean: {
+    defaultValue: false,
+    widget: 'BooleanInput',
+    shownInColor: `${hsl(0)}`,
+  },
+  string: {
+    defaultValue: '',
+    widget: 'TextInput',
+    shownInColor: `${hsl(60)}`,
+  },
+  ...
+`
+
+!Here the most important one is 'string', 
+!it gives the TextInput widget where we set the name
+
+9. Now we fully understand how CreateFunction Node is created
+
+9.1 Let's first illustrate basic Handle
+	-the basic Handle in ReactFlow is called as RFHandle in our Project
+	口 looks like a simple square, we add a <label> <label/> out of it
+	-so it makes our basic Handle:     ’<label> 口‘
+	
+9.2 In CreateFunction Node, we need more than that,
+ because the handle inside the CreateFunction is not only a handle, but more like a parameter
+ 
+	-The basic Handle ’<label> 口‘ would not fit our need,
+	because we need to change the name and dataType of a parameter
+
+	-Thus we defined a ParameterHandle inside CreateFunction Node and Return Node
+	-The ParameterHandle looks like :
+	
+	'name: |_______|  dataType: |_______V|' 
+	
+	where behind name: is a textinput and behind dataType is a selector
+	
+9.3 How did we create the textinput and selector?
+
+	-just like the menu we create by calling React.creatElement in WidgetFactory.tsx
+	-For different types of Handle, we first define an interface called DataType in DataType.ts
+	
+	`
+	export interface DataType {
+	  defaultValue?: any;
+	  shownInColor: string;
+	  widget?: string;
+	  options?: any;
+	}
+	`
+	-In the DataType interface, the color and its combining widget name is defined
+	
+	-so now we have a record list DataTypes:
+	
+	`
+	export const DataTypes: Record<string, DataType> = {
+	  DataType: {
+		shownInColor: `${hsl(154, 26, 44)}`,
+		defaultValue: 'boolean',
+	  },
+	  float: {
+		defaultValue: 0.0,
+		widget: 'NumberInput',
+		shownInColor: `${hsl(240)}`,
+	  },
+	  integer: {
+		defaultValue: 0,
+		widget: 'IntegerInput',
+		shownInColor: `${hsl(120)}`,
+	  },
+	  boolean: {
+		defaultValue: false,
+		widget: 'BooleanInput',
+		shownInColor: `${hsl(0)}`,
+	  },
+	  string: {
+		defaultValue: '',
+		widget: 'TextInput',
+		shownInColor: `${hsl(60)}`,
+	  },
+	  ...
+	`
+	
+	- so we can see for the textinput, the keyword in widgetFactory is 'string'
+	
+	-Thus in CreateFunction.tsx's <ParameterHandle> return
+	- line 93, we create the textinput inside the label 'name'
+		by calling widgetFactory.createWidget('string',{
+		
+		    value: handleData.title,
+            className: `nodrag handle-widget`,
+            onChange: onParaNameChange,
+		
+		} )
+
+9.5 As we can see, the name of the handle in textinput, is the handleData.title
+
+-and when onChange, we have function onParaNameChange to update it
+
+-we need a validation 
+
+9.6 I checked the onParaNameChange(), 
+and it's not only update when a enter is pressed or we click away
+
+- every letter's change would be saved to the node's output's title
+-we don't want that
+
+9.7 we want the 
+
+-onChange to keep a local value of title while editing
+-OnBlur and OnEnter to update and store the title of handle
+
+
+-Thus we need to add onBlur and OnKeyDown in Widget.tsx for TextInput component
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+0. briefly summarize callback and promise
+
+1. context checkbox for SearchMenu
+
+	1.1 We add two elements on the top of SearchInput in SearchMenu
+
+	Left element:
+	<span> or <div> with text: All available nodes/actions 
+
+	Right element:
+	checkbox
+
+	1.2 the text element is static, the context checkbox should have two states, toFilter true or false
+
+	-the toFilter is default set as true, with a checked checkbox
+	when the user drag from handle and trigger SearchMenu
+	-also in this scenario, when the user uncheck the checkbox, we should show all the treeData
+	-when the user check the box , again, we show the filteredTreeData
+
+	**We should pay attention to current way of  updating filtered TreeData,
+	Because now the dependency of useEffect is [commands], but it works when we create a new menu every time**
+
+	**- would this checkbox state change--> treedata change affects here?**
+
+	1.4 since we show the context checkbox all the time no matte we trigger a searchMenu from dragging handle
+	or click on the panel.
+	-what would happened if we check the checkbox in normal case of SearchMenu?
+		- for now I presumed nothing would happened, we still show the full treeData with commandTreeData
+
+2. Check the unique handle name inside CreateFunction Node, and Return Node
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
