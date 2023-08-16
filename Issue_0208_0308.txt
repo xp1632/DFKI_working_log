@@ -1,0 +1,190 @@
+Issues 0208_0308:
+-----------------------------------------
+0. About ConnectableData
+
+[!]	-In types/Connectable.ts, we have ConnectableData extends BasicNodeData
+	
+	export interface ConnectableData extends BasicNodeData {
+	  title: string;
+	  inputs?: Record<string, Handle>;
+	  outputs?: Record<string, Handle>;
+	  dataType?: string; ?
+	  nodeRef?: string;
+	  [key: string]: any;
+	}
+
+	-In types/Edge.ts, we have EdgeData extends BasicNodeData
+	export interface EdgeData extends BasicNodeData {
+	  dataType?: string;
+	}
+
+	1.2.3 So here we noticed that the ConnectableData stored the handle data we need 
+	-Let's check how we use ConnectableData
+	-By Searching we noticed that ConnectableData is used when we define a lot of node:
+		-CreateFunction, CreateVariable,FunctionCall,
+		-FunctionNode,MathNode,Return Node,
+		-RerouteNode, Sequence
+		
+	-And when we need to create a node such as CreateFunction Node,
+	the NodeId and data:ConnectableData is passed in
+	-then inside of that !!![since our handle is always defined inside Node]
+		-ConnectableData.inputs's value is set to Nodes' handle inside CreateFunction body
+
+
+
+1. What' the name for CreateFunction
+
+-is it some id, or title, or name property in some data
+-So let's create a Function and see its data
+
+- By adding breakpoint in CreateFunction.tsx
+
+- we noticed that we return a <div>
+and the div's title is title={`add a new function named ${title}`}
+
+-and inside the <div>, we have <div> node__header
+
+-and inside node_header we have <InplaceInput> with text ={title}
+
+-and <div> node__header has siblings node__body
+
+1.1  Find title in CreateFunction
+- For CreateFunction, we have id as nodeId when create it for the first time
+- and we get title from the data 
+- we get data passed to CreateFunction as type ConnectableData
+
+-where's this ConnectableData from?
+
+
+
+-here title is set as newFdun_0 all the time because that's what we get from 'data'
+
+- we also have a function updateName to update the title when we edit it in inPlaceText
+
+1.2 is there certain logic of Functions name? should it be newFdun_num ?
+
+	1.2.1-Let's check the namePool and see how it works
+
+	-When creating the function node multiple times ,we already have newFdun_num logic
+
+	- how did it happen?
+
+1.4 When checking the createFunction in useGraph, we notice that
+	we have:
+	- createFuncNodeWithRef
+	- createFuncNodeWithoutRef
+	
+	-looks like the Func Node should be somehow/sometimes depend on other Ref 
+	-when node is deleted, we also set nodeRef as undefined
+
+1.5 I've found the where's the newtitle for createFuncNode from
+
+-In useScene.ts, OnNodeAdd(), when node.type  === createFunction, or createVariable
+-line 481
+-we call funNamePool.current.createNew, and update the new title somehow/sometimes
+
+-in onNodeDelete, we also have similar opposite actions
+
+2. What' nodeRef for in CreateFunction?
+
+-I'll check CreateFunction.tsx
+
+-createFunc in useScene
+
+-createFunc in useGraph
+
+- NamePool
+
+2.1 
+
+
+-------------------------------------------
+Main task today:
+
+0. organize and summarize the modification of Context Menu code
+	-1. exclamation 
+	-2. think about the condensed useEffect
+		-the treeData could be assigned not only with setTreeData
+	
+
+0.1 Check callback function
+1. The checkbox for context in search Menu
+2. Unique name for CreatFunction
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+0. In Typescript, we have different usage of exclamation mark:
+
+1. single ! ( from https://github.com/e2tox/blog/issues/9)
+
+1.1  Take Opposite
+const myFlag = !undefined
+
+```
+Boolean(undefined) // false
+Boolean(null) // false
+Boolean(NaN) // false
+Boolean(0) // false
+Boolean("") // false
+```
+thus myFlag === true
+
+1.2 Emphasize the property could not be empty
+```
+// 因为接口B里面name被定义为可空的值，但是实际情况是不为空的，那么我们就可以
+// 通过在class里面使用！，重新强调了name这个不为空值
+class A implemented B {
+  name!: string
+}
+
+interface B {
+  name?: string
+}
+```
+
+
+1.4 Assert that this value must exist,  is never undefined or empty
+
+// 这里 Error对象定义的stack是可选参数，如果这样写的话编译器会提示
+// 出错 TS2532: Object is possibly 'undefined'.
+new Error().stack.split('\n');
+
+// 我们确信这个字段100%出现，那么就可以添加！，强调这个字段一定存在
+new Error().stack!.split('\n');
+
+2. double !!, 
+- convert non-Boolean to Boolean, 
+- empty to false, non-empty to truth
+
+Double exclamation marks !! in TypeScript
+While we’re on the topic of the exclamation mark !, TypeScript also uses double exclamation marks !! to convert (also called cast) non-Boolean type values to Boolean type. Here’s an example:
+
+```
+const emptyStr = ''
+const nonEmptyStr = 'test'
+
+const emptyStrBool = !!emptyStr //false
+const nonEmptyStrBool = !!nonEmptyStr //true
+```
+
+
+3. When you need to fetch something after others are already mounted
+
+you can use setTimeout(func(),0)  ,to run fun() in next order
+
+or  window.requestAnimationFrame(func()) ,to run fun() at next frame
