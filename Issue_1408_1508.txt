@@ -1,0 +1,137 @@
+Issues 1408_1508:
+-----------------------------------------
+1. Check the value in TextInput component
+- the reason that the text appear at the input is not updated, is because
+
+- the passed value is not updated, even if in last layer we have already modify
+the value we passed to TextInput, however inside the TextInput, we didn't
+get the value in time.
+
+-Thus I add a useEffect to refresh the value
+
+2. when adding new Handle, there's duplication
+
+- how to solve this question, do we need a namePool?
+
+2.1 addNewHandle()
+
+- why we use handleCount++ inside of handleCount
+	-because we start counting the number of handle from 0
+	-so we use while(duplicated) count++ to solve the question
+
+2.2 Add these to Return node
+
+3. Check how we copy and paste CreateFunction Node
+
+-In utuil.ts,we have copy() function, which return node object 
+-in useScene.ts, we have copySelectedNodeToClipboard()
+
+3.1 Check the copy,paste, onNodeAdd() functions in useScene
+
+3.1.1 copySelectedNodeToClipboard()
+
+- we first define a clipboard with type ClipboardInfo 
+	to hold the nodes and position and edges:
+	    const clipboard: ClipboardInfo = {
+      hasNodes: false,
+      nodes: {},
+      edges: [],
+      minX: Number.POSITIVE_INFINITY,
+      minY: Number.POSITIVE_INFINITY,
+    };
+
+-then we call useGraph.selectedNodes() to get selected Nodes
+	  const selectedNodes = useCallback(() => {
+		return getNodes().filter((n) => n.selected);
+	  }, []);
+
+- we copy the selectedNodes and position to clipboard container
+
+	if no nodes, clipboard.hasNodes = false,return
+
+- we copy the edge's source and target also to clipboard.nodes
+
+-then we stringify clipboard into a JSON called clipboardStr
+
+-we first write the JSON file which contains our nodeInfo
+	to system clipboard by .writeText(clipboardStr)
+	
+[?]-we then setExtraCommands and create a new Command called 'Paste'
+
+-this command will do action: pasteFromClipboard()
+
+[?] Here I don't quite understand :
+	
+	setExtraCommands: Dispatch<SetStateAction<Command[]>>;
+
+[?] How did we pass this command to SearchMenu?
+
+----------
+
+setExtraCommands variable is an important part of the state management
+ system in a graph editor. 
+ It allows the editor to dynamically update the set of extra commands
+ available to the user, and provides a flexible and extensible way
+ to add new functionality to the editor over time.
+ The use of generic types like SetStateAction and Dispatch 
+ helps to ensure that the state management system 
+ is type-safe and easy to use, 
+ even as the editor grows in complexity.
+-----------
+
+
+
+3.1.2 How pasteFromClipboard works?
+
+- we first readText() from system clipboard
+
+- we put information into newNodes and newEdges
+
+-we clean the old Connection by seting input/output.connection =0
+
+-then we add newEdges to newNodes, connection++
+
+-at last we creat the elements of newNodes and newEdges by
+
+graphState.addElements({
+          newNodes: Object.values(newNodes),
+          newEdges,
+        });
+
+3.2 onNodeAdd()
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1.[] Applying for student apartment
+
+2. []check lost and found in saarVV
+Lost property office in the regulatory office
+
+Großherzog-Friedrich-Strasse 111
+66121 Saarbrücken
+
+3. []reply house owner
+
+4. []modify the value part in validation
+
+5. []regist for JobMensa
+
+6. []zab
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:

@@ -1,0 +1,105 @@
+Issues 1608_1708_0821:
+-----------------------------------------
+1. but if we copy the createFunction and return node 
+at the same time, 
+the pasted createFunction should 
+update the nodeRef to the new return node
+
+- how would the createFunction have the nodeRef with Return?
+-the answer is the useEffect() in useGraph line 608, 
+- in line 646, we found the Return for Function
+
+-and we use this information in toBeupdated()
+
+
+2. we would like to update the nodeRef of 
+pasted createFunction and pasted Return
+
+- we know ori createFunction and ori Return has nodeRef to each other
+- we know the node id of ori and copy of each node
+- we want to update the copy version's nodeRef based on its own ori
+
+-in paste function, we'll use the newId to overwrite ori Id for new nodes
+
+2.1 what's the relationship between ori node and copy node?
+
+-I don't see clear relationship between them, I'll create a relationship
+myself and delete it afterwards
+
+- also, because we set newId to nodes in for one by one
+- we can't evoke during the loop, because by then, the return node
+or the createFunction node could be not assigned with newId yet
+
+-but after the assigning, we could lost the old id for newNode
+
+-so I'll save the oldId in newNode for finding the relationship first
+- we used the oldId to update nodeRef of copy nodes
+- and delete it before actual setNodes
+
+2.2 so this is how we update newNode's nodeRef
+
+- we find createFunction newNode
+- we find its oldId 
+- we find the return node who has nodeRef with this oldId
+- we set the return Node's current 
+
+2.3 why the newFunc has no NodeRef?
+
+2.4 after pasting, nodeId != node's index in newNodes[]
+
+2.5 the clipboard.nodes[node.data.nodeRef]
+
+here the clipboard.nodes is already the pasted version, not the oriVersion
+
+2.6 in paste(), the index or key is not assigned correctly
+
+during copy, we set the node.id as key index of clipboard.nodes
+- for example
+ 0:node0; 1:node1; 5:node5.
+
+2.7 it uses the relationship that, the OriNode and pasteNode shares index
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. indexOf() expects also string inside()
+- in complicated case, we could use findIndex()
+
+
+2. when we have an object newNodes:
+
+is composed of newNode with type Record<string,Node>
+
+such as 
+{
+0:Node 0
+1:Node 1
+5:Node 5
+}
+
+newNodes[2] would be undefined, because we only have keys 0,1,5
+
+-when we want to access the 3rd item in newNodes
+- we use thirdNode = Object.values(newNodes)[2];
