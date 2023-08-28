@@ -1,0 +1,127 @@
+Issues 2408_2508:
+-----------------------------------------
+1. How to show the ExecStartNode properly?
+
+- addElement used the raw setNodes from reactflow
+- we should use our addNode instead
+
+-by using addNode we have a problem,
+addNode is a sceneAction, but if we want to add Node at the beginning,
+the sceneState may not be initialized yet.
+
+-we could try  
+window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+
+-in useKeyDown.ts, we pass the sceneState to onKeyDown function 
+	- and use the sceneAction there
+	
+1.1 we need to check what we have in GraphState and its relation with Scene
+
+- we find we have a global flag in useGraph which is shouldUpdateDataTypeOfRerouteNode
+- and we use it to control the function resetRerouteNodeDataType()
+
+
+-do we also need that for keepOneExecNode
+
+1.2 relation of graph and scene 
+
+- we use useGraph and get graphState in VPEditor.tsx
+- graphState is passed to useScene() to get SceneState
+- in SceneState we have SceneActions
+- we also create a context based on SceneActions,
+	we could use useSceneState to access the sceneActions
+- Or like in useKeyDown, we pass the sceneState to onKeyDown function and use sceneActions
+
+
+Problems:
+- we would like to use addNode in sceneActions 
+	to add ExecStartNode when we find there's no ExecStartNode in Graph
+- however, since SceneActions is based on Graph, 
+	when we would like to use this SceneActions, the scene might not be initialized
+
+Solution:
+- we check the deserlizer of Node and find when creating the Node, the type of ExecStartNode
+is 'function'
+
+2. Now we start to solve the render dependency problem
+
+- from the consoleLog we can see after we create A new ExecStartNode, we still checked
+it multiple times, I'll consider a global flag to avoid this
+
+- and trigger the keepOneExecNode() when the flag is false, and change the flag to true after we
+create a new ExecStartNode
+
+-we don't want the more checks if we already added a ExecStartNode
+
+- we want it check once when the scene mounted and check again when nodes changes ?
+
+
+
+2.1 we create a shouldCheckExecStartNode flag, with default value true? Or false.
+--------------------------------------------------------------------------------------
+
+3. For Issue 361, one node in graph we noticed that the issue request is changed,
+- we cancel the centerFunction since it's quite conflicted
+- and we add the paste ExecStartNode to CreatFunc to the code
+
+
+4. For Issue 409, Connect all matched edges
+
+- we add a new function in SearchMenu.tsx called addNode(configType)
+- and we get node Info of dragFromNode by getNodeById
+- if startHandleInfo.handleType === source, when for through the output handles of dragFromNode
+
+	-for each handle we find matchinghandle and create Connection
+-if not source, go through input handle
+
+5. For Issue 217, update nodeRef when paste,
+
+- why are we not updating returnNode.date.noderef? Is it because that we need to
+update it outside in useGraph? why?
+
+- and we also add onNodeAdd check in pasteFunction's last, because in pasteFunction
+	we used addElement instead of addNode, thus onNodeAdd() is omiited
+	
+6.For Issue 392, add clear Button for FilePond:
+ const [showClearButton, setShowClearButton] = useState<boolean>(false);
+  const handleFileProcess = (
+    error: FilePondErrorDescription | null,
+    fileItem: FilePondFile
+  ): void => {
+    if (!error) {
+      setShowClearButton(true);
+    }
+    setShowClearButton(true);
+  };
+  
+  - why both true?
+-------------------------------------------
+Main task today:
+
+1. Summarize two former issues
+
+	
+
+2. finish the pic version of 300 questions
+	-font should be large
+	-do we need the wrong options?
+		-maybe not
+	
+
+3. check jupyterlab, fiji imageJ, 
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:

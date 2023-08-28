@@ -1,0 +1,120 @@
+Issues 2208_2308:
+-----------------------------------------
+1. where's the 'start' node, how do we define 'start'?
+
+ - in flowControl.json,
+	we have Executre Start type and node
+
+ - in useGui.ts, 
+	we have connectionStartNodeId, but i don't think it is this one
+	
+- I think should be in useScene.ts:
+
+	where we have data.configType.includes('Start')
+	ans sourceCodeWithStartNode()
+
+2. detailed request:
+
+- [ ] If there is no start node in the graph, we can create one
+
+- [ ] If there is already a node, the graph should focus the start node (see shortcut F) 
+		-in useKeyDown.ts, line 30 centerSelectedNodes()
+		
+- [ ] If there is already a node, when paste create a new function ?
+	
+2.1 how do we know if there's start node in graph?
+
+- we start to check useScene line645:
+
+- initGraph: is where we add the node to the scene from graphState
+
+- ShortCut F:
+	-centerSelectedNodes()
+		-we use setCenter() to center the selected Nodes to viewCenter
+
+[!] -in line 734, we have sourceCode with return Type SourceCodeExec:
+
+	export interface SourceCodeExec {
+	  hasError: boolean;
+	  result: string;
+	}	
+
+- line 735:
+[!]   const startNode = graphState
+      .getNodes()
+      .find((n) => n.data.configType.includes('Start'));
+
+-line 742, we got topoSortOfFunctionDependencies() that takes startNode
+and get sourceCodeFrom
+
+	-in line 1034 ,we check topoSortOfFunctionDependencies()
+	- we can see its parameter is startNodes:Node[]
+	-which means here, we have several startNode instead of only one
+	
+	-we put all startNodes into a queue and go through the que by nodeId
+	-inside in nodeId loop, we call findFunctionCallNodes() in useGraph.ts line 724
+		-findFunctionCallNodes() 
+		- this is a recursive function where we find the FunctionCallNode
+			by searching for the nodes that connect with startNode 
+			with type:'functionCall'
+------------------------------------------------------------------------------------
+3. where's the correct place to place the useEffect(),[nodes]
+
+- I think should be in useGraph because it's more like a graph control
+-however, how should I get the current anchorPosition?
+
+ const addNode = useCallback(
+    (
+      configType: string,
+      thisPosition?: XYPosition,
+      data?: any,
+      positionOffset?: XYPosition
+    ): Node => {
+      const id = getFreeUniqueNodeIds(1)[0];
+      const position = thisPosition ?? {
+        x: mousePos.current.mouseX,
+        y: mousePos.current.mouseY,
+      };
+-based on the defination of addNode, we may not need thisPosition
+- we just need to pass the addNode to useGraph.ts
+- also I'll not use the addNodeWithCoordinate here, too complicated 
+
+
+3.2 to add a new ExecStart Node , we mimic the addNode() in SearchMenu
+
+-I kind of know we could use the addNodes() from reactflow or setNodes to update list
+-but we'll think about this way later
+
+now, the configType we need to addNode for ExecStart Node is : "Flow Control.Execute Start"
+
+3.3 Currently problems are:
+
+1. The new-add ExecStartNode is not shown properly
+2. The rendering dependcy of keepOneNodeFunction
+	- if we set the dependcy from [] once to [nodes]
+	- it will force-focus on execute Start Node all the time, and influnce other actions in the scene
+3. In the logic of description of this issue,
+-we would always has a un-deleteable ExecStartNode in the scene, is that what we want?
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Only keep one startNODE in the graph
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
