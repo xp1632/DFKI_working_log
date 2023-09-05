@@ -1,0 +1,427 @@
+Issues 0409:
+-----------------------------------------
+
+1.7 We continue with The Wire Protocol
+
+### Wire Protocol
+- We check the general message format in jupyter:
+
+
+### A full message:
+
+- Combining all of these, a complete message can be represented as :
+- the following dictionary of dictionaries( and one list)
+
+```
+{
+    "header" : {
+        "msg_id": "...",
+        "msg_type": "...",
+        ...
+    },
+    "parent_header": {},
+    "metadata": {},
+    "content": {},
+    "buffers": [],
+}
+
+- But this is only a logical representation of the contents
+- the actual implmentation in ZeroMQ at wire level is different
+
+- Every message is serialized to a sequence of at leat six blob of bytes:
+
+```
+[
+  b'u-u-i-d',         # zmq identity(ies)
+  b'<IDS|MSG>',       # delimiter
+  b'baddad42',        # HMAC signature
+  b'{header}',        # serialized header dict
+  b'{parent_header}', # serialized parent header dict
+  b'{metadata}',      # serialized metadata dict
+  b'{content}',       # serialized content dict
+  b'\xf0\x9f\x90\xb1' # extra raw data buffer(s)
+  ...
+]
+
+```
+
+### Prefix
+
+- The front part of message is the routing prefix of ZeroMQ
+- which can be zero of more socket identities
+- For IOPub, it should be one prefix, which is topic of subscribers, e.g. `execute_result`
+
+
+### Auchentication
+
+- After the delimiter is the signature of message, used for authentication
+- if authentication is disabled, this should be an empty string
+- by default, we use hashing function sha256 to compute the signatures
+
+
+### Actual Message
+
+- After the signatureis the actual message, in four frames of bytes
+- The four dictionaries that compose a messgae are serialized separately
+	- inthe order of `header`
+	- `parent header`
+	- `metadata`
+	- `content`
+
+- The default and most common serialization is JSON
+- We can do the serialization by any functions that turns a dict into bytes
+
+
+----------
+
+### Python API
+
+- All messages sent to or received by any IPython message handler:
+- should have this extended struture after deserialization:
+
+```
+{
+  'header' : dict,
+  # The msg's unique identifier and type are always stored in the header,
+  # but the Python implementation copies them to the top level.
+  'msg_id' : str,
+  'msg_type' : str,
+  'parent_header' : dict,
+  'content' : dict,
+  'metadata' : dict,
+  'buffers': list,
+}
+
+```
+
+-------
+
+### 1.8 Message on the shell (ROUTER/DEALER) channel
+
+**Request-Reply Pattern**
+
+- Client side send `execute_request` via its `DEALER` socket
+- Kernel recieves the request and publish `status:busy` on IOPub
+- Kernel process request and send back `execute_reply`
+- After processing the request and publishing associated IOPub message
+	- the kernel publish `status: idle`
+
+
+**Status**
+- All replt messages have a 'status' field, which will have one of following values:
+
+	- `status :ok` means the request was processed successfully, 
+		the remaining content of reply is specified below
+	
+	- `status: error` means the request failed due to an error`
+		the usual content of a successfully reply should be omitted
+		
+this is presented when status: error
+```
+{
+   'status' : 'error',
+   'ename' : str,   # Exception name, as a string
+   'evalue' : str,  # Exception value, as a string
+   'traceback' : list(str), # traceback frames as strings
+}
+```
+
+**Execute request type**
+
+- This message type is used by frontends to ask the kernel to execute code.
+
+- Here's an example of `execute_request`
+
+```
+content = {
+
+'code' : str,
+# Source code to be executed by the kernel, one single string or more lines.
+
+...
+
+
+'user_expressions':dict.
+# A dict mapping names to expressions to be evaluated in the user's dict
+# this information could be retrieved to distinguish between:
+# inner prompts, client prompts, different frontend prompts interacting with same kernel
+
+
+'allow_stdin': True
+# If true, code running in the kernel could prompt user for input
+# with input_request message
+
+...
+}
+
+```
+
+**Execute reply type**
+
+```
+content ={
+
+'status' : str,
+# One of :'ok' OR 'error' OR 'aborted'
+
+'execution_count': int,
+# A global kernel counter that increased by one with each request
+# Typically used by clients to display prompt numbers to the user
+
+}
+
+```
+
+- When status is 'ok', the following fields are present:
+
+```
+{
+
+'payload' : list(dict),
+# Payloads are a way to trigger frontend actions from the kernel.
+
+'user_expressions':dict
+}
+
+
+```
+
+**Payloads**
+
+- Payloads are a way to trigger frontend actions from the kernel.
+
+	- **page** : display data in a pager
+	- **set_next_input** : create a new output
+		- used to create new cells in the notebook
+		- or set the next input in a console interface
+		-example:`%load`
+		
+	- **edit_magic**: open a file for editing
+		- only QtConsole currently support edit payloads
+		-`%edit`
+	
+	- **ask_exit**: instruct the frontend to prompt the user for exit
+		-allows the kernel to request exit via `%exit` in IPython
+		-only for console frontends
+
+--------------------------
+**Other Message Type in shell channel**:
+
+- **Introspection**: 
+	- the kernel decide what information should be displayed to the user
+	- `inspect_request`, `inspect_reply`
+
+- **Completion**:
+	- The code context in which completion is requested
+	- `complete_request`, `complete_reply` 
+
+- **History**:
+	- The kernel has all the actual execution history stored
+	- Clients could explicitlt request history from a kernel when needed
+	- `history_request`, `history_reply`
+
+- **Comm Info**
+	- When a client needs current open comms in the kernel
+		- it can issue a request by `comm_info_request`	
+		- when `target_name` is specified, the reply will only contain target information
+
+- **Kernel Info**
+	- when client needs to know kernel info such as 
+		- language/ language version number/ IPython message spec version 
+	- `kernel_info_request`
+
+---------
+
+- **Code Completeness**
+
+- When the user enters a line in a console,
+	- the console needs to decide whether to execute current code
+	- Or showing a continuation prompt for further input
+	
+- There are four possible replies:
+	- `complete` code is ready to be executed
+	- `incomplete` code should prompt for another line
+	- `invalid` code will be sent foe execution so user could see error soonest
+	- `unknown` if kernel cound not determine, the code may defaultly be sent to execution
+
+--------
+
+### 1.9 Messages on Control(ROUTER/DEALER) channel
+
+- **Kernel shut**
+	- the client can request the kernel to shut itself down
+	- on shutdown, client application will execute a last minute sanity check
+	- and forcefully terminate any alive kernel 
+
+- **Kernel Interrupt**
+	- In case a kernel can not catch OS's interrupt signals
+	- kernel uses a message to be notified instead
+
+- **Debug request**
+	- This message type is used with debugging kernels to request specific actions:
+		- `dummyCell`
+		- `debugInfo`
+		- `inspectVariables`
+		- `copyToGlobals`
+
+------------
+
+### 1.10 Message on the IOPub(PUB/SUB) channel
+
+- **Streams(stdout,stderr)**
+
+- **Display Data**
+	- to bring back data should be displayed (html,svg,etc.) in the frontends
+	- This data is published to all frontends
+	- Each message can have multiple representation of data in a JSON'able structure
+	- Frontend can decide which one to use and how
+
+```
+content = {
+
+    # The data dict contains key/value pairs, where the keys are MIME
+    # types and the values are the raw data of the representation in that
+    # format.
+    'data' : dict,
+
+    # Any metadata that describes the data
+	# In IPython, only width and height of images
+    'metadata' : dict,
+
+    # Information not to be persisted to a notebook or other documents.
+    # Intended to live only during a live kernel session.
+    # We could store transient key display_id for future update
+    'transient': dict,
+}
+
+```
+
+- **Update Display Data**
+	- When a `display_id` is specified for a display in 'transient', 
+	- it can be updated later with an update_display_data message
+
+- **Code inputs**
+	- To let all frontend know
+		- what code is being executed now
+	- These messages contains a re-broadcast of `code` part of execuete_request
+
+- **Execution results**
+	- Result of an execution are published as `execute_result`
+	- The data result is any JSON object
+
+```
+content = {
+
+    # The counter for this execution is also provided so that clients can
+    # display it, since IPython automatically creates variables called _N
+    # (for prompt N).
+    'execution_count' : int,
+
+    # data and metadata are identical to a display_data message.
+    # the object being displayed is that passed to the display hook,
+    # i.e. the *result* of the execution.
+    'data' : dict,
+    'metadata' : dict,
+}
+```
+
+- **Execution errors**
+	- when an error occurs during code execution
+
+- **Kernel status**
+	- is used by frontends to monitor the status of the kernel
+
+```
+content = {
+    # When the kernel starts to handle a message, it will enter the 'busy'
+    # state and when it finishes, it will enter the 'idle' state.
+    # The kernel will publish state 'starting' exactly once at process startup.
+    execution_state : ('busy', 'idle', 'starting')
+}
+
+```
+
+- **Clear output**: is used to clear visible output on the frontend
+
+- **Debug event**: is used by debugging kernels to send debugging events to frontend
+	
+--------------
+
+### 1.11 Messages on stdin(ROUTER/DEALER) channel
+
+- In stdin channel, the request/reply pattern goes in opposite direction of most kernel comminication
+
+- With stdin socketm **Kernel makes the request**, the single frontend provides response
+
+- This allows code to prompt user for a line of input
+	- which would normally be read from a terminal through stdin
+
+---------
+
+### 1.12 Custom Messages
+
+- A messaging system for developers to add their own objects with Frontend and Kernel
+	-allow them to communicate with each other with notion of `Comm`
+
+- `Comm` exists on both Kernel side and Frontend side, and can comminicate in either direction
+
+- ** Opening a Comm**
+
+```
+#Open Comm produce this 'comm_open' msg, to be sent to the other side
+{
+  'comm_id' : 'u-u-i-d',
+  'target_name' : 'my_comm',
+  'data' : {}
+}
+
+```
+	- Every Comm has an ID and target name.
+	- After `comm_open` messgae has been sent,
+		there should be corresponding Comm instance on both sides
+
+
+- **Comm Message**
+
+```
+#comm_msg
+{
+  'comm_id' : 'u-u-i-d',
+  'data' : {}
+}
+
+```
+- Comm messages are one-way comminicationto update comm State
+
+- **Tearing Down Comms**
+
+- since comms live on both side
+- when one side destroys a comm
+- the other side should be notified by `comm_close` message
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Rest parts of jupyter client
+
+2. config files of node( tomorrow )
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:

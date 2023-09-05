@@ -1,0 +1,81 @@
+Issues 2808:
+-----------------------------------------
+1.we can divide this task into:
+
+	- how do we get the handles of each node？
+		-get nodes's get handle
+		
+	- how do we highlight it?
+		-add a classname and a style class for matching handles
+
+
+2. we first go through handles of the node
+	- where this code locate?
+	- In VPEditor.tsx 's onConnectStart
+	- i would like to define this into a sceneAction
+	- Or the function we use in Search Menu could be put into Scene Action
+	
+
+3. When we get the handle, how do we locate the handle and add a className to it?
+
+- how to locate a handle?
+- our handle is different from RF handle becasue our handle is combined with node
+	
+	-for RF handle, handle is a element that has id,className,style 
+	
+	
+
+4. Remeber, we also need to move highlight after the connectFinished or context Menu
+
+-----------------------------------------------------------
+not planned for that issue, we are starting fiji
+-----------------------------------------------------------
+
+
+5. Fiji has update to ImageJ2, this is the new feature of ImageJ2:
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. (not planned)Highlight all mactched handles when dragging edge
+
+2.  Check Fiji software functions
+	2.1 check the user functions of Fiji
+		-it's a scientific image PS, with some other functions such as script etc.
+	2.2 check new features of ImageJ2
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. the config/setting file we mentioned before:
+	is to add node by defining JSON file manually
+	- if we could get parameters from Fiji's API then we could generate the nodes automatically
+
+2. the python-fiji extension in Jupterlab now used python-binding
+Python bindings allow you to call functions and pass data from Python to C or C++
+
+we would like to use a java Kernel to run fiji directly
+
+3.

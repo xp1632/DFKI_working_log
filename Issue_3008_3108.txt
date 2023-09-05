@@ -1,0 +1,328 @@
+Issues 3008_3108:
+-----------------------------------------
+
+1. What is kernel in jupyter?
+
+- Kernels: 
+
+	- Kernels are programming language specific processes that run independently 
+	and interact with the Jupyter Applications and their user interfaces.
+	
+	- the default kernel called ipykernel,is the reference Jupyter kernel built on top of IPython.
+		which provides powerful environment for interactive computing in Python
+	
+	- In addition to Python, other programming language can also be used in the notebook
+		based on different language kernels
+
+- jupyter-client 
+
+	-jupyter-client contains the authoritative description of the Jupyter messaging protocol
+		which is used by clients to communicate with the kernels
+	
+	- here we have more details of how kernel works in Jupyter:
+	https://jupyter-client.readthedocs.io/en/stable/messaging.html
+	
+	- by checking this we could understand how kernels work in Jupyter
+	
+	
+- Xeus
+
+	- Xeus is a framework meant to facilitate the implemtation of kernels for Jupyter
+	- since I don't need to implement a kernel, I will pass this part
+
+1.1 Architecture of Jupyter projects: 
+
+https://docs.jupyter.org/en/latest/projects/architecture/content-architecture.html
+
+1.1.1 a high-level overview of jupyter projects: 
+
+![image](https://docs.jupyter.org/en/latest/_images/repos_map.png)
+
+-we also have our simple version as :
+
+	- [ ] scanned image here
+
+1.1.2 IPython Kernels
+
+- The IPython kernel provides computation and communication with the frontend interfaces like notebook
+
+
+-Terminal Python:
+- the model REPL(Read-Eval-Print-Loop) of IPython works as:
+	- prompt the user for some code
+	- when user enter code
+	- execute the code in the same processes
+
+- REPL:
+	-Stands for “read-eval-print-loop”.
+	- An REPL is a program that reads user commands and inputs, 
+	evaluates them, and prints results for the user to view.
+	
+	- These steps runs in a perpetual(continuous) loop,
+		- allowing the user to prototype code, interact with data, view results on the fly.
+		- since the data and code stay open in memory after evaluation while the REPL is running
+
+
+-The IPython Kernel:
+- All the other interfaces such as the Notebook, the Qt console, ipython console in the terminal,
+	and third-party interfaces -- uses the IPython Kernel.
+
+- IPykernel is a separate process which is responsible for running user code
+- Frontends such as notebook or qtConsole, communicate with iPython Kernel	
+	using JSON messages over ZeroMQ sockets(asynchronous I/O model) https://zeromq.org/
+
+![image] (https://docs.jupyter.org/en/latest/_images/ipy_kernel_and_terminal.png)
+
+- The protocol used between frontend and IPython Kernel is described in Messageing in Jupyter
+
+https://jupyter-client.readthedocs.io/en/stable/messaging.html
+
+
+
+1.2 So let's check jupyter-client focusing on how kernels work and deal with messaging:
+
+![image](https://jupyter-client.readthedocs.io/en/stable/_images/frontend-kernel.png)
+	
+- A single kernel can be simultaneously(at the same time) connected to one or more frontend
+
+- to understand the communication between Front-end and kernels, we need to know 
+basic socket type ROUTER,DEALER,PUB,SUB in ZeroMQ
+
+1.4 Socket API in ZeroMQ
+- I've summarize it here : https://github.com/Max-ChenFei/VPE_IP/issues/6
+
+------------------
+
+1.5 There are five functions of kernel based on ZeroMQ sockets:
+
+### Shell
+
+- This single `ROUTER` socket allows multiple incomming connection from frontend
+- And in this socket, frontend makes requests of **code execution, promps, object informations**
+- Communication on this socket is a sequence of request/reply actions from each frontend and kernel
+
+
+###IOPub
+
+- This socket is the `broadcast channel` where the kernel publishes all side effects 
+	- such as stdout, stderr,debugging events etc.
+
+- It also publishes the requests from any client that we get through `shell` socket
+- It also publishes its own requests on the `stdin` socket
+
+- Additionally, in a multi-client scenario, this socket 'broadcast' the side effects and information 
+	taking place with one client, to all other clients over `shell` channel.
+	- This can be useful in collaborative scenarios
+
+### stdin:
+
+- this `ROUTER` socket is connected to all frontends,
+- and for active frontend(when raw_input) is called
+- it allows the kernel to request input from the active frontend
+
+- `DEALER` socket
+- The active frontend that executed the code has a `DEALER` socket.
+- acts as a "virtual keyboard" for the kernel whild this communication is happenning
+
+- **Kernel request**
+- Normally frontend may display such kernel request using a special input widget
+- to indicate the user that the type input is for kernel instead of normal commands
+
+- **Information tag**
+- All messages are tagged 
+- to let the clients know which messages come from their interaction with kernel
+- and which ones are from other clients
+
+
+### Control
+
+- The control channel is used for shutdown, restart, debugging messages
+- this channel is identical to `Shell`
+  - but operate on a separate socket to avoid ququeing behind execution requests
+- The control channel is recommended to run in a separate thread from shell
+	- so shutdown or debug message could be processed immediately 
+
+
+### Heartbeat
+- This socket is to ensure the connection between frontend and kernel
+	- by allowing sending simple bytestring messages
+
+------
+
+### 1.6 General Message Format:
+
+- There are certain format for the message we passed via sockets
+- A message is composed of five dictionaries
+
+
+### Message Header:
+
+- The message `header` contains information about the message:
+
+	- unique identifiers for 
+	- the originating session
+	- the actual message_id
+	- type of message
+	- version of Jupyter protocol
+	- date/timestamp when the message was created
+ 
+ ```
+ {
+    'msg_id' : str, # typically UUID, must be unique per message
+    'session' : str, # typically UUID, should be unique per session
+    'username' : str,
+    # ISO 8601 timestamp for when the message is created
+    'date': str,
+    # All recognized message type strings are listed below.
+    'msg_type' : str,
+    # the message protocol version
+    'version' : '5.0',
+}
+```
+
+### Parent header
+
+- When a message is the `result` of another message
+	- such as a side-effect (output or status) or direct reply
+	-the `parent_header` is a copy of the `header` of the msg that `cause`
+		the current message
+		
+- `_reply` messages **MUST** have a parent_header
+- side-effects **typically** have a parent, if not, an empty dict should be used
+- 
+
+- This parent header is used by clients to route message handling to correct place
+	- such as outputs to a cell
+
+```
+{
+    # parent_header is a copy of the request's header
+    'msg_id': '...',
+    ...
+}
+```
+
+### Metadata
+
+- the `Metadata` dict contains information about the message that is not part of content-architecture
+- This can be used to store information about request and replies
+	- such as extesions adding information about context of request and execution
+
+### Content
+
+- `content` dict is the body of the message
+- its structure is determined by the `msg_type` in the header
+
+### Buffers
+
+- In the final part of a message, it is a list of addition binary buffers
+- No official messages make use of these buffers
+- But they are used by extension messages, such as IPython Parallel's `apply`
+
+---------
+
+### A full message:
+
+- Combining all of these, a complete message can be represented as :
+- the following dictionary of dictionaries( and one list)
+
+```
+{
+    "header" : {
+        "msg_id": "...",
+        "msg_type": "...",
+        ...
+    },
+    "parent_header": {},
+    "metadata": {},
+    "content": {},
+    "buffers": [],
+}
+
+
+```
+-----------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------
+
+2. Try installing a kernel in jupyterlab, 
+	- we first try Ganymede: https://github.com/allen-ball/ganymede
+	- example: https://github.com/allen-ball/ganymede-notebooks
+
+
+
+
+3. Check jupyterlab documentation
+	
+	-jupyterlab's notebook
+	https://github.com/jupyter-attic/jupyter-js-notebook
+	
+	- jupyterlab's plugins
+	https://github.com/jupyter-attic/jupyter-js-plugins
+
+
+	
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+0. scan documents, send to respective person
+	- send documents to welcome center
+
+1. Check what is kernel in jupyterlab, how do we use it
+
+2. Check JIPipe paper 
+
+	2.1 If you want, check the printer again, because there might be other stuffs you need to printer
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. We want to figure out
+
+- what is kernel in jupyterlab
+- what is JavaShell Tool?
+- how java works?
+- how fiji works in development? 
+	- we can try to add breaking point and debug
+	- and see from where we can jump in
+
+
+2. I would like to send a summary e-mail to Tim and Fei every Thurdays afternoon
+
+
+
+
+--------------------------------------------
+Take away:
