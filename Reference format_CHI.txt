@@ -1,0 +1,50 @@
+
+
+
+	- Journal:
+	
+	Jon M. Kleinberg. 1999. Authoritative sources in a hyperlinked environment. J. ACM 46, 5 (September 1999), 604–632. https://doi.org/10.1145/324133.324140
+	
+	
+	- Conference:
+	
+	Atul Adya, Paramvir Bahl, Jitendra Padhye, Alec Wolman, and Lidong Zhou. 2004. 
+	A multi-radio unification protocol for IEEE 802.11 wireless networks. 
+	In Proceedings of the IEEE 1st International Conference on Broadnets Networks (BroadNets’04) . IEEE, Los Alamitos, CA, 210–217. https://doi.org/10.1109/BROADNETS.2004.8
+	
+	
+	David Harel. 1979. First-Order Dynamic Logic.
+	Lecture Notes in Computer Science, Vol. 68. Springer-Verlag, New York, NY. https://doi.org/10.1007/3-540-09237-4
+	
+	
+	- Magazine:
+	
+	Martin A. Fischler and Robert C. Bolles. 1981. 
+	Random sample consensus: a paradigm for model fitting with applications to image analysis and automated cartography.
+	Commun. ACM 24, 6 (June 1981), 381–395. https://doi.org/10.1145/358669.358692
+	
+	
+	- Books:
+	
+	Prokop, Emily. 2018. The Story Behind. Mango Publishing Group. Florida, USA.
+	
+	
+	- Techinial report:
+	
+	James W. Demmel, Yozo Hida, William Kahan, Xiaoye S. Li, Soni Mukherjee, and Jason Riedy. 2005. 
+	Error Bounds from Extra Precise Iterative Refinement. Technical Report No. UCB/CSD-04-1344. University of California, Berkeley.
+	
+	
+	- Online reference:
+	
+	TUG 2017. Institutional members of the LaTeX Users Group. Retrieved May 27, 2017 from http://wwtug.org/instmem.html
+	
+	-Software Artifact:
+	
+	R Core Team. 2019. 
+	R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria. 
+	https://www.R-project.org/
+	
+	-Dataset:
+	Sam Anzaroot and Andrew McCallum. 2013. UMass Citation Field Extraction Dataset. 
+	Retrieved May 27, 2019 from http://www.iesl.cs.umass.edu/data/data-umasscitationfield
