@@ -1,0 +1,171 @@
+Issues 1109_1209:
+-----------------------------------------
+1. Summarize short gist of making scientific video in github 
+
+
+2. Rough reading paper 
+
+---
+4.  First step, add the missing nodes to json
+
+
+- Find the ori picture, in issues/temps,  in tif type
+
+
+- Module 1's thresholding is in scikit-image
+https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_multiotsu.html
+
+- Module 2's watershed is also in scikit-image
+https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_watershed.html
+------------------------------
+
+
+[v]4.1 read picture 
+
+[v]4.2 use multiotsu to get two thresholds [add multiotsu]
+	- divide in two part, this is threshold part
+	- output threshold is nparray, not image
+
+	- ref: https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_multiotsu.html
+
+[v]4.3 digitize with threshold bins(digitize is to put value into bins and count number)
+	
+	- do we need to draw histogram as in ref or not 
+	- part 2 of otsumulti
+	
+	
+	- show regions in picture
+	- why it can be shown, it's a image or numpy.array or no difference?
+	
+
+[??]  how to get thresholds[0] from threshold(an output array from node) in nodes
+
+[v]4.4 numpy.greater					[add numpy.greater in float]
+
+[?] - add externalImports in math package 
+	- datatype of input is numpy.ndarray not float
+	- ref : https://numpy.org/doc/stable/reference/generated/numpy.greater.html#numpy.greater
+	
+
+
+from skimage import (
+    color, feature, filters, measure, morphology, segmentation, util
+)
+
+[v]- measure.label, [ add measure.label in Scikit-segmentation]
+	[?] - output labels is not image but numpy.array
+
+
+[v] - .max [add numpy.max in float ] 
+[v]- calculate dividing value [add numpy.divide in float]
+
+
+[v]- print naive_mi [use log node]
+
+[v]- write[cells] [dividing] as image
+
+----
+
+[v]4.5 numpy.greater [v]
+	-manualley set higer threshold as 125
+
+[v]4.6 filter.rank.mean [add filter.rank.mean in filter]
+[v]	- add [util.img_as_ubyte in filter]
+[v]	- add [morphology.disk in filter]   -in case it's difficult to use
+		[?]- the input && return footprint is not image, is int and ndarray
+	
+	
+
+[v]4.7 numpy.greater with mean  [use >]
+	smoother_dividing > 20 get binary smoother_dividing
+
+[v]4.8 measure.label (binary smoother_dividing) [use measure_label in segmentation]
+
+[v]- [use .Max in float]
+[v]- print better nuclei as ouput.module1 [use log]
+
+----
+
+[v]4.9 disttance calculation
+	from scipy import ndimage as ndi
+	[?] - output is ndarray or also image
+	-ref: https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.distance_transform_edt.html
+
+[v]4.10 feature.local max with distance
+	- the distance we get from last step is input image
+	[?] - output is ndarray coordinates not image
+	-ref:  https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.peak_local_max
+
+[v]4.11 mask with distance.shape  [add .shape, .zeros in float]
+
+[??]4.12 tuple mask as true  [may try make a tuple node] 
+	```
+
+The `local_max_coords` array is then used to set the corresponding values 
+in the `local_max_mask` array to `True`. 
+The `tuple()` function is used to convert the `local_max_coords` array
+ to a tuple of coordinates, which is then passed to the `[]` operator
+ to index the `local_max_mask` array and set the corresponding values to `True`.
+
+
+	```
+
+[v]4.14 marker for watershed [use measure_label in segmentation]
+
+
+[v]4.15 watershed and get the segemented cells as output.module2
+	[!]- the first input is distance image
+	[?] - the second parameter could be int or ndarray int
+			-we use ndarray
+	[?] - the third variable mask = cells, here cells is 
+		# Step 4
+			cells = image > thresholds[0]
+	- ref: https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.watershed
+
+[v]4.16 overlay the colored image to raw
+
+[v]- color.label2rgb [add in color.label2rgb segmentation]
+
+	- first parameter is the segemented_cells we get in Step 15
+	- second is ori image
+	
+	- the 3rd and 4th parameter need to be set specifically 
+	[?]	- {{{alpha=inputs.3}}},{{{bg_color=inputs.4}}} correct or not
+	-ref :https://scikit-image.org/docs/stable/api/skimage.color.html#skimage.color.label2rgb
+-----
+
+[v]4.17 
+[use .max in float]
+print ouput.module1/output.module2  [use / in float]
+	
+----
+	
+-------------------------------------------
+Main task today:
+1. Check how to make a research video
+
+2. Check the direction of Paper
+
+3. usecase 1 of segment cells
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- Video Preview in CHI is 30s
+- Sumpplemental material video is 5 mins 
+
+- no hurry, simply copy and paste again
+	- delete the wrong branch , make a new one
+	- 
+
+
+
+
+
+--------------------------------------------
+Take away:

@@ -1,0 +1,89 @@
+Issues 1309_1409:
+-----------------------------------------
+1. Selling points of the paper
+
+	- experimental groups with limited programming experience 
+		- still rely heavily on manual image processing
+	
+	- [reproducibility]
+	- [lower the barrier]
+	- auto- conversion between the image representations for non programmer
+		- “image” can be mapped to concreate data layouts in various ways,
+		- for example as numpy.ndarray [28], torch.tensor [29], 
+		- or raw pointer, 
+		- each with variations in color channel, channel order, location of memory, and pixel intensity.
+	
+	- how a visual programming editor (VPE) can be used by non-programmers for reproducible scientific image processing tasks,
+	- how several real-world use cases can be solved using the system.
+	- 
+	- until Chapter 3
+----
+
+	- AI voice, clara : https://genny.lovo.ai/project/650179521fc3dc00235d11ac
+	
+	- Intro video, script: https://chat.openai.com/c/9fbf153f-f83b-45be-9116-e6af7de25044
+		- 
+
+
+
+2. The large sections are divided.
+
+- now we put the node pieces into belonging section
+
+- we filter the menu until Kornia, then we filter the three list of lib
+
+
+---
+- myself mistake: 
+	- kornia_adjustment : tooltip: hue/contrast/sharpness
+	- 
+	
+------
+
+3.  Check for reference
+
+	- 1.
+	[1] journal: doi should be full: https://doi.org/10.1091/mbc.01-12-0593
+	[2] journal: doi missing, wrong format
+	[3] journal: 
+	
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. APPENDIX of node list
+
+1.5 Read paper and find saling point
+
+2. Script of Video
+
+
+3. Rough Version of a Script
+
+---
+
+4. For video, we put aside the the usecase and would use the showcase instead
+
+5. check the submission requirements of video and paper
+
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:

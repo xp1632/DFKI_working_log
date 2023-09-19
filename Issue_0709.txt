@@ -1,0 +1,333 @@
+Issues 0709:
+-----------------------------------------
+
+5. We first filter the examples in scikit-image: https://scikit-image.org/docs/stable/auto_examples/index.html
+
+- the filter standard is:
+	- image as tensor in, tensor out 
+	- priorize the functions that is not repetitive with Kornia
+
+- all the image type in scikit is set as 'numpy.ndarray'
+
+
+---
+
+- Data, Operations on NumPy arrays are omitted
+
+- In Manipulating color channels
+	- we don't need color and histogram
+	- and gamma,log, contrast adjustment is already in Kornia
+
+- In Edges and lines
+  - we could do 
+	- convex hull
+	- canny
+	- ridge operators
+	- Approximate polygon
+	- Skeletonize
+	- Edge operators
+
+	- Contour finding, Active Contour finding, Hough transform 
+	are not supported
+	
+- In Geometrical transformations
+  - we could do 
+	- Swirl
+	- Rescale
+	- resize
+	- downscale
+
+	-Homographies Interpolation: Edge Modes, Build image pyramids, Piecewise Affine Transformation,
+	geometric transformations, Structural similarity index, Radon transform ,Robust matching using RANSAC
+	are not supported
+	
+- Image registration is omitted
+
+- In Filter and restoration:
+  - we can do:
+	- top_hat filter
+	- Hysteresis thresholding
+	- Unsharp masking
+	- Mean filters
+	- Denoising a picture
+	- Morphological Filtering (repetitive thus omit) 
+	
+	-Image Deconvolution,window functions,Estimate strength of blur
+	Entropy,Calibrating Denoisers ,Inpainting, Band-pass filtering by Difference of Gaussian,
+	Butterworth Filters are not supported
+
+- In Detection of features and objects :
+  - we can do:
+	- Histogram of Oriented Gradients
+	- CENSURE feature detector
+	
+	- Corner detection (whole package repetitive thus omit) 
+	- Blob Detection (whole package repetitive thus omit) 
+  
+  -Dense DAISY feature description,Template Matching, Filling holes and finding peaks
+	Multi-Block Local Binary Pattern, Haar-like feature descriptor, 
+	ORB feature detector and binary descriptor, Gabors / Primary Visual Cortex 
+	Fisher vector feature encoding,BRIEF binary descriptor, SIFT feature detector and descriptor extractor
+	GLCM Texture Features, Shape Index, Sliding window histogram, Gabor filter banks for texture classification
+	Local Binary Pattern for texture classification are not supproted
+  
+  
+-In Segmentation of objects :
+  - we can do 
+	- Chan-Vese Segmentation
+	- Maximum filter
+	- Apply maskSLIC vs SLIC
+	- Comparison of segmentation and superpixel algorithms
+	- Flood Fill
+  
+  - Region Boundary based RAGs, RAG Thresholding, Normalized Cut
+   ,Find Regular Segments Using Compact Watershed, Thresholding, 
+	Drawing Region Adjacency Graphs (RAGs), Niblack and Sauvola Thresholding,
+	Multi-Otsu Thresholding, Random walker segmentation, Expand segmentation labels without overlap,
+	Watershed segmentation, Label image regions, Markers for watershed transform,Find the intersection of two segmentations,
+	Region Adjacency Graphs,Measure perimeters with different estimators, RAG Merging,
+	Hierarchical Merging of Region Boundary RAGs, Extrema, Explore and visualize region properties with pandas,
+	Hausdorff Distance, Measure region properties, Trainable segmentation using local features and random forests,
+	Morphological Snakes, Euler number. Evaluating segmentation metric, 
+	Use rolling-ball algorithm for estimating background intensity,Face detection using a cascade classifier are not supported
+
+---------------------------
+	
+5.1 We start with Edge and lines:
+	https://scikit-image.org/docs/stable/auto_examples/edges/index.html
+	- all output are set as grayscale in sourceCode
+	
+	- convex hull 
+	- canny
+	- ridge operators
+	- Approximate polygon
+	- Skeletonize
+	- Edge operators
+	
+- ridge operators, we'll keep meijering filter since it looks better
+- Approximate polygon, not sure if we use it correctly
+- Edge_operator, we take it simple by only keeping parameter image 
+
+-------------------
+
+5.2 We now do Geometrical transformations and registration:
+  - we could do 
+	- Swirl
+	- Rescale, 
+	- resize, 
+	- downscale
+
+----
+
+5.3 We now do Filter and restoration:
+  - we could do,
+  	- white_top_hat filter
+	- black_top_hat 
+	- Hysteresis thresholding
+	- Unsharp masking
+	- Mean filters:
+		- Mean_Percentile
+		- Mean_bilateral
+		- Mean
+	- Denoising a picture
+		- denoise_tv_chambolle
+		- denoise_bilateral
+		- denoise_wavelet
+
+- Morphological Filtering (whole package repetitive thus omit) 
+- For top_hat filter, we omit the footprint parameter
+- For unsharp mask, we keep the first 3 parameters as in example
+		
+---
+
+5.4 We now do Detection of features and objects
+  - we could do,
+	- Histogram of Oriented Gradients (on second check, return is not image)
+	- CENSURE feature detector (on second check, return is not image)
+	
+	- Corner detection (whole package repetitive thus omit) 
+	- Blob Detection (whole package repetitive thus omit) 
+
+
+---
+5.5 we now do Segmentation of objects
+- we can do 
+	- Chan-Vese Segmentation (on second check, return is not image)
+	- Maximum filter
+	- Apply maskSLIC vs SLIC (on second check, return is not image)
+	- Comparison of segmentation and superpixel algorithms
+		- Felzenszwalb_Segmentation
+		- Slic_Segmentation
+		- quickshift
+		- watershed(not supported)
+	- Flood Fill
+
+
+- For segmentation algorithm, not sure if it is correctly used
+- Watershed segmentation is omitted because not supported
+
+- For flood fill, not sure if new_value is correct
+
+
+----------------------------------
+5.6 List for SciKit-Image:
+
+- In Filter and restoration.json,
+	we have White_Tophat,Black_Tophat,Hysteresis_Threshold,
+	Unsharp_Mask, Mean_Percentile,Mean_Bilateral,
+	Mean, Denoise_tv_chambolle,Denoise_bilateral,Denoise_wavelet
+
+
+- In Segmentation.json,
+	we have Maximum_Filter, Felzenszwalb_Segmentation
+	Slic_Segmentation, Quickshift_Segmentation, Flood Fill
+
+- In Geometrical transformations.json,
+	we have Swirl, Rescale,Resize,Downscale
+
+- In Edge and Lines.json,
+	we have Convex_Hull, Canny_edge_detector,
+	Ridge_operators,Approximate_subdivide_polygons,
+	Skeletonize,Edge_Operator_Sobel, Edge_Operator_Roberts
+		
+----------------------
+
+6. We first filter the examples in opencv-python: https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html
+
+- the filter standard is:
+	- image as numpyArray in, numpyArray out 
+	- priorize the functions that is not repetitive with Kornia and scikit
+
+- all the image type in scikit is set as 'numpy.ndarray'
+- all intensity range is 0-255
+
+---
+
+- Gui Features are omitted
+
+---
+
+- In Core Operations： https://docs.opencv.org/4.x/d7/d16/tutorial_py_table_of_contents_core.html
+  - we can do:
+		- Making Borders for Images https://docs.opencv.org/4.x/d3/df2/tutorial_py_basic_ops.html
+		- Image Blending https://docs.opencv.org/4.x/d0/d86/tutorial_py_image_arithmetics.html
+---
+
+- In Image Processing in OpenCV: https://docs.opencv.org/4.x/d2/d96/tutorial_py_table_of_contents_imgproc.html
+
+  - we can do:
+	- Image Thresholding
+		- Simple Thresholding
+		- Adaptive Thresholding
+	- Smoothing Images
+		- 2D Convolution ( Image Filtering )
+		- Image Blurring (Image Smoothing)
+			- Averaging
+			- Gaussian Blurring
+			- Median Blurring
+			- Bilateral Filtering
+	- Morphological Transformations (whold packages are repetitive)
+	- Image Gradients (repetitive but different name)
+	- Canny Edge (repetitive)
+	- Image Pyramids
+	- Template Matching
+	
+  - Changing Colorspaces, Geometric Transformations of Images,Contours in OpenCV,
+	Histograms in OpenCV, Image Transforms in OpenCV, Hough Line Transform,
+	Hough Circle Transform, Image Segmentation with Watershed Algorithm
+	Interactive Foreground Extraction using GrabCut Algorithm are not supported.
+	
+---
+
+- In Feature detection:
+  - we can do:
+	- Harris Corner Detection (repetitive)
+	
+  - Shi-Tomasi Corner Detector & Good Features to Track, SIFT (Scale-Invariant Feature Transform)
+	SURF (Speeded-Up Robust Features), FAST Algorithm for Corner Detection, 
+	BRIEF (Binary Robust Independent Elementary Features),ORB (Oriented FAST and Rotated BRIEF),
+	Feature Matching,
+	
+---
+- Video analysis (video module), 
+- Camera Calibration and 3D Reconstruction
+- Machine Learning are omitted
+
+---
+- In Computational Photography: https://docs.opencv.org/4.x/d0/d07/tutorial_py_table_of_contents_photo.html
+
+  - we can do:
+	- Image Denoising 
+		- cv.fastNlMeansDenoising()
+		- cv.fastNlMeansDenoisingColored()
+	- Image Inpainting
+	
+	
+  - High Dynamic Range (HDR) is not supported
+---
+
+- Object Detection, OpenCV-Python Bindings are omitted
+
+
+----------------------------
+6.1 In Core Operations： https://docs.opencv.org/4.x/d7/d16/tutorial_py_table_of_contents_core.html
+  - we can do:
+		- Making Borders for Images https://docs.opencv.org/4.x/d3/df2/tutorial_py_basic_ops.html
+		- Image Blending https://docs.opencv.org/4.x/d0/d86/tutorial_py_image_arithmetics.html
+---
+
+- In Image Processing in OpenCV: https://docs.opencv.org/4.x/d2/d96/tutorial_py_table_of_contents_imgproc.html
+
+  - In Image Processing. json we have:
+	- Image Thresholding
+		- Simple Thresholding
+		- Adaptive Thresholding
+	- Smoothing Images
+		- Image Blurring (Image Smoothing)
+			- Averaging
+			- Gaussian Blurring
+			- Median Blurring
+			- Bilateral Filtering
+	- Image Gradients 
+		- Sobel
+		- Laplacian
+	- Canny Edge 
+	- Image Pyramids
+		- Downsample
+		- Upsample
+
+	
+---
+- For simple thresholding, we have two outputs
+- For Averaging Image Blurring, we keep two first parameters
+
+
+
+	- Template Matching (not supported)
+	- Morphological Transformations (whole packages are repetitive)
+
+-------------------------------------------
+Main task today:
+
+0. List and errors for Scikit-image
+
+1. opencv python: https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html
+	- pick by examples' module
+
+2. to json the openCV module
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
