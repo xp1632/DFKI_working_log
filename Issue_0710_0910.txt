@@ -1,0 +1,241 @@
+Issues 0710_0910:
+-----------------------------------------
+1. Video requirements:
+
+I think they are minor and we can submit without the changes: 
+
+(1) The first is at 0:50-0:55. Here, the nodes are connceted, 
+then the kernel parameters for qualize_hist are changed, then it is explained what happens in the conversion.
+ 
+ I think this was slighly nicer if we first insert the node, set the parameters. 
+ 
+ Then explain the part of "core issue", and exactly when you mention the connecting of the two nodes make the connection.
+
+
+ With the current audio, this would  be at 1:06. 
+ That would give a very cool effect, but as I said, the current version is acceptable as well. 
+ 
+ 
+ (2) At 1:50, the transition is very sudden. 
+ Here I suuggest to add the audio text "One issue with graphical programming is, that..." to prepare for the next topic.
+
+
+(3) At 4:00, the audio says "with this system". 
+I know I suggested the text. But in context, "this system" relates to the node extension mechanism. 
+I think we should change now to
+ " " to make clear we mean the entire system in the last sentence.
+ 
+ 1.2 
+ 
+ - Scene 1 insert two nodes A,B
+ - Scene 2 set parmater of B node 
+ (New material of not connecting the line but set the parameters)
+ 
+ - Scene 3 link the two nodes
+ - Scene 4 the mechanism of conversion 
+
+---------------
+
+
+2. Ganymede's Java code is executed with JShell
+
+Jshell: https://docs.oracle.com/en/java/javase/17/jshell/snippets.html#GUID-630F27C8-1195-4989-9F6B-2C51D46F52C8
+
+- 2.1  What's JShell introduced in JDK9. ?
+	- JShell is an interactive Read-Evaluate-Print Loop tool (REPL), 
+	which evaluates declarations, statements, and expressions 
+	as they are entered and immediately shows the results.
+
+
+- strength of Jshell:
+	- try out code and easily explore options as we develop the programming
+	- while traditional java program requires a complete program before compiling
+
+- verbose mode: the mode where the undergoing process of code would be explained
+	- % jshell -v
+
+- 2.2 Snippets in Jshell:
+
+	- we could define code snippets:
+		- `variable` : `jshell> int x = 45` 
+		- `method`: 
+			```
+			jshell> String twice(String s) {
+			   ...>    return s + s;
+			   ...> }
+			```
+		- `function call`:
+		`twice("Ocean")`
+
+- 2.3 Forward Reference
+
+	- Jshell accepts method definition that reference variables aren’t yet defined.
+	- variables can be defined later
+
+- 2.4 Tab completion for snippets
+	- as in forward reference, if we defined a `volume` method,
+	- when we input `vol` we can use `Tab` to finish `volume(`
+	
+---
+
+- 3. Commands in JShell (https://docs.oracle.com/en/java/javase/17/jshell/commands.html#GUID-F4881B8E-8B6C-4906-A100-E78C4AFC277D)
+	- Commands are distinguished from snippets by a slash (/).
+	- JShell commands control the environment and display information within a session.
+	
+	```
+		jshell> /vars
+		|    int x = 45
+		|    int $3 = 4
+		|    String $5 = "OceanOcean"
+
+		jshell> /methods
+		|    twice (String)String
+
+		jshell> /list
+
+		   1 : System.out.println("Hi");
+		   2 : int x = 45;
+		   3 : 2 + 2
+		   4 : String twice(String s) {
+				 return s + s;
+			   }
+		   5 : twice("Ocean")
+	
+	```
+	- Other important commands include:
+		- /exit to leave JShell, 
+		- /save to save your snippets, 
+		- and /open to enter snippets from a file.
+
+	- Enter /help for a list of the JShell commands.
+
+3.1 Tab Completion for Commands 
+	- we could also auto complete commands by tab
+
+
+---
+
+4. Shell Editing (https://docs.oracle.com/en/java/javase/17/jshell/editing.html#GUID-1E2FAE28-093F-44E5-8DE5-499AA77D1EC2)
+	- To edit input at the current line or history via previous session of Jshell
+	- we could use keyboard combinations to go to the code snippets that we would like to edit
+
+
+- 4.1 External editor:
+
+	- we can use external editor to edit and create snippets
+
+---
+!!!!
+
+5. **External Code/Class/Module**
+ (https://docs.oracle.com/en/java/javase/17/jshell/external-code.html#GUID-D0BED087-AD44-4048-B37D-054308C64390)
+
+	- To use external classes in JAR files:
+	
+	- we need to set the class path to directories or JAR files that has demanding package as shown:
+	` % jshell --class-path myOwnClassPath `
+	
+	- the code must be compiled into class files
+	- unnamed packages or code in default packages can't be accessed from JShell
+	
+	
+	- After you set the class path, packages can be imported into session as:
+	`jshell> import my.cool.code.*`
+	
+	
+- 5.1 Setting Module Option
+	[Modules]
+	- Modules are supported in JShell. The module path can be set.
+	` % jshell --module-path myOwnModulePath  --add-modules my.module `
+
+- 5.2 Enviroment setting:
+
+	- To see current environment settings, use /env without options
+	```
+	 jshell> /env
+ |     --add-modules my.module
+ |     --module-path myOwnModulePath
+ |     --class-path myOwnClassPath
+	
+	```
+----
+6. Feedback Mode: (https://docs.oracle.com/en/java/javase/17/jshell/feedback-modes.html#GUID-AC32A8DA-8D4C-46F5-B415-B61E71411EF3)
+	- there are predefined modes in JShell:
+	`verbose, normal, concise`
+	- which provides different level of information and feedback
+	
+----
+
+7. ""Scripts in Jshell""
+
+- A Jshell script is a sequence of snippets and Jshell commands in a file.
+- One snippets or command per line
+
+
+7.1 Startup Scripts
+
+- Startup scripts are loaded each time the jshell tool is reset. 
+- we can set up the startup script of our own
+
+```
+jshell> /set start mystartup.jsh
+```
+
+
+- to keep the setting of start up script, we need to use -retain
+
+`jshell> /set start -retain` to preserve it
+
+7.2 Creating Scripts
+
+`jshell> /save mysnippets.jsh`
+
+- The first command shown in the example saves the current active snippets to mysnippets.jsh. 
+
+7.3 **Loading Scripts**
+
+- Scripts can be loaded when a JShell session is started 
+	- from the commmand line
+	
+`% jshell mysnippets.jsh`
+
+- Scripts can also be loaded within a JShell session
+	- by using `/open` command
+
+`jshell > /open PRINTING`
+
+
+- --
+	
+	
+-------------------------------------------
+Main task today:
+
+1. Last Minor change of video before the audio membership expired
+	(1) not quite understand requirement 1
+	(2),(3) fixed
+	
+2. Pick up some java kernel-- Jshell
+
+3. The questions until page 8 today
+
+4. install ganymede or Ijava in jupyterlab
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Fiji is Java 8, Jshell is Java 9, Ganymede is based on Jshell and java 11+
+
+2. Confirmed that ganymede has jupyterlab client， or not?
+
+3. ImageJ's Doc is quite good, we should read through it: https://imagej.net/learn/faq#compatibility
+
+
+
+
+
+
+--------------------------------------------
+Take away:
