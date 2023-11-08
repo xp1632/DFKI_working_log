@@ -1,0 +1,227 @@
+Issues 2310_2410:
+-----------------------------------------
+1. Modify the time plan
+	- we'll also add the other plans 
+		- that we didn't use to show the validity of final choice
+	
+2. check the imageJ tutorial in jupyterlab
+ - ref: https://github.com/imagej/tutorials/blob/master/notebooks/1-Using-ImageJ/1-Fundamentals.ipynb
+
+
+2.1 Tutorial list and demo:
+
+https://github.com/imagej/tutorials/blob/master/notebooks/ImageJ-Tutorials-and-Demo.ipynb
+
+2.1 with IJava, the %classpath magic is not working,
+	- so we try the BeakerX Groovy kernel that used in the tutorial notebook
+
+
+2.2 with Groovy, the %classpath takes some time but is able to work
+	- we'll quick go through the basic demos, then go to the fundamental part
+	- the classpath gateway will takes some time, remember to wait until the package
+	is installed, until Text "ImageJ v${ij.getVersion()} is ready to go." shows.
+	- I also need a check about headless model
+
+2.5 what is imageJ op?
+
+
+3. Java-related questions:
+
+3.1 How to call a function in a class in Java?
+
+	- via static method: 
+	```
+	// define a static method:
+	public static void sayHello() {
+		System.out.println("Hello!");
+	}
+
+	// call a static method:
+	sayHello();
+	```
+	
+	- inside a class via an instance with/without parameters:
+	
+	```
+	public class TestVoidMethod {
+	  public static void main(String[] args) {
+		printGrade(88);
+	  }
+	 
+	  public static void printGrade(double score) {
+		if (score >= 90.0) {
+		   System.out.println('A');
+		}
+		else if (score >= 80.0) {
+		   System.out.println('B');
+		}
+		else if (score >= 70.0) {
+		   System.out.println('C');
+		}
+		else if (score >= 60.0) {
+		   System.out.println('D');
+		}
+		else {
+		   System.out.println('F');
+		}
+	  }
+	}
+
+	TestVoidMethod obj = new TestVoidMethod();
+	obj.main(null);
+	obj.printGrade(98);
+	
+	```
+	
+	- via class's constructer function when new instance is created
+	
+	```
+	public class TestVoidMethod2 {
+    
+	  public TestVoidMethod2() {
+	   System.out.println("Constructor called!");
+	  }
+		
+	  public static void main(String[] args) {
+		printGrade(88);
+	  }
+	 
+	  public static void printGrade(double score) {
+		if (score >= 90.0) {
+		   System.out.println('A');
+		}
+		else if (score >= 80.0) {
+		   System.out.println('B');
+		}
+		else if (score >= 70.0) {
+		   System.out.println('C');
+		}
+		else if (score >= 60.0) {
+		   System.out.println('D');
+		}
+		else {
+		   System.out.println('F');
+		}
+	  }
+	}
+
+	TestVoidMethod2 obj2 = new TestVoidMethod2();	
+	
+	```
+	
+	- via class's constructer function with parameters when new instance is created
+	
+	```
+	public class TestVoidMethod3 {
+    
+	  public TestVoidMethod3(String name) {
+	   System.out.println("Constructor called! by " + name);
+	  }
+		
+	  public static void main(String[] args) {
+		printGrade(88);
+	  }
+	 
+	  public static void printGrade(double score) {
+		if (score >= 90.0) {
+		   System.out.println('A');
+		}
+		else if (score >= 80.0) {
+		   System.out.println('B');
+		}
+		else if (score >= 70.0) {
+		   System.out.println('C');
+		}
+		else if (score >= 60.0) {
+		   System.out.println('D');
+		}
+		else {
+		   System.out.println('F');
+		}
+	  }
+	}
+
+	TestVoidMethod3 obj3 = new TestVoidMethod3("Jupyter");	
+	
+	```
+	
+3.2 What's the common data structure in Java?
+	ref: https://www.runoob.com/java/java-array.html
+	- for numbers: int, float, byte, long
+	- for characters: char
+	- for string: String
+	
+	- for array: dataType[] arrayRefVar, ex: `double[] myList;` or `double myList[]; `
+		- create an array: `dataType[] arrayRefVar = new dataType[arraySize];`
+		- or `dataType[] arrayRefVar = {value0, value1, ..., valuek};`
+
+3.3 JShell main difference with typical java : 
+	ref: https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Java-JShell-Online-Commands-How-to-Tutorial-Exit
+	
+	1. No need for JavaC and compiling
+	
+	- With typical, standalone Java programs, developer must complie source code
+		into bytecode with JavaC, then run the bytecode on JVM
+		
+	- Jshell reads and runs the code on the fly with the incremental compilation
+	model.
+
+	2. No need for a main method
+	
+	- Historically, Java devs have to code a main method even when they want to
+	run a tiny code snippt.
+	
+	- with JShell, we can run a java program without a main method, such as :
+	```
+	System.out.println("Hello World");
+	```
+	
+	3. Jshell auto imports of java.io*, java.math*, jave.util* etc.
+
+```
+- JShell is a Java REPL (Read-Eval-Print Loop) tool that allows you to interactively execute Java code snippets and see the results immediately. JShell is able to read and execute Java code on the fly because it uses a different approach to compiling and executing code than traditional Java.
+
+- In traditional Java, you write your code in a text editor or an IDE, and then you compile the code using a Java compiler, such as `javac`. The compiler translates the Java code into bytecode, which can be executed by the Java Virtual Machine (JVM). This process requires a separate compilation step before the code can be executed.
+
+- In contrast, JShell uses an incremental compilation model, where code is compiled and executed on the fly as you type it. When you enter a code snippet into JShell, the tool compiles the code in the background and executes it immediately, without the need for a separate compilation step. This allows you to experiment with Java code and see the results immediately, without the overhead of compiling and running a separate program.
+
+```
+
+4. Modify the time plan v2 at last
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Modify the Milestone plan
+
+2. Make Two process graph of 
+	- kernel process
+	- xx based execution
+
+3. read Jupyter note
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- PyImageJ tutorial1 : https://nbviewer.org/github/guiwitz/neubias_academy_biapy/blob/master/14-PyImageJ.ipynb
+- PyImageJ tutorial2: https://github.com/imagej/tutorials/blob/master/notebooks/1-Using-ImageJ/6-ImageJ-with-Python-Kernel.ipynb
+
+- with Groovy kernel, we don't use {} to define array, we use []
