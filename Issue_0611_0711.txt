@@ -1,0 +1,240 @@
+Issues 0611_0711:
+-----------------------------------------
+
+1. Paper summary
+
+1.1 PolyJus summary:
+
+- executing notebook on top of a polyglot execution environment
+- Squak-based notebook UI that is compatible with Jupyter notebook file format
+- a notebook backend powered by a system allows code cells of a notebook
+	- 1. exchange data with each other
+	- 2. re-use behavior
+	- 3. work on same objects in memory
+	
+---
+###Technical Details:
+
+-  form of key-value namespaces for sharing obejects between languanges
+-  translate code cell's language selection into appropriate API call
+
+---
+
+Final summary: 
+
+**- Feature:** 
+- support live object inspection by smalltalk based jupyter-like notebook system 
+- support polyglot execution by GraalVM virtual machine env's API
+- support sharing object reference between languages by key-value pair namespace 
+
+**- Drawback:**
+- runs on a single machine
+- not with existing web-based notebook UI and remote kernel architecture  
+
+1.2 Smalltalk Programming Language feature
+	https://www.codeproject.com/Articles/1241904/Introduction-to-the-Smalltalk-Programming-Language
+	- image-based : allows user to save execution state of the program at any time
+		- which is similar to the system image in OS virtualization software
+	- support live coding IDE
+
+
+1.4 What's GraalVM?
+	- a java virtual machine environment which support polyglot by its polyglot API
+	
+2. ImageJ Op
+
+2.1 imageJ gateway, by checking https://github.com/imagej/tutorials/blob/master/notebooks/1-Using-ImageJ/1-Fundamentals.ipynb
+
+- we noticed that in comments, they also offered fiji install from local jar or remote maven
+
+
+- `Problem 1 ` : 
+
+Failed to load model class 'TableDisplayModel' from module 'beakerx'
+Error: No version of module beakerx is registered
+
+- consider a jar install of imagej to keep steady working of ij function
+
+- install beakerx again to correctly registered it
+- didn't effect functioning for now, fix later
+
+
+-`Problem 2 solved` :
+
+- we have segment.detectRidges op showb in the list
+- we `ij.op.help('detectRidges')` and see the required paras
+- we try to run it with 
+	- `ij.op().run("segment.detectRidges"...)`
+	- or ij.op.segment.detectRidges()
+	- both not working with 
+
+```
+java.lang.IllegalArgumentException: No matching 'segment.detectRidges' op
+
+Request:
+-	segment.detectRidges(
+		IntervalView,
+		Double,
+		Double,
+		Double,
+		Integer)
+
+Candidates:
+1. 	(List out) =
+	net.imagej.ops.segment.detectRidges.DefaultDetectRidges(
+		RandomAccessibleInterval in,
+		double width,
+		double lowerThreshold,
+		double higherThreshold,
+		int ridgeLengthMin)
+	Inputs do not conform to op rules
+		in = IntervalView [(0, 0, 0) -- (331, 299, 2) = 332x300x3]
+		width = 1.0
+		lowerThreshold = 0.5
+		higherThreshold = 1.0
+		ridgeLengthMin = 10
+
+	at net.imagej.ops.DefaultOpMatchingService.singleMatch(DefaultOpMatchingService.java:432)
+	at net.imagej.ops.DefaultOpMatchingService.findMatch(DefaultOpMatchingService.java:97)
+	at net.imagej.ops.DefaultOpMatchingService.findMatch(DefaultOpMatchingService.java:83)
+	at net.imagej.ops.OpEnvironment.module(OpEnvironment.java:253)
+	at net.imagej.ops.OpEnvironment.run(OpEnvironment.java:136)
+	at this cell line 8
+	at com.twosigma.beakerx.groovy.evaluator.GroovyCodeRunner.runScript(GroovyCodeRunner.java:94)
+	at com.twosigma.beakerx.groovy.evaluator.GroovyCodeRunner.call(GroovyCodeRunner.java:59)
+	at com.twosigma.beakerx.groovy.evaluator.GroovyCodeRunner.call(GroovyCodeRunner.java:32)
+
+```
+
+- the error is caused by wrong img format
+
+### It's important to transfer pic into single-channel 32-bit float point version
+
+```
+import net.imglib2.FinalInterval
+w = image.dimension(0); h = image.dimension(1)
+slice = FinalInterval.createMinSize(0, 0, 0, w, h, 1)
+grayImage = ij.op().run("crop", image, slice, true)
+image32 = ij.op().convert().float32(grayImage)
+
+```
+
+- the problem is the wrong format of img
+- 
+
+2.2 I've found the segement op in the bottom list of 
+https://github.com/imagej/tutorials/blob/master/notebooks/1-Using-ImageJ/2-ImageJ-Ops.ipynb
+
+
+- I plan to first read through the tutorial, then pick 1-2 method in each main category
+
+
+2.3 Groovy: check 
+
+- the imageJ on jupyter notebook tutorial is wriiten with Groovy
+- Groovy is a superset of Java
+- Groovy is an objected oriented language which is based on Java platform
+- Groovy is fully compatible with Java and can use any Java library
+- Groovy has a simpler syntax and supports dynamic typing
+
+----
+
+### Features:
+
+- Range Operators `..`:
+```
+class Example { 
+   static void main(String[] args) { 
+      def range = 5..10; 
+      println(range); 
+      println(range.get(2)); 
+   } 
+
+```
+ 
+ we get results as:
+
+```
+[5, 6, 7, 8, 9, 10] 
+7
+```
+
+- 
+
+
+2.4 ImgLib2: Image Type in ImageJ
+https://github.com/imagej/tutorials/blob/586267dc1e84d722b1765eddb5cb69c3ea28c0b6/notebooks/1-Using-ImageJ/3-ImgLib2-Basics.ipynb
+
+
+
+3. I'll have a new notebook which focus on ImageJ ops:
+
+`Problem 3` 
+
+the fiji jar can not be found on https://maven.scijava.org/content/groups/public/
+anymore
+
+
+- since fiji is built based on ImageJ and ImageJ2, we first make sure the ops work
+- then we' ll try to solve this question based on %classpath with local jar
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Paper summary
+
+2. ImageJ OP
+
+3. Segmentation plugins
+
+4. 4- 5 pages slides
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. I may use SoS notebook and see 
+
+	- how 'inconvenience' it is 
+	- is it capable of modifying same object 
+		- do we need that in VP?
+		- do we need intermediate results?
+		- we need to show it, but they are all images files right?
+
+	
+2. Is my beakerx correctly used?
+
+
+3. while op can be extended, 
+
+is it possible that we add the imageJ 1.x plugins to ops?
+
+
+4. I just found the tutorial on ImageJ Jupyter notebook is written with Groovy
+
+ 
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- RandomAccessibleInterval is an ImageJ image
+
+- ImageJ Ops are the framework for reusable image processing operations
+
+- `variance filter` is a type of filter that highlight edges in an image by
+	- replacing each pixel with the neighborhood variance
+
+
+
+image = datasetIO.open("https://2.bp.blogspot.com/-uuoxxToW-o4/WRRaSRBRx2I/AAAAAAAAZVg/jV5tmaapBNUGUXvbv4p6h41JWuvYCakeQCEw/s1600/levedura.png")
+image = ops.run("convert.float32", ops.run("hyperSliceView", image, 2, 0))
