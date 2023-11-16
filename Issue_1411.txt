@@ -1,0 +1,125 @@
+Issues 1411:
+-----------------------------------------
+
+1. with local fiji:
+	- ij.io().open could not be initialized becasue of version conflict
+	- remote maven classpath could solve this problem
+	
+2. however remote fiji package could not be resolved sometime
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. before 14, try accessing fiji maven classpath last time
+
+	- if not, divide into 
+	
+	- ImageJ1 classpath ,
+	- ImageJ2 classpth,
+	- local external jar
+
+2. Slides main contents:
+	- Slide 1 : goal of first stage: run fiji functions on jupyterlab
+	- Slide 2: fiji is Java-based
+		-> deploy java environment in jupyterlab
+		-> investigate default jupyter kernel and its mechanism
+			-> REPL : read, evaluate,print,loop 
+			-> typical java execution require complete class to complile into javac first then execute
+				-> not 
+			-> Jshell works
+	- Slide 3: fiji is a distribution of plugins
+		- ImageJ1.x built-in plugins, 
+		- ImageJ2 plugins op ()  
+		- external plugins
+		- script
+		
+	- Slide 4: we access the fiji plugins by 
+		magic operations %classpath in jupyter lab and 
+	
+	
+	- we also have 3 related work as starting point:
+	
+	
+	- Timetable
+	
+	
+one slide of jupyter env
+
+
+
+----------------------------------------------
+My thoughts:
+
+- Some ImageJ 1.x plugins which highly relies on ImageJs' interface is 
+difficult to reuse it in jupyeter
+- we could use substitute methods from imageJ2
+
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- An instance of the net.imagej.ImageJ class is nothing more than a collection of these services; 
+- this instance is referred to as the “application gateway.
+- Services are defined as interfaces, with concrete implementations as plugins.
+
+Ops: https://imagej.net/libs/imagej-ops/
+- ImageJ Ops is a framework for reusable image processing operations 
+
+- A Command is a plugin written in Java,
+	-  An Op plugin is a form of Command
+
+- whereas a script is written in one of the many available SciJava scripting languages.
+
+- List of available ops:
+- https://javadoc.scijava.org/ImageJ2/?net/imagej/ops/package-summary.html
+
+---
+- ImageJ 1.x:
+- ImageJ 1.x plugins are not directly compatible with ImageJ2 (net.imagej.ImageJ) and 
+therefore cannot be directly used in a Jupyter notebook. 
+
+- However, ImageJ2 provides a compatibility layer for running ImageJ 1.x plugins.
+
+Here's an example of how to run an ImageJ 1.x plugin from a Jupyter notebook:
+
+```groovy
+// Add ImageJ as a dependency
+%classpath config resolver scijava.public https://maven.scijava.org/content/groups/public
+%classpath add mvn net.imagej imagej 2.1.0
+
+// Create an instance of ImageJ
+ij = new net.imagej.ImageJ()
+
+// Run an ImageJ 1.x plugin
+ij.legacy().runLegacyCommand("ij.plugin.filter.GaussianBlur", "sigma=2")
+```
+
+This script creates an instance of ImageJ and runs the GaussianBlur plugin from ImageJ 1.x. The `runLegacyCommand` method of the `LegacyService` class is used to run the plugin. The first argument is the fully qualified name of the plugin class, and the second argument is a string of parameters to pass to the plugin.
+
+- not all ImageJ 1.x plugins may work correctly when run this way, 
+- especially those that rely on ImageJ 1.x's user interface. 
+
+- Also, you need to know the fully qualified name of the plugin class, 
+- which may not be easy to find for some plugins.
+
+
+
+- part of imageJ plugins are updated to ImageJ2 paradigm via ops 
+https://imagej.net/libs/imagej-legacy#updating-imagej-commands-to-the-new-paradigm
+
+- ImageJ1.x : `ImagePlus` Object
+- ImageJ2: `Dataset` Obeject
