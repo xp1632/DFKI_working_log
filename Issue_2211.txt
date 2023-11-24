@@ -1,0 +1,71 @@
+Issues 2211:
+-----------------------------------------
+
+- Today I attend tha AIMSE conference as a volunteer
+
+- This conference is about application of machine learning  
+- in the area of marterial science
+
+- 1. Present side summary
+
+- the key of a good pre is :
+
+- Timing, good presenter put a timer at the table to be punctual
+- Voice: reading without tone changes is bad, try to use pause, emphasize and questioning
+- Content: it's good to have a conclusion page that states the challengs/problems/methods
+- Form: chart is good, image is good, animation is really good, too much text is bad
+- Architecture of a pre: 
+	- old story of old ways;
+	- basic concept for different backgrounds
+	- current challenges;
+	- method1;
+	- usecase 1;
+	- method2; 
+	- usecase 2;
+	- comparision using chart
+	- adavantages 
+
+- 2. Material side summary
+
+- Field challenges when applying ai to material dataset:
+
+	- the industry process is complex, which lead to non-unified format of dataset
+	- the data is hard to collect 
+	- identification of parameters 
+	- the correlation of parameters is hard to find
+	- current data could lead to graphs/charts but no semantic info/diagnose
+	
+	
+- Tools: 
+	- for material scientist, they use fiji software and existing NN models
+	- for cs backgrounds, they use python and label me etc.
+
+- Image Processing method they value:
+
+	- segmentation	(segmenation of grains in cross section of steels/cells- cellpose)
+	- object detection (for voids, cracks in material) 
+	- classfication
+	- 3d reconstruction based on 2d texture of material
+	
+- Industry field they value more cost and time
+
+-------------------------------------------
+Main task today:
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
