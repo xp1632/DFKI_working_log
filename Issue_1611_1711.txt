@@ -1,0 +1,63 @@
+Issues 1611_1711:
+-----------------------------------------
+1. 
+eclipse doesn't have chatgpt support, if possible
+	- vs code + maven+ java environment
+	- choose Java 8 for JIPipe because the rest version doesn't work
+	- it already comes with JRE1.8, seems to be Java 8 support
+	
+- how to change to java 8 in vs code?
+	
+
+
+2. I need to know more about Groovy https://www.tutorialspoint.com/groovy/groovy_methods.htm
+- for example , how method should be used in Groovy
+- 
+
+3. In Fiji, we also have auto-dependency check for plugins in 'Update':
+
+https://imagej.net/update-sites/setup#modifying-dependencies
+
+
+-------------------------------------------
+Main task today:
+
+1. How should External Plugins works in jupyter lab via imageJ gateway
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. how to make a plugin for fiji?
+	- a jar add somewhere and a pom.xml
+	- we could decompile a jar and get its java file inside 
+	
+
+2. how should we check if this plugin works in net.imagej
+	- 2.1 packages matters
+	- if only imageJ2 packages, definitely work
+	- if import ImageJ 1.x, can't guarantee
+	
+
+	- 2.2 rely on ImageJ interface?
+	- should be somewhere in the code
+	
+3. how do we know if a plugin is imageJ2 or ImageJ 1.x?
+	- via the import?
+
+4. ImageJ legacy, how does it work?
+
+
+
+--------------------------------------------
+Take away:
+
+- More related work of ImageJ
+- Check JIPipe in details
+	- how to solve dependency
+	- learn complicated usecases 
+	
+- we want a customized plugins working on 
