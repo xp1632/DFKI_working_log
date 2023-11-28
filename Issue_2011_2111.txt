@@ -1,0 +1,78 @@
+Issues 2011_2111:
+-----------------------------------------
+1. How do we know if a plugin of Fiji rely on its own interface or not
+
+	- before I manually checked if a plugin could be used by:
+	
+		- import it via local jar and %classpath 
+		- check error message
+		
+		- decompose a jar file online by :
+		http://www.javadecompilers.com/result?currentfile=fiji/threshold/Auto_Threshold.java
+		
+		- check the class in the decomposed java file
+		
+		- check javadoc of this specific plugin
+		- figure out if it's imagej1 or Image2 by its import prefix
+		- no idea of finding if it has Fiji-UI-depedency
+	
+	
+1.1 How to figure out ImageJ1 vs ImageJ2?
+
+- they have different groupId: 
+- https://imagej.net/develop/architecture#maven-component-structure
+
+- the ImageJ2 has the groupId of net.imagej
+- which means the gateway we use in jupyter is ImageJ2 
+- why can't the fiji gateway work!!!!!!!!
+
+
+1.2 How to figure out UI-depedency?
+
+- we know for sure ImageJ2 is UI-independent
+	
+	
+
+2. Check JIPipe documentation
+ https://jipipe.hki-jena.de/documentation/advanced-node-info/
+
+- they have custom plugins via SciJava plugin interface
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. to use External Plugins of Fiji on Jupyter lab via gateway or locally
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- We're using Jupyterlab version 3.6 
+- jupyter lab has new release of Version 4
+- I didn't update it because of the Ganymede, Ijava kernel
+- I am not sure if Beakerx has Version 4 support of jupyterlab
+----
+
+- Even with new Op not new plugin
+- we also need to tell the user if the operation inside the Op is suitable for
+net.imageJ
+
+
+ 
+
+
+
+
+
+--------------------------------------------
+Take away:
