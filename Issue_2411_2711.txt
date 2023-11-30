@@ -1,0 +1,101 @@
+Issues 2411_2711:
+-----------------------------------------
+1. check the template plugin of ImageJ2:
+
+ 1.1 - I cloned the template plugin from
+ https://github.com/imagej/example-imagej2-command
+ 
+ - in vs code, I met problem in pom.xml about Maven Enforcer Plugin:
+ - I solved it by adding disable this plugin after <dependency>:
+ ```
+ <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>enforce-rules</id>
+                    <phase>none</phase>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+ ```
+ 
+1.2 Now I'll edit the ori plugin:
+
+ - before editing, I run the default GaussFilter.java by `Run java`
+ - and got the function of opening the image via path, gaussian filter works
+ - however I also saw a ImageJ2 software window
+ - should it be like this? - yes, that's from imagej context
+ - and I didn't find the `jar` file of the plugin or copy it to anywhere
+ 
+ 
+ ---
+ 
+1.4 After reading https://imagej.net/develop/plugins
+ 
+ - I have new insights of plugins, I've summarized it in :
+ https://github.com/Max-ChenFei/VPE_IP/issues/35
+ 
+ 
+1.5 Now I have deeper understanding of how plugins are composed of in ImageJ2
+
+- I also need to check some java examples in 
+- https://github.com/imagej/tutorials/blob/master/java/howtos/src/main/java/howto/commands/simple/HelloWorld.java 
+- https://github.com/imagej/tutorials/blob/master/java/execute-commands/src/main/java/ExecuteCommands.java
+
+- we can read this and compare with op extension in tutorial 
+---
+
+- Op tutorial in java: 
+https://github.com/imagej/tutorials/blob/master/java/howtos/src/main/java/howto/ops/CreateANewOp.java
+
+- Op tutorial on jupyter:
+https://github.com/imagej/tutorials/blob/master/notebooks/2-Extending-ImageJ/2-Ops.ipynb
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+V 1. Print successful info when connect to the gateway successful
+
+2. Make a hello world imagej2 plugin
+	V 2.1 java file in VS code 
+	V 2.2 explicit op code in jupyer 
+	V 2.3 export customized plugin as a jar
+	
+	
+3. test the plugin in local fiji
+4. test the plugin in jupyter
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. finish reading 
+
+	- example ops
+	- plugin documentation https://imagej.net/develop/plugins
+	- 
+
+2. try jar and add plugins mannually instead of writing ops in jupyter
+
+3. 
+
+
+
+
+
+--------------------------------------------
+Take away:
