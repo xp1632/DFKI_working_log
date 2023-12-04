@@ -1,0 +1,172 @@
+Issues 1810_1910:
+-----------------------------------------
+1. PyImageJ paper (https://www.nature.com/articles/s41592-022-01655-4.pdf):
+
+	- Why?
+	
+	- Accessibility of Python libraries for researchers at various programming proficientcy level
+	- ImageJ : a Java-based open-source software package and platform widely used for scientific image analysis.
+		- allow researchers to perform image-processing and analysis tasks
+		- operations can be combined to construct complex workflows in the form of macros and scripts
+	- Communities across both languages require a bridge enabling seamless feature integration without
+		duplicated effort
+	
+	----
+	
+	- To address this need:
+	- PyImageJ: Python-based package built on ImageJ2 that provides fundamental interoperability between Python and ImageJ
+	
+	---
+	
+	- Features:
+	
+	- Enables two way communication between ImageJ and Python by initializing Java as a sub-process of Python.
+	- ImageJ2 consists of two key layer 
+	- SciJava(infrastructure https://scijava.org/, https://github.com/scijava/scyjava ), 
+	- ImgLib2(image data model)
+		- Accordingingly, PyImageJ is built on two fundamentalPython packages
+		- scyjava( https://github.com/scijava/scyjava) 
+		- imglyb ((https://github.com/imglib/imglyb))
+		- as Python-based intergration layer for Java-based SciJava and ImageLib2 respectively
+	
+	- PyImageJ offers access to **ImageJ2 API**
+	- PyImageJ supports **headless mode** with GUI that enables workflows on systems without monitor(such as a remote server)
+	---
+	
+	- Technical details:
+	
+	**For scyjave Layer**:
+	- It utilizes two parts:
+		1. To retrieve ImageJ2 java libraries:
+			- **jgo**: Launch Java code from the CLI, installation-free (https://github.com/scijava/jgo)
+		2. To create a special Python-intergrated Java environment to include the libraries:
+			- **jPype**: a Python module that let python call JAVA via jar within Python by intergrating JVM into pythonruntime			
+			- (https://blog.csdn.net/u013250861/article/details/120383456)
+			- (https://jpype.readthedocs.io/en/latest/)
+	- Functionalities:
+		- download and cacheJAVA libraries from remote online repositories
+		- start java environment as a sub process in python
+		- warp java classes as dynamically generated Python classes with same functions
+		- convert common data structures between Java and python
+	---	
+	**For imglyb Layer**:
+	
+	- Using shared memory to store image data and exchange image between Python and ImageJ
+	- ImageJ images can be converted into Python type that is NumPy or xarray
+	
+----	
+2. 
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Summarize PyImageJ paper (https://www.nature.com/articles/s41592-022-01655-4.pdf):
+	
+	
+2. Summarize the white board
+	- how to call Fiji Functions(Command Line call software--> Python Binding call JAVA JAR--> Java Kernel call Java lib )
+	- how to intergrate Fiji API calling in Visual Programming Project?
+		- the same way that we import scikit-python package
+	- how to solve the questions of caused by different languages in one workflow of VP?
+		- notebook based execution, one kernel to run whole notebook, ex: IPython
+		- cell based execution, one cell execute with one user-manually-specified kernel, java in java code cell, python in python code cell, ex: SOS notebook
+		- Visual programming node based execution:
+			- we have a kernel_handler works as the 'parameter server' in distributed computing which assigns works to different workers based on context
+			- In our case, which is, handling different execution tasks to different requiring kernel based on the verification flag we defined in the backend
+			- we focus on the domain of image-processing, so all the execution tasks are acomplished with its own kernel
+			- and we'll auto-transfer the different output image types, ensure the workflow with different language, kernel, image types working seamlessly
+			
+3. Divide everything into small mission topic
+
+- P1. Can Fiji Functions work in Jupyter? How?
+	- Ref call imageJ from my software: (https://imagej.net/learn/faq#how-can-i-call-imagej-from-my-software)
+	- Official tutorial of imageJ on notebooks: https://github.com/imagej/tutorials/tree/master/notebooks
+		- The tutorial above is extremly important, because as in description, 
+		- they use the Groovy kernel from **BeakerX** that support Java
+	
+	- there's also java imageJ tutorial: https://github.com/imagej/tutorials/tree/master/java
+	- Fiji git code: (https://github.com/fiji/fiji)
+	- Fiji documentation: https://imagej.net/software/fiji/
+	- FIji paper: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3855844/
+	- ImageJ2 documentation: https://imagej.net/software/imagej2/
+	- ImageJ development: https://imagej.net/develop/
+	- ImageJ2 repo: https://github.com/imagej/imagej2
+	
+- P2. Macro and Sripts in Fiji, how does they work? Call exe or API 
+	- Ref Scripts: (https://imagej.net/scripting/basics,https://imagej.net/scripting/#supported-languages )
+	- Fiji-Marcos: https://workshops.imagej.net/fiji-macros.pdf
+	
+- P3. How does headless mode run? by calling exe or? 
+	- Ref: (https://imagej.net/learn/headless)
+
+- P4. Do we need deepImageJ? :
+	- Paper: https://www.biorxiv.org/content/10.1101/799270v3.full.pdf, https://www.nature.com/articles/s41592-021-01262-9
+	- website: https://deepimagej.github.io/
+	- related JDLL, java deep learning libraries paper: https://arxiv.org/abs/2306.04796, https://arxiv.org/ftp/arxiv/papers/2306/2306.04796.pdf
+
+- P5. How does SOS as polyglot notebook run multi-language, ? 
+	- ref : https://vatlab.github.io/sos-docs/notebook.html
+	- POlyJus: another polyglot notebook paper with good pics:  https://fniephaus.com/2019/px19-polyglot-notebooks.pdf
+	
+- P6. How does BeakerX support multi-language kernels?
+	- ref: http://beakerx.com/, https://github.com/twosigma/beakerx/tree/1.3.0
+
+
+
+----------------------------------------------
+My thoughts:
+
+- Problems to solve:
+
+- 1. How to run Fiji functions in jupyterLab?
+ - check,juptyter tutorial
+ 
+- 2. How to run python and java in same notebook by manually changing kernel?
+ - check,mul
+ 
+- 3. If our intention of moving Fiji functions to jupyterlab to lower the barrier
+	- why using java kernel instead of PyImageJ that based on the default python kernel?
+
+- 4. Is the multi-language kernel BeakerX worth changeing?
+	- Is it easy to install? How well does it support JAVA, Python, and Typescript
+
+
+-----
+
+Kernel's lifecycle:
+
+- use specific kernel at the time when we want
+
+
+- Marco和Script  是针对软件的还是针对后台的
+
+- SOS is not auto-converted
+ 
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. CommandLine is to call exe in cmd
+
+2. advantages of no pyImageJ: can't guarantee the stead and compatibility兼容， 解释层之类的需要额外effort
+	 
+ ---> directly to java kernel:  limitation of java ecosystem,
+	
+---> to multi-language kernel:  d
+
+   - different types of multi-language kernels： different types of multi-language kernels
+  
+  
+3. cell-based changing kernel, data-exchange of different language
+ jupyter-related implement
+ 
+ 
+ 4. The user doesn't need to know which language 
+ node-ba
