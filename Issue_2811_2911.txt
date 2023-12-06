@@ -1,0 +1,83 @@
+Issues 2811_2911:
+-----------------------------------------
+
+1. I found a ImageJ1, ImageJ2 equivalent api table in 
+https://github.com/Max-ChenFei/VPE_IP/issues/40
+
+v 2. I am checking the howto-java-imagej tutorial code : 
+https://github.com/imagej/tutorials/tree/master/java/howtos/src/main/java/howto/app
+
+- in app folder,we have GetJARsInClassPath:
+https://github.com/imagej/tutorials/blob/master/java/howtos/src/main/java/howto/app/GetJARsInClassPath.java
+	- which let us check the avaible jars in classpath
+	- I tried it in jupyetr and it returns beakerx related jars
+	- not imagej jars or our plugin jars that add via %classpath
+
+3. I checked the `install` command in Fiji, 
+it uses imagej1's plugin :
+
+`legacy:ij.plugin.PluginInstaller` to install the plugin to Fiji
+- how should we use it in Jupyter?
+- what's inside the class: 
+	https://imagej.net/ij/developer/api/ij/ij/plugin/PluginInstaller.html
+
+- we don't use it, because it requires javac compliler
+- we register the plugin mannually by addPlugin()
+	
+4. I'll start checking adding ops in imageJ both from java and notebook now
+https://github.com/Max-ChenFei/VPE_IP/issues/42
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+
+1. Op notebook/java summary 
+2. test the plugin in jupyter
+	v - test with the explicit code plugin 
+	v  - test with the jar plugin
+
+3. v test plugin in IDE: `run java` for test run; `mvn package` for build jar 
+
+4. v test the plugin in local fiji
+	v - I installed the jar in Plugins>Install 
+		- restart fiji
+		- and find my plugin GaussianFilter at the bottom
+		- after open a img in the context 
+		- I run the plugin
+		- and got filtered pictures
+---
+
+- after modify the plugin itself according to copliot answers of print out
+- result to jupyter
+
+- we could move on to, how to know what errors might occur when customized plugin
+comes
+- and how should we give proper feedback
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- For final process, considering the target user of our software,
+
+	- I'll offter a usecase of material's segmentation
+	- and a biology cell counting
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- on around Dec 5.6, we are going to do paper stuffs
+- including usecase in paper, update video
