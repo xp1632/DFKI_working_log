@@ -1,0 +1,76 @@
+Issues 0612_0712_0812:
+-----------------------------------------
+1. My main task today is to put things together 
+	v - finishing the plugin compatibility workflow 
+	
+	- organize the examples we run on jupyter
+	- give each case an example
+	
+	
+	- put update things into the former slides
+
+v 2. For better organization, we'll put the draft workflow online in sometools
+
+	- for better modification
+	- it's a little hard for me to copy the content to the diagram
+		- and think about how to arrange them for better visual effect
+		- at the same time
+	- so I'll just make an exact same one in digital version
+	- and drag/modify it later 
+
+v 3. Refer to PyImageJ:
+
+- how they state ROI Manager and WindowManager Limited functionality
+https://github.com/imagej/pyimagej/blob/1.2.0/doc/Troubleshooting.md#the-original-imagej-api-is-limited-in-headless-mode
+- give `log` hint as they do in 
+https://github.com/imagej/pyimagej/blob/main/src/imagej/__init__.py
+
+- I summarize it in: 
+https://github.com/Max-ChenFei/VPE_IP/issues/47
+
+
+-------------------------------------------
+Main task today:
+
+1. Fill the part of IJ2 Command Plugin rules:
+
+	- add UI check too, in IJ2 we check UI service
+	? - in IJ1, we check IJ.gui? 
+	- then we check the OUTPUT paramter or return?
+		- I am not sure if `compute()` works for command plugin
+
+2. finish reading the PyImageJ doc that we could also use
+
+3. Stage 1 material:
+
+	-(1) we finish the v1 workflow and the error log message base on it
+	
+	-(2) we give some textual guidelines and reasons in the document
+		- the content is the combination of some previous issue answers and 
+			- some PyImageJ doc
+	-(3) Then we give each end of workflow an example
+		- and we show two long examples that we utilize the ImageJ functionality 
+			on jupyter
+		- we could refer to JIPipe cellpose, longer example in ImageJ notebook tutorial
+	-(4) we put the existing command list, somehow we get the op list 
+		- into distinct csv
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- fiji plugin classpath suddenly works for 2.14.0 
+- however this version the io.open() is not working, so I tried previous
+	version 2.10.0, the classpath works but the io.open not
+- now I'm trying the 2.0.0-pre-9
+- don't think about using fiji gateway for now, it's so unstable for Groovy kernel
+
+
+
+
+--------------------------------------------
+Take away:

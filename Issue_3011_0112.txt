@@ -1,0 +1,71 @@
+Issues 3011:
+-----------------------------------------
+1. Reason that fiji classpath is not resolved on jupyter
+
+- The fiji artifact has a large number of dependencies, 
+- one or more of these dependencies cannot be resolved by the BeakerX Maven resolver in Jupyter
+- we should continue using the imageJ2 classpath
+- and we may add some common plugins support 
+
+
+2. Now we know how to write plugins/ops for imageJ
+- then we know what we want for the plugins to run on jupyter 
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. auto-check explicit-defined plugins based on guides first 2 items 
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- I learnt the SciJava framework that imageJ2 is built on
+- I summarized the workflow of writing a customized ImageJ plugin
+- I summarized the workflow of writing a customized op plugin 
+
+---
+
+- we offer a guideline for customized plugins so user knows 
+  - what should be avoided/updated
+  - guides includes: 
+  - support list of ops/commands/imglib2(refer to PyimageJs' support)
+  - example hints of update from ImageJ1 to ImageJ2
+
+---
+### Guidelines:
+
+- plugin needs to have output parameter defined 
+- the parameter should not be provided by imageJ context 
+	- but by providing with parameter mannually
+- ? should be totally ui-free or only imageJ1's gui free?
+	- because we could show the result normally in jupyter with ImageJ2s' UI
+	- but we also need to consider the case in visual programming
+	
+	- I think show be totally UI-free, because what happened in jupyter leaves in jupyter
+	- showing the result of fiji with fiji UI on jupyter is comfusing
+	
+-  imagej2's ui is supported by scijave ui so we could use it on jupyter
+
+- for imageJ1: we can use the marco
+				- and ImageJlegacy didn't do harm to ori imageJ2
+				- we can keep it and its function for transition between 1,2
+
+
+
+---
+- I used the Groovy's exception capture to show success/failure log of process
+
+ 
+
+--------------------------------------------
+Take away:

@@ -1,0 +1,81 @@
+Issues 0412_0512:
+-----------------------------------------
+1. To check why `Op` works without `Output` Parameter defined?
+
+- Let's check it parent class `AbstractOp` or `Op` 
+- Result: either `output` defined or `compute()` method
+- https://github.com/Max-ChenFei/VPE_IP/issues/46
+
+
+2. How should we distinguish command based plugin or Op based plugin?
+
+- by PluginInfo's type
+- we can check if the plugin type is Op.class or its subclass
+```
+import org.scijava.plugin.PluginInfo;
+import net.imagej.ops.Ops;
+
+public boolean checkPlugin(List<PluginInfo<?>> plugins) {
+    for (PluginInfo<?> info : plugins) {
+        if (Ops.class.isAssignableFrom(info.getPluginType())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+```
+
+3. Let's check some examples and basic operations in JIPipe 
+https://jipipe.hki-jena.de/examples/
+
+
+
+-------------------------------------------
+Main task today:
+
+v 0. Find the built-in command ImageJ1 uses in Marco 
+	- shift+L in https://ij.imjoy.io/
+	- export command list csv
+
+v 1. Check why `Op` has no `Output` defined but could `=`
+	- Op interface has compute() defined 
+	
+
+v 2. Check JIPipe if they used `command` that has no `Output` parameter
+	- they wrap IJ1 marco and IJ2 ops which has standard input and output:
+	- https://github.com/Max-ChenFei/VPE_IP/issues/31
+	
+3. Check the cloud paper, how they solve the problem
+	- they use marco
+	- they use Fiji software UI and put the data on jupyter to generate histogram
+	- jupyter and fiji is seperated process in the workflow
+
+	
+	
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+- the marco list: https://imagej.net/ij/ij/developer/macro/functions.html
+- is not what we're looking for:
+
+- What we called in run(), is actually `menu command`
+---
+
+- We check the command finder in fiji again,
+- And find out most of `command`are from `ij.plugin`
+- how did we run ImageJ `plugins` instead of `op` on jupyter?
+   - I kind of forget
+   - I suppose it's `ij.command().run()`
+
+
+
+
+--------------------------------------------
+Take away:

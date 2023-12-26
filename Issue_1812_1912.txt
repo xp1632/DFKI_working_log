@@ -1,0 +1,75 @@
+Issues 1812_1912:
+-----------------------------------------
+1. cloud workflow integrates Fiji paper summary
+Main contribution is software-container and cloud computing
+
+https://www.nature.com/articles/s41598-022-19173-w
+
+- The modular platform supports reproducible image analysis workflow
+	by providing interactive graphics supports to software containers
+
+- 3D Medical images are in large scale, thus it requires cloud computing 
+	to eliminate the need for access to expensive, dedicated local servers 
+
+- Biodepot-workflow-builder (Bwb) uses software containers represented by graphical widgets 
+	to precisely define the version and operating environment for each module.
+
+- Software containers greatly expand the scope of analyses possible, 
+	as modules are no longer restricted to a pre-defined software suite. 
+
+- Software containers also facilitate cloud deployment, 
+	allowing users to easily scale the analysis for large datasets using on-demand cloud resources.
+---
+
+Their Fiji limitation:
+- lack systematic version control, difficult to reproduce workflows' marco
+- designed for desktop, interactive, not for cloud
+
+---
+Other workflow systems with a GUI limitation:
+
+- KNIME Analytics Platform: built on Eclipse, not containerized
+
+-------------------------------------------
+Main task today:
+
+1. Go over the previous 3 log 
+	- pick the useful part
+	- close it
+
+2. Wind up the Stage 1.5 report 
+	- one sentence for each item in excel
+	- add pic in slides
+	- copy the useful part in jupyterlab and make one all-in version
+
+3. Check the Jipipe PyImageJ work and see what kind of working examples we need
+
+
+4. Check the new project of VPL, and its documentations
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- AI voice membership lasts one month, we could still add new feature to it.
+
+
+----
+【Reasearch Field Study】
+- I did some research of searching keywords: imageJ, visual programming and find:
+	- ImageJ is highly releated with  Material Science and Medical Image Processing
+
+	- Visual Programming papers include 3D/large-scale image features
+
+
+- Most of the papers are published in mdpi, nature scientific report, nature method
+
+----
+
+--------------------------------------------
+Take away:
+
