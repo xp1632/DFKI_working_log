@@ -1,0 +1,497 @@
+Issues 2612_0101_0201:
+-----------------------------------------
+1. To Use ImageJ functions in VP, we need to know:
+
+ - how node and functions are converetd in VP
+ - how to add the ImageJ2's image type into AutoConvert Knowledge Graph
+ 
+---
+
+ - node <-> code part we can read the code and doc in code generator and (knowlege graph?)
+ - imageJ image type convert we can refer to PyimageJ, they mentioned they type convert in git
+ 
+---
+
+2. VP documemts summary:
+ 
+### Knowledge Graph:
+https://github.com/Max-ChenFei/Visual-Programming-Language/blob/main/doc/Knowledge%20Graph.md.md
+
+- image_channel_order: 
+  Specifies the number of channels and the channel layout 
+  i.e. the memory layout in which channels are stored in the image.
+
+- aim to automate the conversion [code generation] of image data 
+	via preconfigured knowledge graph
+
+- **Common image data type in Python**
+
+`Image` has structure as :
+
+```
+image = {
+    'dataType': 'string',  # Replace 'string' with the actual data type
+    'value': None,         # Replace None with the actual value
+    'metadata': metadata
+}
+```
+
+- `dataType` is a string that denoting the format of image data, such as 
+	`numpy.ndarray` or `torch.tensor`
+
+- `value` holds the raw image data
+
+- `metadata` captures critical descripyors about the image:
+
+```
+from typing import Literal
+metadata = {
+    'colorChannel': Literal['rgb', 'gbr', 'grayscale'],
+    'channelOrder': Literal['none', 'channelFirst', 'channelLast'],
+    'isMiniBatched': bool,
+    'intensityRange': Literal['0-255', '0-1'],
+    'device': Literal['cpu', 'gpu']
+}
+
+```
+
+- `Literal` here means we can only define the exact values in the dictionary:
+- ex. `colorChannel` can only be rgb,gbr,or grayscale
+
+---
+
+- Knowledge Graph Node:
+	- represents an `Image` with a specific `datatype`
+	- `intraconversion`(intra means inner) functions within each node could convert 
+		image with same datetype but different metadata
+	
+	- ex.: `ndarray2ndarry`
+
+
+- Knowledge Graph Edge:
+	- Edges between nodes represent interconversion functions.
+	- which convert an `Image` from one `dataType` to another
+	- ex. for edge of `ndarray` node and `tensor` node we have:
+	- function `ndarray2torch`
+
+
+- Knowledge Graph Pathfinding:
+	- Metadata Matching Priority
+	- A* shortest path
+
+---
+### Conversion Code Generation in Visual Programming
+https://github.com/Max-ChenFei/Visual-Programming-Language/blob/main/doc/Knowledge%20Graph.md.md#conversion-code-generation-in-visual-programming
+
+- I don't quite understand this part of code, 
+	I would check this part again when reading relative code in project
+
+- 1. Configuration
+	- we replace various image representations with our standard `Image` format
+	 in outputs and inputs
+
+- 2. Node Type Specification
+	- when `Image` is output, add `dataType` in defaultValue
+	- when `Image` is input, specify its metadata
+
+---
+### How to add new Image Type and conversion rule:
+
+```
+{
+  "description": "image conversion",
+  "imageTypeConversion": {
+    "imageTypes": [
+      {
+        "name": "numpy.ndarray",
+        "functionName": "numpyndarray2numpyndarray",
+        "function": "function numpyndarray2numpyndarray() { #... return 'numpyndarray2numpyndarray'; }"
+      },
+      {
+        "name": "torch.tensor",
+        "functionName": "torchtensor2torchtensor",
+        "function": "function torchtensor2torchtensor() { #... return 'torchtensor2torchtensor'; }"
+      }
+    ],
+    "ImageTypeConversions": [
+      {
+        "from": "numpy.ndarray",
+        "to": "torch.tensor",
+        "functionName": "numpyndarrayToTorchtensor",
+        "function": "function numpyndarrayToTorchtensor() { #... return 'numpyndarrayToTorchtensor'; }"
+      },
+      {
+        "from": "torch.tensor",
+        "to": "numpy.ndarray",
+        "functionName": "torchtensorToNumpyndarray",
+        "function": "function torchtensorToNumpyndarray() { #... return 'torchtensorToNumpyndarray'; }"
+      }
+    ]
+  }
+}
+```
+---
+
+### Node Type Specification
+
+- The JSON schema for node is in `/src/editor/types/ConfigTypes.ts`
+
+```
+
+export interface NodeConfig {
+  category: string;
+  title?: string;
+  inputs?: Record<string, HandleConfig>;
+  outputs?: Record<string, HandleConfig>;
+  tooltip?: string;
+  [key: string]: any;
+  dataType?: string; // the data type for all the handles
+  enable?: boolean;
+  codeGenerator?: string;
+  externalImports?: string;
+}
+```
+
+- There are two primary types of nodes : 
+	- `Exec Nodes` that packed with `exec` type inputs and outputs
+		- control the sequence of execution
+	- `Value Nodes` that handle data within the program
+
+---
+
+### Code Generation:
+- A node's code generation should include two parts:
+	- required import statements as `externalImport`
+	- a `code generator` typescript function that should:
+		- translate nodes's logic to executable code
+		- attach metadata to outputs for image data
+		- ensure the correct execution order of Exec Node's subsequent code
+
+
+---
+
+### Example of Desired external Function --> VP Exec Node  
+
+- When we need a read_image function from Pytorch
+  https://pytorch.org/vision/main/generated/torchvision.io.read_image.html
+	
+- As the `NodeConfig` interface we defined in `/src/editor/types/ConfigTypes.ts`
+
+```
+
+export interface NodeConfig {
+  category: string;
+  title?: string;
+  inputs?: Record<string, HandleConfig>;
+  outputs?: Record<string, HandleConfig>;
+  tooltip?: string;
+  [key: string]: any;
+  dataType?: string; // the data type for all the handles
+  enable?: boolean;
+  codeGenerator?: string;
+  externalImports?: string;
+}
+```
+### externalImports
+- we need `externalImports` for the `read_image` function 
+	- which is :
+	`"from torchvision import io\nfrom torchvision.io import ImageReadMode"`
+
+### codeGenerator
+- here in the `code` function, 
+	- we define how we use the inputs and outputs in this external functions
+	- add metadata to image to fit our unified `Image` format
+	- this `code()` function returns code strings
+ 	- the image locates in `output[1]` because `output[0]` is saved for exec handles
+		- which is in charge of execution order of the code
+
+```
+function code(inputs, outputs, node, generator) {  
+ // 1. Read an image and assign it to an output variable.
+ // 2. Create a metadata dictionary and attach when dealing with image data.
+ // 3. Prepare the execution sequence for the subsequent code.
+  const code = `${outputs[1]} = io.read_image(${inputs[1]}, ${inputs[2]})
+${outputs[1]} = {
+  'value': ${outputs[1]},
+  'dataType': 'torch.tensor',
+  'metadata': {
+    'colorChannel': 'rgb',
+    'channelOrder': 'channelFirst',
+    'isMiniBatched': false,
+    'intensityRange': '0-255',
+    'device': 'cpu'
+  }
+}
+${outputs[0]}`;
+  return code;
+}
+```
+
+- In the end, the generated code will be stringify into JSON format
+
+
+```
+// Convert the code generation function to a string format for JSON configuration.
+const codeGeneratorFunction = code; // Assign the function for conversion
+const jsonFormattedString = JSON.stringify(codeGeneratorFunction.toString());
+console.log(jsonFormattedString);
+```
+
+- here's the final JSON node specification of `read_image` function :
+
+
+```
+{
+    "read_image": {
+        "type": "read_image",
+        "category": "function",
+        "title": "read_image",
+        "tooltip": "Reads a JPEG or PNG image into a 3 dimensional RGB or grayscale Tensor. Optionally converts the image to the desired format. The values of the output tensor are uint8 in [0, 255].",
+        "externalImports": "from torchvision import io\nfrom torchvision.io import ImageReadMode",
+      	"codeGenerator": "function code(inputs, outputs, node, generator) {\r\n  // Begin Python code generation\r\n  const code = `${outputs[1]} = io.read_image(${inputs[1]}, ${inputs[2]})\r\n${outputs[1]} = {\r\n  'value': ${outputs[1]},\r\n  'dataType': 'torch.tensor',\r\n  'metadata': {\r\n    'colorChannel': 'rgb',\r\n    'channelOrder': 'channelFirst',\r\n    'isMiniBatched': False,\r\n    'intensityRange': '0-255',\r\n    'device': 'cpu'\r\n  }\r\n}\r\n${outputs[0]}`;\r\n  return code;\r\n}",
+        "inputs": {
+            "execIn": {
+                "title": "execIn",
+                "tooltip": "execIn",
+                "dataType": "exec",
+                "showWidget": false,
+                "showTitle": false
+            },
+            "path": {
+                "title": "path",
+                "dataType": "string",
+                "tooltip": "path(str) - path of the JPEG or PNG image."
+            },
+            "mode": {
+                "title": "mode",
+                "dataType": "imageio.ImageReadMode",
+                "default": "ImageReadMode.UNCHANGED",
+                "tooltip": "mode(ImageReadMode) - The read mode used for optionally converting the image. Default: ImageReadMode.UNCHANGED."
+            }
+        },
+        "outputs": {
+            "execOut": {
+                "title": "execOut",
+                "tooltip": "execOut",
+                "dataType": "exec",
+                "showWidget": false,
+                "showTitle": false
+            },
+            "image": {
+                "title": "image",
+                "dataType": "image",
+                "defaultValue": {
+                    "dataType": "torch.tensor"
+                },
+                "tooltip": "{dataType: torch.tensor, value, layout: [chw], colorMode: [rgb, grayscale], intensityRange: 0-255' device: cpu}"
+            }
+        }
+    }
+}
+
+```
+
+----
+
+### Example of a VP Value Node without exec handle:
+
+- here's an example of create a node for `plus` operation:
+
+### externalImports
+	- we don't need extra import for `plus` operation 
+	  - since it's defaultly supporetd
+### codeGenerator
+	- we don't need exec handle for this node, so array index starts from 0
+
+```
+function code(inputs, outputs, node, generator) {
+ // Perfom plus operation.
+ // *NOT NEED deal with execution sequence for the subsequent code, so the index starts   from the 0.
+  const code = `${outputs[0]} = ${inputs.filter(s => s.length > 0).join(' + ')}`;
+  return code;
+}
+
+```	
+### final JSON node specification for `plus` operation 
+
+```
+{
+  "+": {
+    "type": "+",
+    "category": "math",
+    "title": "+",
+    "tooltip": "Addition of objects",
+    "enableAddNewOne": true,
+    "dataType": "anyDataType",
+    "codeGenerator": "function code(inputs, outputs, node, generator) {\n  return `${outputs[0]} = ${inputs.filter(s => s.length > 0).join(' + ')}`;\n}",
+    "inputs": {
+      "in1": {
+        "dataType": "anyDataType",
+        "title": "in",
+        "showTitle": false
+      },
+      "in2": {
+        "dataType": "anyDataType",
+        "showTitle": false
+      }
+    },
+    "outputs": {
+      "out": {
+        "dataType": "anyDataType",
+        "title": "out",
+        "showTitle": false
+      }
+    }
+  }
+}
+```
+----
+
+### Summary of `Automatic Image Transitions via Knowledge graph`
+
+- Ori: https://github.com/Max-ChenFei/Visual-Programming-Language/blob/main/doc/Automatic_Image_Data_Transitions_via_a_Configurable_Knowledge_Graph.ipynb
+
+### `Image` Data Structure:
+
+- There are several components in `Image` Data Structure:
+
+### Image Metadata:
+
+```
+interface ImageMetadata {
+  colorChannel: 'rgb' | 'gbr' | 'grayscale';
+  channelOrder: 'none' | 'channelFirst' | 'channelLast';
+  isMiniBatched: boolean;
+  intensityRange: '0-255' | '0-1';
+  device: 'cpu' | 'gpu';
+}
+```
+- metadata is the additional information we add as critical descripyors about the image
+- more details could be found in https://github.com/Max-ChenFei/VPE_IP/issues/53#issuecomment-1869618605
+- SoureImage has singular `metadata`, DestinationImage has `metadatalist`
+
+---
+### SourceImage or DestinationImage
+
+```
+interface ISourceImage {
+  dataType: string;
+  value: any;
+  metadata: ImageMetadata;
+}
+
+interface IDestinationImage {
+  dataType: string;
+  value: any;
+  metadata: ImageMetadata[];
+}
+
+export type Image = ISourceImage | IDestinationImage;
+```
+
+- `Image` is either `ISourceImage` type or `IDestinationImage` type
+- sourceImage is for original images with a singular `metadata` dictionary
+- destImage is for processed images, `metadata` is a `metadataList`
+---
+
+### Example of `SourceImage`:
+
+- output of the pytorch `read_image` node is a `SourceImage`:
+
+```
+output_node_torchvision_read_image = {
+    'dataType': 'torch.tensor',
+    'value': torch.tensor([3, 20, 20], device='cpu'),
+    'metadata': {
+        'colorChannel': 'rgb',
+        'channelOrder': 'channelFirst',
+        'isMiniBatched': False,
+        'intensityRange': '0-255',  # Assuming default 8-bit image, modify if different
+        'device': 'cpu'  # Default device unless specified otherwise
+    }
+}
+```
+
+### Example of `DestinationImage`
+
+- input of matlab `imshow` node is `DestinationImage`
+- this node is flexiable in accepting both RGB and grayscale images]
+- thus there're two metadata entries:
+
+```
+input_node_matplotlib_imshow = {
+    'dataType': 'numpy.ndarray',
+    'value': None,
+    'metadata': [
+        {
+            'colorChannel': 'rgb',
+            'channelOrder': 'channelLast',
+            'isMiniBatched': False,
+            'intensityRange': '0-255',
+            'device': 'cpu'
+        },
+        {
+            'colorChannel': 'grayscale',
+            'channelOrder': 'none',  # No channels for grayscale
+            'isMiniBatched': False,
+            'intensityRange': '0-255',
+            'device': 'cpu'
+        }
+    ]
+}
+
+
+```
+---
+
+### Knowledge Graph Paradigm
+
+- **Nodes** indicate `datatype` of an image, such as `numpy.ndarray`,`torch.tensor`
+
+- **Edges** indicate `transition rules` between two datatype nodes
+
+- **Automated Conversion** knowledge graph identifies the necessary transition and
+exectutes them automatically to ensure the data is always in correct type
+
+---
+
+### Transitions rules (Edges) in Knowledge Graph
+
+**Intraconversion**
+- We have intraconversion which is the conversion
+	- between the image with same `datatype` but not same `metadata`
+	- such as `ndarray2ndarry()`in 
+	https://github.com/Max-ChenFei/Visual-Programming-Language/blob/main/doc/Automatic_Image_Data_Transitions_via_a_Configurable_Knowledge_Graph.ipynb
+	
+**Interconversion**
+- We also have interconversion that happens between different `dataType`
+	- such as `numpy.nadarray` to `torch.tensor`
+	- we use function `ndarray2tensor` in 
+	https://github.com/Max-ChenFei/Visual-Programming-Language/blob/main/doc/Automatic_Image_Data_Transitions_via_a_Configurable_Knowledge_Graph.ipynb
+
+
+- We also provide many unit tests for different metadata matching scenario during conversion
+-------------------------------------------
+Main task today:
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- The paradiam of adding ImageJ compatibel image type to ori Knowledge Graph :
+- https://github.com/Max-ChenFei/VPE_IP/issues/54
+
