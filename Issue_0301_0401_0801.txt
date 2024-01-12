@@ -1,0 +1,72 @@
+Issues 0301_0401_0801:
+-----------------------------------------
+1. we start by importing imageJ by classpath
+
+- We can't decide whether to create a node only for `ImageJ initialization`
+- However, after checking the other VP extensions such as `scikitImage`
+- We noticed that each node `import` everytime 
+
+---
+Thus, we'll first try the `Initialization inside every node` schema
+
+---
+
+2. We ask Fei, author of this VP project, we might have some misunderstanding
+of mechanism of VP nodes
+
+- we'll check the `generators` codes in VP project and see what we could do
+
+---
+
+### `generators/visual_program.ts`
+
+- We start with understanding `visual_program` in VP
+    - because it's used in `code_generator.ts` file
+---
+
+- **Definition**: 
+	- A `Visual program` is made up of several functions
+	- Each function is directional acyclic graph of nodes and edges
+	- Functions start with `Flow Control.main` node or `new function` node
+
+---
+- **FunctionCallsFunc**
+
+	- We search for `FunctionCalls` Functions by `configType` of `function call`
+
+---
+
+### ``
+-------------------------------------------
+Main task today:
+0. import imageJ gateway 
+	- ImageJ1 can only be created once
+	- how does this node thing work?
+	- we import the same thing for each node every time?
+	
+
+1. Make one workflow or one node of ImageJ
+	- read image
+	- Gaussian
+	- output result
+
+2. 
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- The code summary of VP is in issue: 
+
+https://github.com/Max-ChenFei/VPE_IP/issues/56
