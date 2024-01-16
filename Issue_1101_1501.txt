@@ -1,0 +1,49 @@
+Issues 1101_1501:
+-----------------------------------------
+0. We finished the part of summarizing VP code and docs
+
+- Now I'll see how Java is different from Python
+
+- And we need to try VP project in diffrent kernel
+
+
+1. When we try to run vpl in our conda base env,
+
+Problem 1:
+- we need jupypterlab 3.6.6->4.0
+- 
+```
+conda activate base
+conda install -c conda-forge jupyterlab=4
+```
+
+2. We managed to put
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Run VP project with Groovy Kernel 
+
+2. Make a new node of ImageJ function and use Python generator
+
+3. do we need to takes care of `IJ2` image datatype now?
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:

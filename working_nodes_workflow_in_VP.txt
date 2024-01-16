@@ -1,0 +1,194 @@
+
+
+from torchvision import io
+from torchvision.io import ImageReadMode
+import io as PythonIO
+import base64
+from PIL import Image
+from comm import create_comm
+comm_1704990756424 = create_comm(target_name='capture_image')
+def capture_image_1704990756424(comm, image, image_dom_id):
+  # Save the image to a BytesIO object
+  buf = PythonIO.BytesIO()
+  image.save(buf, format="PNG")
+  buf.seek(0)
+  # Encode the buffer contents as base64
+  image_base64 = base64.b64encode(buf.read()).decode("utf-8")
+  buf.close()
+  # image_base64 now contains the base64-encoded grayscale image
+  comm.send({"image_data": image_base64, "image_dom_id": image_dom_id})
+def tensor2numpy(src_image):
+  numpy_image = src_image['value'].cpu().numpy()
+  return {
+       'dataType': 'numpy.ndarray',
+       'value': numpy_image,
+       'metadata': src_image['metadata']
+  }
+
+def numpy2numpy(src_image, dest_metadata_list):
+    import numpy as np
+    image = np.copy(src_image["value"])
+    if dest_metadata_list is None:
+        return {
+        "dataType": src_image["dataType"],
+        "value": image,
+        "metadata": src_image['metadata'],
+    }
+    def find_matched_color_channel(src_metadata, dest_metadata_list):
+        # First, try matching the dataType
+        for metadata in dest_metadata_list:
+            if metadata["colorChannel"] == src_metadata["colorChannel"]:
+                return metadata
+
+        # Check for 'grb' or 'gbr' in src and match with 'rgb' or 'gbr' in dest
+        if src_metadata["colorChannel"] in ["grb", "gbr"]:
+            for metadata in dest_metadata_list:
+                if metadata["colorChannel"] in ["rgb", "gbr"]:
+                    return metadata
+
+        # If no match found, return the first metadata
+        return dest_metadata_list[0]
+
+    src_metadata = src_image["metadata"]
+    dest_metadata = find_matched_color_channel(src_metadata, dest_metadata_list)
+    if src_metadata.get("isMiniBatched", False):
+        batch_dim = 0
+    else:
+        batch_dim = None
+
+    if (
+        src_metadata["colorChannel"] == "grayscale"
+        and dest_metadata["colorChannel"] == "grayscale"
+    ):
+        pass
+    elif (
+        src_metadata["colorChannel"] == "grayscale"
+        and dest_metadata["colorChannel"] != "grayscale"
+    ):
+        if batch_dim is not None:
+            image = np.repeat(image[..., np.newaxis], 3, axis=-1)
+        else:
+            image = np.repeat(image[:, :, np.newaxis], 3, axis=2)
+    elif (
+        src_metadata["colorChannel"] != "grayscale"
+        and dest_metadata["colorChannel"] == "grayscale"
+    ):
+        if src_metadata["channelOrder"] == "channelFirst":
+            if batch_dim is None:
+                if src_metadata["colorChannel"] == "rgb":
+                    weights = np.array([0.299, 0.587, 0.114]).reshape(3, 1, 1)
+                else:  # gbr
+                    weights = np.array([0.587, 0.114, 0.299]).reshape(3, 1, 1)
+                image = np.sum(image * weights, axis=0)
+            else:
+                if src_metadata["colorChannel"] == "rgb":
+                    weights = np.array([0.299, 0.587, 0.114]).reshape(1, 3, 1, 1)
+                else:
+                    weights = np.array([0.587, 0.114, 0.299]).reshape(1, 3, 1, 1)
+                image = np.sum(weights * weights, axis=1, keepdims=True)
+        else:
+            if batch_dim is not None:
+                if src_metadata["colorChannel"] == "rgb":
+                    image = np.dot(image[..., :3], [0.299, 0.587, 0.114])
+                else:  # gbr
+                    image = np.dot(image[..., :3], [0.587, 0.114, 0.299])
+            else:
+                if src_metadata["colorChannel"] == "rgb":
+                    image = np.dot(image[:, :3], [0.299, 0.587, 0.114])
+                else:
+                    image = np.dot(image[:, :3], [0.587, 0.114, 0.299])
+
+    elif src_metadata["colorChannel"] == "gbr" and dest_metadata["colorChannel"] == "rgb":
+        if src_metadata["channelOrder"] == "channelLast":
+            if batch_dim is not None:
+                image = image[..., [2, 0, 1]]
+            else:
+                image = image[:, :, [2, 0, 1]]
+        elif src_metadata["channelOrder"] == "channelFirst":
+            if batch_dim is not None:
+                image = image[:, [2, 0, 1], :, :]
+            else:
+                image = image[[2, 0, 1], :, :]
+
+    elif src_metadata["colorChannel"] == "rgb" and dest_metadata["colorChannel"] == "gbr":
+        if src_metadata["channelOrder"] == "channelLast":
+            if batch_dim is not None:
+                image = image[..., [1, 2, 0]]
+            else:
+                image = image[:, :, [1, 2, 0]]
+        elif src_metadata["channelOrder"] == "channelFirst":
+            if batch_dim is not None:
+                image = image[:, [1, 2, 0], :, :]
+            else:
+                image = image[[1, 2, 0], :, :]
+
+                # Adjust channel order
+    if (
+        src_metadata["channelOrder"] == "channelFirst"
+        and dest_metadata["channelOrder"] == "channelLast"
+    ):
+        if batch_dim is not None:
+            image = np.transpose(image, (batch_dim, 2, 3, 1))
+        else:
+            image = np.transpose(
+                image, (1, 2, 0)
+            )  # Transpose to (height, width, channels)
+
+    if (
+        src_metadata["channelOrder"] == "channelLast"
+        and dest_metadata["channelOrder"] == "channelFirst"
+    ):
+        if batch_dim is not None:
+            image = np.transpose(image, (batch_dim, 3, 1, 2))
+        else:
+            image = np.transpose(image, (2, 0, 1))
+
+    # Adjust intensity range
+    if (
+        src_metadata["intensityRange"] == "0-255"
+        and dest_metadata["intensityRange"] == "0-1"
+    ):
+        image = image / 255.0
+    elif (
+        src_metadata["intensityRange"] == "0-1"
+        and dest_metadata["intensityRange"] == "0-255"
+    ):
+        image = (image * 255).astype(np.uint8)
+
+    # Handle batched destination image with non-batched source image
+    if dest_metadata.get("isMiniBatched", False) and not src_metadata.get(
+        "isMiniBatched", False
+    ):
+        image = np.expand_dims(image, 0)
+    elif not dest_metadata["isMiniBatched"] and src_metadata.get("isMiniBatched", False):
+        image = np.squeeze(image)
+
+    if dest_metadata["channelOrder"] == "none":
+        if src_metadata["channelOrder"] == "channelFirst":
+            image = image.squeeze()
+
+    # Create destination image with new metadata and converted values
+    dest_image = {
+        "dataType": src_image["dataType"],
+        "value": image,
+        "metadata": dest_metadata,
+    }
+
+    return dest_image
+
+import json
+n_1_image = io.read_image('retina.jpg', ImageReadMode.RGB)
+n_1_image = {
+  'value': n_1_image,
+  'dataType': 'torch.tensor',
+  'metadata': {
+    'colorChannel': 'rgb',
+    'channelOrder': 'channelFirst',
+    'isMiniBatched': False,
+    'intensityRange': '0-255',
+    'device': 'cpu'
+  }
+}
+np_img_1704991440962 = numpy2numpy(tensor2numpy(n_1_image), json.loads('[{"colorChannel":"rgb","channelOrder":"channelLast","isMiniBatched":false,"intensityRange":"0-255","device":"cpu"},{"colorChannel":"grayscale","channelOrder":"none","isMiniBatched":false,"intensityRange":"0-255","device":"cpu"}]'));
+pil_img_1704991440962 = Image.fromarray(np_img_1704991440962['value'], 'RGB' if np_img_1704991440962['metadata']['colorChannel'] == 'rgb' else 'L');
+capture_image_1704990756424(comm_1704990756424, pil_img_1704991440962, "image-1-image")
