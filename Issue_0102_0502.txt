@@ -1,0 +1,48 @@
+Issues 0102_0502:
+-----------------------------------------
+
+x 1, We start with note 7. marcos and script, IJ1 plugins
+
+2. we then go deep in IJ1 plugins in note 11
+
+3. we review the notes of code->node in 
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. PyImageJ notebook close up, 
+	- 7, 10 of IJ2 plugins
+	- 8,11 of IJ1 plugins
+
+2. 
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Display multi-dimension images with PyImageJ:
+
+- 3d images can be processed with ImageJ, however, 
+current ij.py.show() uses matplotlib, it only supports 2d images displaying
+
+- but we can crop its channel to show it
+
+2. Considering the execution mechanism 
+
+
+
+--------------------------------------------
+Take away:
+
+The PyImageJ summary is in :
+
+https://github.com/Max-ChenFei/VPE_IP/issues/62

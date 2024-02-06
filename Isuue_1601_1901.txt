@@ -1,0 +1,37 @@
+Issues 1601_1901:
+-----------------------------------------
+1. API- Initialization 
+
+API summary: https://github.com/Max-ChenFei/VPE_IP/issues/61
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1. For now, we put the show result and process image into one node as testing 
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- Final thoughts of changing patt is summarized in :
+https://github.com/Max-ChenFei/VPE_IP/issues/59
+
+- JIPipe has a execution for each node
+- currently we are always executing all nodes in the scene as a code snippet
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- PyImageJ has test included, we can also use that

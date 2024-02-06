@@ -1,0 +1,100 @@
+Issues 2301_2401_2501_2601:
+-----------------------------------------
+1. We finished installing pyimagej in a new mamba env with pyimagej python kernel
+in 
+https://github.com/Max-ChenFei/VPE_IP/issues/62#issuecomment-1905798706
+
+2. We quickly scanned the 12 notebooks 
+
+- we'll summarize the things that are useful for us in topics
+
+- [x] 2.0 ! important 
+Image data types in PyImageJ in Doc 6
+https://github.com/imagej/pyimagej/blob/main/doc/06-Working-with-Images.ipynb
+
+- This notebooks tell details of image channels 
+- 6.1, 6.2, 6.6 and the followings are important
+
+- [ ]2.1 - ImageJ1 plugin
+Doc11:
+https://github.com/imagej/pyimagej/blob/main/doc/11-Working-with-the-original-ImageJ.ipynb
+
+Doc8: 
+https://github.com/imagej/pyimagej/blob/main/doc/08-Discover-and-run-ImageJ-commands.ipynb
+
+
+- [ ] 2.2 - ImageJ2 ops 
+
+	- basic ops are in Doc 10:
+	https://github.com/imagej/pyimagej/blob/main/doc/10-Using-ImageJ-Ops.ipynb
+	- more complex op use cases are in :
+	https://py.imagej.net/en/latest/imagej-ops-use-cases.html
+	
+- [x] 2.3 - customized plugins
+	- could only be defined in jar and add to classpath before `imagej.init()`
+	- reference: https://github.com/imagej/pyimagej/blob/main/doc/Initialization.md#plugins-without-maven-endpoints
+	- more specifically, we need to check the 
+	`_set_ij_env` function in `PyimageJ/src/imagej/__init__.py`
+	
+	```
+	def _set_ij_env(ij_dir):
+    """
+    Create a list of required jars and add to the java classpath.
+
+    :param ij_dir: System path for Fiji.app.
+    :return: num_jar(int): Number of jars added.
+    """
+    jars = []
+    # search jars directory
+    jars.extend(find_jars(ij_dir + "/jars"))
+    # search plugins directory
+    jars.extend(find_jars(ij_dir + "/plugins"))
+    # add to classpath
+    sj.config.add_classpath(os.pathsep.join(jars))
+    return len(jars)
+	```
+	- The `add_classpath` function is where we add jars to current classpath
+	
+- [ ] 2.4 - marcos and scripts 
+	- Doc 7:
+	https://github.com/imagej/pyimagej/blob/main/doc/07-Running-Macros-Scripts-and-Plugins.ipynb
+---
+
+
+- [x] 2.5 - Conversion Python -> Java
+- document 3: https://github.com/imagej/pyimagej/blob/main/doc/03-Sending-Data-to-Java.ipynb
+
+- [x] 2.6 - Conversion Java ->Python 
+- document 4: https://github.com/imagej/pyimagej/blob/main/doc/04-Retrieving-Data-from-Java.ipynb
+
+
+---
+
+- [ ] 2.7 blob example and segmentation usecase:
+https://py.imagej.net/en/latest/segmentation-use-cases.html
+
+
+----
+
+### 
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Install PyimageJ, figure out the python interpreter thing
+
+2. Try the jupyter notebooks of pyimagej
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+The PyImageJ summary is in :
+
+https://github.com/Max-ChenFei/VPE_IP/issues/62
