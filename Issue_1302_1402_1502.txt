@@ -1,0 +1,74 @@
+Issues 1302_1402_1502:
+-----------------------------------------
+1. How to test CaptureImageCode part of code?
+
+- we could print the intermediate image and its information to see 
+ if it's correctly converted.
+
+2. We find that the PIL image is wrong, we'll test it with different pictures
+
+v - jpg picture with ori_pytorch_read image and show the PIL image
+	- In this case, the PIL image looks correct
+	
+- a grayscale tif image without colormaping 
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Test CaptureImageCode and find problems about
+why it can't show IJ_tif->numpy imagej
+
+- PIL conversion fails -> yes, ori image is out of [0,255] and not uint8
+- jupyter communication fails?
+
+-->
+Final solution:
+ https://github.com/Max-ChenFei/VPE_IP/issues/68#issuecomment-1944060426
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. I am putting aside some final wrap-up work for PyImageJ notebook:
+- I quickly scanned them, but they are not really good examples, I don't want to spend more time on it
+---
+
+
+- [ ]2.1 - ImageJ1 plugin
+Doc11:
+https://github.com/imagej/pyimagej/blob/main/doc/11-Working-with-the-original-ImageJ.ipynb
+
+Doc8: 
+https://github.com/imagej/pyimagej/blob/main/doc/08-Discover-and-run-ImageJ-commands.ipynb
+
+
+- [ ] 2.2 - ImageJ2 ops 
+
+	- basic ops are in Doc 10:
+	https://github.com/imagej/pyimagej/blob/main/doc/10-Using-ImageJ-Ops.ipynb
+	- more complex op use cases are in :
+	https://py.imagej.net/en/latest/imagej-ops-use-cases.html
+
+
+- [ ] 2.7 blob example and segmentation usecase:
+https://py.imagej.net/en/latest/segmentation-use-cases.html
+---
+
+
+
+
+
+--------------------------------------------
+Take away:

@@ -1,0 +1,59 @@
+Issues 0602_0702_0802:
+-----------------------------------------
+1. We first test the ori_read_image from `torchvision`
+- the `read_image` VP node works with jpg,png image, not tif image
+- the intermediate image display on node works
+- the datatype of the image is `torch.tensor`
+
+
+---
+
+- We need to check `numpy` datatype for image in VP
+- we can refer to the `JSON` file of `imageio` --> `read_image` 
+- we need to check the notes for code generator again
+
+---
+
+1.1 base on `imageio.json` , we can modify its code generator part into IJ readImage
+
+1.2 the imageJ_v5 is wrong, we should go back to v3,
+	- we find the v3 missed one `)`, now the v6 based on it is working
+
+-The final node is in https://github.com/Max-ChenFei/VPE_IP/issues/68#issuecomment-1930519429
+
+---
+
+2. We met problems of `CaptureImageCode` in VP_IJ_read_image:
+
+- Reason could be 
+1. `tif` image and `CaptureImageCode` are incompatible
+	- but we already convert the image into `numpy`
+	
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Today the main task is to have a ImageJ readImage VP node
+
+2. Today the main task is to fix the CaptureImageCode problem
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
