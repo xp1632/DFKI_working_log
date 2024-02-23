@@ -1,0 +1,95 @@
+Issues 1602_1902_2002:
+-----------------------------------------
+1. We'll have a logic flow for read_image
+
+	- now we need to test `color tif`
+		- color tif also have (3,512,512) dim order that need array transpose
+	
+	- and **time series tif**, we get order as (Time, Channel, X,Y)
+		- currently I don't know how to write a `VP Node` that can slice a slice of 
+		a 4d time-series, so we'll focus on 2d images!
+	
+2. Now we modify the `IJ_read_image` node in code,
+	
+	- add `dim num check` condition
+	- add `cmap = gray` for grayscale image
+	- add `transpose` for color image jpg/png/color tif
+		- ChannelFirst (3,512,512)---> ChannelLast (512,512,3)
+	
+	- Normalization of numpy array to range (0,255), uint8 
+	for further PIL convert
+
+3. Then we put the code back and update IJ_read_image node
+https://github.com/Max-ChenFei/VPE_IP/issues/68#issuecomment-1954201374
+
+
+4. during the `IJ_read_image` code-> node part, we don't want to do it mannualy
+- so we use `format_code()` to generate the return of `codeGenerator` item of a json
+https://github.com/Max-ChenFei/VPE_IP/issues/68#issuecomment-1954227010
+
+
+4.1 Now we first test, a simple json node from this function works
+
+
+	
+                                                   
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Solve wrong `dim order` problem when reading jpg img with `IJ_read_image`
+	- by first check dimension number of image shape
+2. Add `mean filter Node` and non-optional `otsu-segmentation Node`
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. 
+
+
+
+---
+
+2.  I am putting aside some final wrap-up work for PyImageJ notebook:
+- I quickly scanned them, but they are not really good examples, I don't want to spend more time on it
+---
+
+
+- [ ]2.1 - ImageJ1 plugin
+Doc11:
+https://github.com/imagej/pyimagej/blob/main/doc/11-Working-with-the-original-ImageJ.ipynb
+
+Doc8: 
+https://github.com/imagej/pyimagej/blob/main/doc/08-Discover-and-run-ImageJ-commands.ipynb
+
+
+- [ ] 2.2 - ImageJ2 ops 
+
+	- basic ops are in Doc 10:
+	https://github.com/imagej/pyimagej/blob/main/doc/10-Using-ImageJ-Ops.ipynb
+	- more complex op use cases are in :
+	https://py.imagej.net/en/latest/imagej-ops-use-cases.html
+
+
+- [ ] 2.7 blob example and segmentation usecase:
+https://py.imagej.net/en/latest/segmentation-use-cases.html
+---
+
+
+
+
+
+--------------------------------------------
+Take away:
