@@ -1,0 +1,71 @@
+Issues 2102_2202:
+-----------------------------------------
+1. Now we continue with the `IJ_Op_Mean_Filter` 
+
+
+- [v] PyImageJ Op Notebook 
+- [v] Segmentation workflow
+
+2. During the mannual-add Node process, I made half-auto generation(auto-format)
+in  https://github.com/Max-ChenFei/VPE_IP/issues/68#issuecomment-1954879443
+
+- Then we made further research on the possiblity of full-auto generation of Node
+
+
+
+
+-------------------------------------------
+Main task today
+
+0. Solve the enum `grayscale`, `rgb` image user enum input by
+	updating the metadata inside based on `image.shape`
+
+1. test a more complicated code-->json case
+
+2. Add a `Op Plugin Code template`, 
+all the information items should be get from `Op` itself,
+instead of making it up
+
+
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Now we can close the IJ2 ops notebook and segmentation usecase
+
+
+- [ ]2.1 - ImageJ1 plugin
+Doc11:
+https://github.com/imagej/pyimagej/blob/main/doc/11-Working-with-the-original-ImageJ.ipynb
+
+Doc8: 
+https://github.com/imagej/pyimagej/blob/main/doc/08-Discover-and-run-ImageJ-commands.ipynb
+
+
+- [v ] 2.2 - ImageJ2 ops 
+
+	- basic ops are in Doc 10:
+	https://github.com/imagej/pyimagej/blob/main/doc/10-Using-ImageJ-Ops.ipynb
+	- more complex op use cases are in :
+	https://py.imagej.net/en/latest/imagej-ops-use-cases.html
+
+
+- [v] 2.7 blob example and segmentation usecase:
+https://py.imagej.net/en/latest/segmentation-use-cases.html
+
+
+
+- 2. Add `mean filter Node` and non-optional `otsu-segmentation Node`
+
+
+--------------------------------------------
+Take away:
+
+- Tim's hiring in image.sc:
+https://forum.image.sc/c/job-opportunities/11

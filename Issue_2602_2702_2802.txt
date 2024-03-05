@@ -1,0 +1,189 @@
+Issues 2602_2702_2802:
+-----------------------------------------
+1. Run cell Segmentation codes on jupyterlab
+
+1.1 3d image in skiimage
+
+- convention shape in skimage:
+https://scikit-image.org/docs/dev/user_guide/numpy_images.html#coordinate-conventions
+- 2d grayscale (row,col)    (x,y)
+- 2d rgb (row,col,ch)
+- 3d grayscale (pln,row,col)  pln=z
+- 3d rgb (pln,row,col,ch)
+
+-----
+
+- **Scikit 3d cell image **
+- our 3d cell has shape as (z,c,y,x) (60,2,256,256)
+https://scikit-image.org/docs/stable/auto_examples/data/plot_3d.html#sphx-glr-auto-examples-data-plot-3d-py
+
+
+
+1.2 When to add labels for xarray?
+
+- `tif image` we opened with ImageJ2 IO can be converted to xarray directly
+- we can check the dimension labels by 
+```
+mitosis_img= ij.io().open('https://wsr.imagej.net/images/mitosis.tif')
+mitosis_img.shape
+# We first turn it into xarray
+mitosis_xarray  = ij.py.to_xarray(mitosis_img)
+# print some basic info
+print(f"name: {mitosis_xarray.name}\ndimensions: {mitosis_xarray.dims}\nshape: {mitosis_xarray.shape}")
+```
+
+- we'll get output as :
+```
+name: mitosis.tif
+dimensions: ('t', 'pln', 'row', 'col', 'ch')
+shape: (51, 5, 196, 171, 2)
+```
+
+- for 4d tif image, no matter what the former dim order,
+- we'll always get (x,y,c,t)
+---
+
+- other numpy image we get doesn't always comes with labels for xarray
+- we need to set the labels based on scikit convention (z,x,y,c) or (t,x,y,c)
+
+
+---
+
+2. Segmentation Code to Node
+
+- Now we'll set Code to Node of segmentation workflow via half-auto generation
+
+- We'll  make the node one by one and put the node in one categories:
+
+2.1 The 3d image segmentation Node is finished in `cell_segmentation_slicing6.json`
+
+
+2.2 Now we need an op template, this time we can not make up informations
+that we need in json file.
+
+- v We need to get information of Op from `OpInfo` 
+- v how did jipipe do?
+- https://github.com/Max-ChenFei/VPE_IP/issues/72#issuecomment-1967367529
+
+---
+
+2.3 how to get a `VP_image` object in VP?
+
+- I think we first add an input for `Op Node`
+- and set a parameter for example n_1_image = ${input} to get this image value
+
+
+---
+
+- v how did this `n_0_image`, `n_1_image` generated?
+
+	- ? from Knowledge graph?
+	- I checked the current knowledge graph project, `n_` or `_image` no
+	- the only thingd that is kind of relevant is `_getUniqueNameOfHandle()` in 
+	`src/editor/generators/python_generators`
+	- and by checking `_getUniqueNameOfHandle`, we use it in 
+	`getInputValueOfNode()` and `getOutputValueOfNode()`
+	
+- Answer: https://github.com/Max-ChenFei/VPE_IP/issues/56#issuecomment-1969082087
+
+	- we know the InputGenRes.code is `input` value's literal we get from previous node
+	
+```
+* @param inputs An array of strings representing literals or variable names e.g., '1', '"str"'. 
+* @param outputs An array of strings for variable names or subsequent Python code.
+```
+ 	
+
+
+
+---
+2.4 Now we're more clear about the `inputs` and `outputs` in VP_NodeGeneration
+
+- let's continue 2.3how to get a `VP_image` object in VP?
+
+- I think we first add an input for `Op Node`
+- and set a parameter for example n_1_image = ${input} to get this image value
+- in some sense, in VP, `image` type's `output` is the same as `image` type's `input`
+
+- We'll refer to this :https://github.com/c3di/Visual-Programming-Language/blob/main/doc/NodeTypeSpecification.md#generating-a-codegenerator-for-python
+---
+
+
+2.5 What do we want on jupyter now for Op?
+
+- in Mock, we can feed the image we get from previous node 's image object
+- 
+
+---
+
+2.6 Input **datatypes**
+
+- the input type we get from OpInfo is not the datatype we need to define in 
+VP project
+
+- OpInfo input type is for example `net.imglib2.algorithm.neighborhood.Shape`
+- but actaully we are using 
+```
+HyperSphereShape = sj.jimport("net.imglib2.algorithm.neighborhood.HyperSphereShape")
+smoothed2 = ij.op().run("create.img", jslice2)
+ij.op().run("filter.median", ij.py.jargs(smoothed2, jslice2, HyperSphereShape(5)))
+```
+
+- it's HyperSphereShape and it should be set value with integer
+- we can not get this information from java library or somewhere
+
+
+- More detailed challenge and solution are in 
+https://github.com/Max-ChenFei/VPE_IP/issues/72#issuecomment-1978700972
+
+---
+
+### My current solution is to have a map table 
+between IJ_input_type and Vp_input_datatype
+
+- and the feedback we get of solving this questions is to 
+- map the common java types to the datatypes we have in VP project
+
+- give the uncommon java types `any` datatype in VP input handle
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. First we'll have a manual(half-auto with `codeGenerator`) segmentation workflow
+ - because even when have a full auto generation, we still need `ground truth`
+ 
+1.1 Classic Segmentation in https://py.imagej.net/en/latest/Classic-Segmentation.html#segmentation-workflow-with-imagej2
+
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. The convention dim order for scikit is 
+(t,z,x,y,ch)
+
+the 3d cell image we use from scikit has ori order as
+(z,ch,x,y) 
+
+2. Displaying 3d image as 3d image is not a good idea in jupyterlab
+- Why? Resource-consuming, `axes3D` can only show one color, itkwidgets not working
+
+- we should slice it into 2d image then display it 

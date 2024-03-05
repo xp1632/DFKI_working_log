@@ -1,0 +1,42 @@
+Issues 2902:
+-----------------------------------------
+
+1. We've figure out seperate working 3D image slice and Op template(currently filter)
+
+- working node and its JSON is in 
+https://github.com/Max-ChenFei/VPE_IP/issues/68#issuecomment-1966962552
+
+2. the remaining Node is not that hard,
+so I'll add them manually first and start making auto generation
+
+
+
+
+2. Everything goes well except the last Watershed labeling
+
+- The ImgLabeling java object is not supported in PyImageJ
+- thus, we work around to send it as PIL
+
+
+
+
+-------------------------------------------
+Main task today:
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
