@@ -1,0 +1,173 @@
+Issues 0403_0503_0603:
+-----------------------------------------
+
+1.We made a top-level structure for seminar slides in 
+
+https://github.com/xp1632/DFKI_working_log/issues/30
+
+2. We'll wrap up the auto-generation components to the extent 
+	- that it's a complete pipeline
+	- And put further details of Node in the Next Step
+	
+- the datatype mismatch problem is summarized here: 
+https://github.com/Max-ChenFei/VPE_IP/issues/72#issuecomment-1978700972
+
+
+
+3. Now I'll continue listing the components we used in auto generation
+
+- Prepared Components are in:
+https://github.com/Max-ChenFei/VPE_IP/issues/72#issuecomment-1979461716
+
+4. We solved the extraction of imports via ast, 
+and preserve rest code's indent but remove extra line break via string replacement
+
+```
+def extract_and_remove_imports(code_snippet):
+    parsed_code = ast.parse(code_snippet)
+    imports = []
+    new_body = []
+    for node in parsed_code.body:
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                name = alias.name
+                asname = ' as ' + alias.asname if alias.asname else ''
+                imports.append(f"import {name}{asname}")
+        elif isinstance(node, ast.Assign) and 'imagej' in [imp.split()[1] for imp in imports]:
+            if isinstance(node.targets[0], ast.Name) and node.targets[0].id == 'ij':
+                if isinstance(node.value, ast.Call) and node.value.func.attr == 'init':
+                    imports.append(astor.to_source(node).strip())
+                else:
+                    new_body.append(node)
+            else:
+                new_body.append(node)
+        else:
+            new_body.append(node)
+    parsed_code.body = new_body
+    new_code_snippet = astor.to_source(parsed_code, indent_with='')
+
+    # Remove the extracted imports from the original code snippet
+    for import_statement in imports:
+        code_snippet = code_snippet.replace(import_statement, '', 1)
+
+    return imports, code_snippet.strip()
+# Example usage
+code_snippet = """
+import imagej
+import scyjava as sj
+ij = imagej.init('sc.fiji:fiji:2.14.0')
+#Get input image
+vp_input_image = n_1_image
+#Get Op Name
+Op_name = "filter.median"
+#Import java libararies
+HyperSphereShape = sj.jimport("net.imglib2.algorithm.neighborhood.HyperSphereShape")
+#Convert input image to Java type
+process_image = vp_input_image.get('value')
+jimage = ij.py.to_java(process_image)
+#Prepare result image
+result_image = ij.op().run("create.img",jimage)
+#Process image by Op
+result_image= ij.op().run(Op_name, ij.py.jargs(result_image, process_image, HyperSphereShape(5)))
+#Normalization to range (0,255), uint8 
+result_image = ij.py.from_java(result_image)
+result_image = ((result_image - result_image.min()) / (result_image.max() - result_image.min())* 255).astype('uint8')
+#Display result
+def image_info(image):
+    # A handy function to print details of an image object.
+    print("--- After Edge Preserve Smoothing ---")
+    ij.py.show(image)
+    print(f" type: {type(image)}")
+    print(f"dtype: {image.dtype if hasattr(image, 'dtype') else 'N/A'}")
+    print(f"shape: {image.shape}")
+    print ("--------------------------------")
+image_info(result_image);
+#Prepare output metadata
+result_image = {
+  'value': result_image,
+  'dataType': 'numpy.ndarray',
+  'metadata': {
+    'colorChannel': 'grayscale',
+    'channelOrder': 'channelLast',
+    'isMiniBatched': False,
+    'intensityRange': '0-255',
+    'device': 'cpu'
+  }
+}
+"""
+
+imports, new_code_snippet = extract_and_remove_imports(code_snippet)
+print("Imports:", imports)  # Output: ['import imagej', 'import scyjava as sj', "ij = imagej.init('sc.fiji:fiji:2.14.0')"]
+print("--------------------------------")
+print("New code snippet:", new_code_snippet)
+
+```
+
+5. Now we're eliminating the uncommon types for input from manual mapping
+
+- at first we just deleted the weird ones that are obviously wrong
+- then we deleted some that are beyond our reach at first sight 
+- at last, just in case we delete more types as we should
+	- I wrote a function`get_ops_with_input_type` that go through OpInfo's input
+	- and list the Ops that used a certain type of input
+	- we'll determine if we should keep this type in the mapping table by its Op
+	- if it's a common Op, we'll check the type and how people use this Op
+	- if this is Op is unheard of, or not that useful for our project
+		- we'll just delete it
+	
+	
+6. while eliminating the input types, we found another problem:
+
+- which is multiple operations in one Op name:
+
+- for exmaple in Op `threshold.otsu`
+```
+otsu_infos = [info for info in all_infos if info.getName() == 'threshold.otsu']
+for otsu_info in otsu_infos:
+    print(otsu_info)
+```
+
+- we get multiple returning operations,
+
+**Solution:** 
+
+`Op Matching` based on parameter number and ImageJ op priority in 
+https://github.com/Max-ChenFei/VPE_IP/issues/72#issuecomment-1981361593
+step2
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Wrap auto components of auto-generation JSON
+
+2.1 Make textual structure into Visual slides 
+
+2.2 Put old slides into certain sections to see which parts we lack
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. For auto-generation, current we are doing one by one ?
+- which is one function call --> one node
+
+- is it possible that we generate a workflow --> multiple nodes
+	- the arguments finding is too hard 
+	- user provides input and output name is also not realistic
+	- ast could be useful because itself know the tree structure of functions in python
+
+
+2. Video --> 德国生存指南--> in 小红书 and bilibili？
+
+
+
+--------------------------------------------
+Take away:

@@ -1,0 +1,116 @@
+Issues 0703:
+-----------------------------------------
+1. [v] Go through the rest of mapping table
+
+2. [v]Put components into PipeLine and adding log information in the end
+
+3. Made a rough Node for Json generator
+	 - if possible, make the input area for code snippet a little larger
+	 
+4. [v]Make skeleton of seminar structure, 
+only put planned bullet point that you want to dig in 
+
+
+
+----
+
+5. [v]Important hints when updating the input information in JSON
+
+- we should omit the `out` in `inputs`
+- for example, when we have inputs of `filter.median` Op as 
+
+```
+(IterableInterval out) =
+	net.imagej.ops.filter.median.DefaultMedianFilter(
+		IterableInterval out,
+		RandomAccessibleInterval in,
+		Shape shape,
+		OutOfBoundsFactory outOfBoundsFactory?)
+```
+
+- And we have `Op_Paramter_Names` we extract from `code_snippet` as:
+
+['result_image', 'process_image', 'HyperSphereShape(range)', 'None'] 
+
+- We have the User_Input_Names as :
+
+["result_image", "n_1_image", "range"]
+in the order of output image name, input image name, range parameter name
+
+
+--- 
+
+**In real case median filter node:**
+
+- we only have two inputs, 
+  - input_image, 
+  - range
+- one output, 
+  - result_image
+
+---
+**Conclusion:**
+- We should refer to `Jipipe`, `ImageJ2OpNodeInfo.java`'s `initializeParameters` method
+
+```
+for (ModuleItem<?> item : opInfo.inputs()) {
+	if (item.isOutput() && !item.isRequired()) {
+		progressInfo.log("Skipping input " + item.getName() + ", as it seems to be an optional input, but is at the same time an output.");
+		continue;
+	}
+```
+- iterate `Op_Paramter_Names` and  `filter.median` Matching OpInfo
+- ignore the first argument 'result_image' in `Op_Paramter_Names`
+	- as in `filter.median` Matching OpInfo 
+	- the first argument in inputs is `item.isOutput()` is output
+- then we go to the second item. 'process image' in `Op_Paramter_Names`,
+	and `RandomAccessibleInterval` with java type, we map this java type into 
+	datatype and get datatype as `image` 
+	- so we add `input1` of this Node in inputs{}, input1.title = `process image`
+	- input1.datatype = `image`
+
+- then we go to the third item `HyperSphereShape(range)` in `Op_Paramter_Names`
+	and `Shape` java type, we map this java type to datatype `integer` 
+	- so we add `input2` of this Node in inputs{}, input2.title = `HyphereShape(range)`
+	- input2.datatype = `integer`
+
+- then we go to the last item `None` in Op_Paramter_Names`,
+	- we find the item in the same position of OpInfo is `OutOfBoundsFactory outOfBoundsFactory?`
+	
+	- we find it isoptional for Op by `!item.isRequired()`
+	- we omit it
+	- if it's required, we'll print a warning: 
+	- You are missing a required input in the Op : {OutOfBoundsFactory}
+
+
+-------------------------------------------
+Main task today:
+
+1. put components of into pipeline for auto-generation JSON
+
+2.1 Make textual structure into Visual slides 
+refering to the top-level structure https://github.com/xp1632/DFKI_working_log/issues/30
+
+  - I tried to make it by slides copilot but is doesn't quite work well
+
+d
+2.2 Put old slides into certain sections to see which parts we lack
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Enhancement for Node generation:
+
+-(v) omit the output in input as JIPipe did
+
+
+
+
+
+--------------------------------------------
+Take away:
