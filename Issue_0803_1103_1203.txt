@@ -1,0 +1,123 @@
+Issues 0803_1103_1203:
+-----------------------------------------
+
+**Seminar Structure Feedbacks:**
+--- 
+
+### Meeting Feedbacks:
+
+1. 【quick summary】 for Op Auto generation showcase
+	- design a fixed procedure and show it live 
+	- let the live video be backup plan
+
+2. 【quick summary】 for Seminar Slides:
+
+- 1.[Backgraound] : one sentence mentions hiwi work, 
+   more backgrounds for imageJ/Chaldene
+   
+- 2. [Motivation] : 
+   - a. Known parts of why we need Chaldene as Visual Programming System
+   - b. Why ImageJ is important
+   - c. Our ImageJ in Chaldene expand the boundary of ImageJ
+
+- 3. [Methodology]:
+	- a. Add more technical details in Method 2 PyImageJ
+	- b. Add [Automatic ImageJ Op Node Generation] to Part 3
+
+- 4. [Progress Made]
+	- one showcase video of segmentation
+	- one live operation of generating ImageJ Op Node
+
+- 5. [Next Step]
+    - we'll keep the Knowledge Graph for ImageJ image types
+
+- 6. [Conclusion]
+	- Give a narrow conclusion
+	- 'With this method', we show how ImageJ could be intergrated in Chaldene project
+	- And we prove the expansibility of Chaldene for other libraries
+
+3. Other hints for presentation:
+	- grab an opportunity to show the detailed issues and organized way of working
+	- If questions emerge during presentation, ask the audience if she/he wants to discuss now for 4 mins
+	    - or discuss in the end('I am happy to discuss etc'), to keep the 20mins punctuality
+	- 20mins , 16slides
+
+-----
+
+### Fei's feedback:
+
+- From large to detail,provide background for method
+-  gradually fade in and fade out
+
+- From theory --> code  , prepare the code if they want 
+
+[Summary:]  At first show people what we want to do
+- then show how we do it in a simple link graph
+
+---
+
+0. First we roughly make a structure for slides based on github 
+
+- though we have many feedbacks and information from different source
+- we start with our own bone 
+
+
+---
+
+### 1. [Title]:
+
+- Which template should we use?
+	- dfki.ai
+	- Uds 
+[v]	- combination? 
+
+- Whose name on the title
+[v]	- me
+	- me and 3 supervisors if they asked me to add the name
+	- Or add it in the defense
+	
+
+---
+
+2. We've set the template for slides and title,QA page
+
+
+3. [Backgraound]
+- We try to create a commic that tells the experimentists difficulty
+	- but the image MS designer creaetd is not as good as we want
+	- we could manual edit the picture
+	- Or we could try our luck in other people's paper
+
+- Three things we want to the user to know about the background
+- I want to add some images or Icon that makes the background part less boring
+
+- I found some useful templates from 
+https://www.presentationgo.com/presentation/abstract-fluid-bubbles-powerpoint-google-slides/
+
+
+-------------------------------------------
+Main task today:
+
+(v) 1. where and how should I update the auto generation pipeline?
+	- I just committed the two parts to VPL project, my branch of ImageJ
+(v) 2. Info for Seminar and Defense requirements
+
+(v) 3. Possible enhancement for auto generation
+
+(half v )4. Textual Seminar Structure ---> Slides Seminar Structure
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
