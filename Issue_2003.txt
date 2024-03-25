@@ -1,0 +1,75 @@
+Issues 2003:
+-----------------------------------------
+1. Fei's feedback
+
+- I've already fixed all the minor parts
+- And I've summarized the important modifications in 
+https://github.com/xp1632/DFKI_working_log/issues/30#issuecomment-2009454326
+- the v3 slides are also there
+
+
+2. My Modification
+
+- Now we only have Python kernel, java kernel instead of `Ipython kernel`
+
+
+3. Segmentation workflow video editing
+
+- I'll write the scripts down for the video:
+
+---
+
+ - S1: This is a video showcase for the ImageJ Cell Segmentation Workflow, integrated in Chaldene System
+ 
+ - S2: First we read an 3d microscopy image: "test_cells3d", and slice the 2d image we need 
+ 
+ - S3: we can preview the image slice by clicking the image handle then clicking `watch this image`
+ 
+ - S4: Here's the cell slice image we get, the preview on the node panel is shown without color mapping
+  
+ - S5: and the image shown in the following jupyter cell is with color mapping and all other detailed information
+ 
+ - S6: Then we create an edge-preserve_smoothing node through the search menu
+ 
+ - S7: This is exactly what we want, the inner side of cells are more smooth now
+
+ - S8: we search for the O T S U segmentation, and we link the node with edges
+
+- S9: however, while the segmentation result is pretty good, but it's not perfect enough
+
+- S10: there are some missing holes inside the cells
+
+- S11: gladly, we can easily fix that by morphology filters: dilation and filling holes
+
+- S12: voila, after applying these two plugins, now we segmented the cells perfectly from the background
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)1. add two pages based on Fei's 2nd feedback
+
+2. Listen to practice 1 and practice 2, write scripts
+
+3. Edit the cell segmentation video clips, shorter and AI voice subtitle
+
+4. Go through the live generation process again, to see the pace we want
+
+5. One practice with scripts and one without
+ 
+
+
+
+----------------------------------------------
+My thoughts:
+
+customizing a certain part of workflow requires a certain level of knowledge in script editing. 
+
+
+
+
+
+
+--------------------------------------------
+Take away:

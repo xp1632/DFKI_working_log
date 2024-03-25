@@ -1,0 +1,157 @@
+Issues 1303_1403_1503:
+-----------------------------------------
+1. we'll continue the backgound+ Motivation part
+
+ - The notes under it can be written in the end
+ - but the basic version of sentences on the slide page should be meaningful
+ 
+
+2. The [background] is already quite close
+
+- just add the key sentences you want to show on slides
+- and not so key sentences in the notes
+
+[v] 2.1 Background - ImageJ/Fiji
+
+---
+
+- I checked the `supplementary pdf` JIPipe provides in 
+ https://static-content.springer.com/esm/art%3A10.1038%2Fs41592-022-01744-4/MediaObjects/41592_2022_1744_MOESM1_ESM.pdf
+ 
+- where it compared itself with KNIME and some other visual programming tool
+- it is useful but currently too complicated for me
+
+---
+[v] 2.2 Background - Chaldene
+
+---
+[v] Motivation illstrated by intersection and challenges
+
+---
+
+3. Now we're heading to [Methodology] Part
+
+- I plan to provide it as a `menu`: 
+
+- Theoritical needs and reference papers (vegetables)
+- Result (juicy meat) (Progress Made)
+- twist conflicts (sauce) 
+
+-------
+[v][IJava Kernel Menu] --- starter menu
+
+- Theoritical needs and reference papers (vegetables)
+- Result (juicy meat) (Progress Made)
+- twist conflicts (sauce) 
+  |
+  v
+------
+[PyImageJ Menu]  --- menu that fed you up
+
+- new methods
+- Result 
+- twist conlicts
+------
+  |
+  v
+------
+[Auto Op conversion Menu]  --- surprise dessert
+
+- graphical theory
+- go live_yum yum result (prepare for two nodes and somehow clean the lab a bit)
+
+-----
+
+Hi Tim, hi Fei, these are quick summaries for today's feedback:   
+
+--------      
+【General Presenetaion Feedback】:
+
+- 1. Keep the dynamic in the presentation instead of totally reading written scripts
+	[Method]:
+	
+	- a.Practice presentation without any scripts in empty room or in mind
+	- b.Pick up the good spontanous sentences and recite them 
+	- c.Do it several times, and form your own `spontanous` scripts in mind
+	- d.Also, keep eye contact with audience to see if they're convinced or lost
+		- tell or omit the rest 20% dynamic content based on their reaction
+
+- 2. How to make a good start and end for presentation?
+
+	- a.Take the stage by raising the voice at the beginning, as a reminder for everyone else
+	- b.Start with a confident and firm attitude : 'Good afternoon everyone! I am Ziwe He, today I am
+	presenting my master thesis seminar: xxxxxxxxx'
+	- c.End with a doubtless attitude: 'As a summary, I'll conclude my work as xxxx. With this method,
+	we xxxxxxx.  Thank you very much and I am happy to take questions now!'
+
+- 3. Considering color blind people ,different settings of projector and display when determing
+the color palette, avoid green and yellow etc.
+
+-----
+【Specific Slide Feedback】:
+
+- 1. Deleting [Outline] page because we already have a clear structure and a fluent storyline
+
+- 2. In Slide 2 [Background - Fiji], advertise more about Fiji
+	- tell more about its material sciences/ astronomy field community
+	- and more than 30000 people who are using Fiji 800+ plugins
+	- stress more on why Fiji is super cool and why we want to integrate it
+
+- 3. In Slide 3 [Background - Chaldene], add two explanatory sentences
+	- about what is VP workflow, what is visual node
+	- visual node is functioning backended by node specification json file
+	- don't mention hiwi work
+
+- 4. In Slide 4 [Motivation -Comparison]
+	- In both sides,remove the [user friendly] comparison since its not our main focus
+	- In Fiji side, illstrate more on `hard to share workflow`
+		a. Add [Inconvenience in Macro recorder to reproduce workflow]: 
+		- still requires knowledge of scripts editing
+		- works for exact obejct in exact order, hard to extend 
+	- In Chaldene side, illstrate more `easy to share and visualize`
+		a. Add [Visual Automation Workflow] 
+		b. Add [Digital Sustainbility], [Scientific reproducibility]
+
+- 5. In Slide 28 [Next Step]
+	- say it in a more abstract level
+	- mention that we'll do some wrap work for the automation pipeline
+	- might wrap it into a special GUI in Chaldene
+	- And for Knowledge Graph part, also an important part of Chaldene,
+	- the only reason we didn't touch it now is that this part of project is still
+	in progress by other group members, we want to integrate our part of work later.
+
+
+-----------------------------
+
+### let's first modify the slides, not the notes
+
+[] 1.In Slide 2 [Background - Fiji], advertise more about Fiji
+	- tell more about its material sciences/ astronomy field community
+	- and more than 30000 people who are using Fiji 800+ plugins
+	- stress more on why Fiji is super cool and why we want to integrate it
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)1. Summarize the feedbacks for slides
+2. Modify the feedback parts and have a version 2
+3. Finish the conclusion part and next step part
+
+
+----------------------------------------------
+My thoughts:
+
+- Possible Questions:
+
+- How do you summarize your contribution?
+
+
+
+
+
+
+--------------------------------------------
+Take away:

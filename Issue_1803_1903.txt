@@ -1,0 +1,123 @@
+Issues 1803_1903:
+-----------------------------------------
+### let's first modify the existing slides
+
+[v] 1. In Slide 2 [Background - Fiji], advertise more about Fiji
+	[v]- tell more about its material sciences/ astronomy field community
+ 	[v]- and more than 30000 people(no source) who are using Fiji 800+ plugins
+	- we found the source for 25000 user in 2012,but we don't find new data source, so we don't use it
+
+
+[v] 1.5 In Slide 3 Background - Chaldene,
+	[v] Fixed the remaining border of the visual node when removing background
+
+[v] 2. In Slide 3 [Background - Chaldene], add two explanatory sentences
+	- about what is VP workflow, what is visual node
+	- visual node is functioning backended by node specification json file
+	(v)- don't mention hiwi work
+
+[v] 3. In Slide 4 [Motivation -Comparison]
+	(v)- In both sides,remove the [user friendly] comparison since its not our main focus
+	- In Fiji side, illstrate more on `hard to share workflow`
+	(v)	a. Add [Inconvenience in Macro recorder to reproduce workflow]: 
+	(in script)	- still requires knowledge of scripts editing
+	(in script)	- works for exact obejct in exact order, hard to extend 
+	- In Chaldene side, illstrate more `easy to share and visualize`
+	(v)	a. Add [Visual Automation Workflow] 
+	(in slide 5)	b. Add [Digital Sustainbility], [Scientific reproducibility]
+
+[v] 4. In Slide 5[Motivation - Integration]
+	(v)- Fix the green-yellow color contrast issue by adjust position
+	(v)- add Add [Digital Sustainbility], [Scientific reproducibility]
+	- add `first step` and modify the challenges to state why`jupyter`
+	- What's our selling point for IJ+VP?
+		- Visual,reproduciable automation flow, out of confined imageJ
+	(v)- add one sentence illustration from integration in Chaldene to integrate in Jupyter
+
+
+[v]	5. In Slide 6: Adjust the shadow or not? (No)
+	
+	
+[v]	6. In Slide 8 
+	- Add `first step`, `next step`
+	- Modify into more clear statement: 
+		- How to handle Java-based ImageJ  and Python-based Chaldene in the same Jupyter environment?
+		- Multi-kernels handling multi-languages in the same notebook
+
+[v] 7. In Slide 10 [Methodology – Polyglot Notebook]
+	- Add `new question`
+
+
+----
+### Let's add slides
+
+[v] 1. In slide 28 [Conclusion]
+	- what do we want to conclude?
+	- what do we want to stress again an let the audience take home with
+		- we want to let the audience know
+		1. what problems we solved?
+		2. by what means
+		3. what will this solution bring us
+	
+ 2. In Slide 29 [Next Step]
+	- say it in a more abstract level
+	- mention that we'll do some wrap work for the automation pipeline
+	- might wrap it into a special GUI in Chaldene
+	- And for Knowledge Graph part, also an important part of Chaldene,
+	- the only reason we didn't touch it now is that this part of project is still
+	in progress by other group members, we want to integrate our part of work later.
+
+---
+
+### Scripts
+
+1.[Slide 2: Background - ImageJ/Fiji]
+	- More stress more on why Fiji is super cool and why we want to integrate it
+	- 
+2.[Slide 3: Background - Chaldene]
+	- Add some explanation of Chaldene interface : 
+		- input, handle, node, search menu etc.
+	- add two explanatory sentences
+		- about what is VP workflow, what is visual node
+		- visual node is functioning backended by node specification json file
+	
+
+----
+
+### Script Draft:
+
+1. old: combination and advantages we get from integration
+
+- Combines the robust functionalities of ImageJ with the user-friendly interface of Chaldene
+---------------
+Allows users to leverage the ImageJ functions they are already familiar with in a new tool
+Facilitates easy sharing and reproduction of workflows via Chaldene
+Enhances the accessibility of image processing tools for scientists with limited programming experience
+Expand the boundary for ImageJ users to explore and utilize other libraries instead of confining to ImageJ’s Java Ecosystem
+ 
+---
+
+
+-------------------------------------------
+Main task today:
+
+(v) 1. Microsoft 365 membership
+(v)2. Modify the feedback parts and have a version 2
+(v)3. Finish the conclusion part and next step part
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
