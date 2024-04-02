@@ -1,0 +1,47 @@
+Issues 2703_2803_2903:
+-----------------------------------------
+1. Today I did marvelous work of approaching the persons that I was afraid of .
+	- I handled it with a courageous attitude, great job Dr He!
+
+2. I am a little tired of modifying these cv stuffs, let me take a break
+
+3. Let's think about the wrap up for generation pipeline
+
+ - currently, we support one Node: filter_median
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+- 1. (v)Wrap up the two new UK positions and estimate its possibility
+	- if tuition fee for international students are covered
+	- if this funding is also open to international students
+
+- 2. CV Modification
+	- based on the issue we proposed yesterday
+	- have a cv_2,0 
+	
+- 3. Think about 
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. generation based on namespace of a libraries API
+
+- filter.median should belong to filter namespace
+
+
+
+
+
+
+--------------------------------------------
+Take away:

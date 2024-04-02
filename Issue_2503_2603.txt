@@ -1,0 +1,97 @@
+Issues 2503_2603:
+-----------------------------------------
+1. CV modification : 
+	- I don't want spend too much time on modifying this 
+	- since I still need the stupid administration process to proceed
+	- I'll spend this morning + this noon 
+	- and get one base academic cv, two cover letters for Philipp, KL 
+	- And 
+
+- Fei's advice of other CV
+	- from current background/experience to previous
+	- stress local experience
+	- show programming skills with project,not with (good)
+	- ungrade undesired extra credits to keep an overall good mark
+
+1.1 Let's see what the three position require
+
+ [KL - TrustifAI ] 
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(v) 1. Wrap up seminar materials
+
+2. Registration of thesis
+	- I've sent the email to require BMS certificate
+	- I've sent the registration form to asr and Philipp
+	
+	- After I get a certificate and a signed form
+	- I'll contact lorang of other staffs in exam office
+	- as said in https://www.ps-mint.uni-saarland.de/en/guidelines/cs/thesis_registration
+	
+	- if Possible, I'll request for ungraded the extra credits I get
+	- by credits regulation https://www.uni-saarland.de/en/study/programmes/master/media-informatics.html
+	- And only keep these courses as graded
+
+	```
+	- **2 Core courses** : (Human Computer Interaction 1.3), (Image Processing and Computer Vision 3.0)  (18Credits)   
+	- **1 advanced lecture** (The Elements of Statistical Learning 3.0) (6Credits)
+	- **1 seminar** (Attentive User Interfaces 1.7) (7Credits)
+	- **1 MAD project** (Briefing Machine 1.0) (8Credits)
+	- **1 Master Seminar** (New Attempt in 2024,DFKI 1.0) (12Credits)
+	- **1 Master Thesis**
+	- **1 Internship Seminar**  (2.3) (5Credits) 
+	```
+	- Details in your Obsidian purple notebook 
+	- You can print it down and go to examination on Thursday 
+	- Friday is holiday
+
+3. CV modification
+
+- originally we have a web developer CV
+- now we need a cv that we can use to apply for an phd candidate
+
+- And for cover letter(200-300 words), you can write an initial version.
+- since the transcript is not that fast
+
+
+(v)4. Wrap up the Position information for KL-healthcare AI
+https://github.com/xp1632/DFKI_working_log/issues/35
+ 
+- I try to scan the pytorch things fast, and I found out that I don't quite understand 
+the code
+- But I understand the most basic mechanism:
+- training a (Neural Network)equation based on the data we have,
+- and try to predict the result we expected by find a proper set of parameters
+-  that minimized loss in loss functions
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. To fix the missing background of trustAI part:
+	
+	- I'll take several advanced courses from April
+	
+		- Topics in Algorithmic Data Analysis https://eda.rg.cispa.io/edu/tada24
+		- Attacks Against Ml models	https://cms.cispa.saarland/amlm2024/
+---
+	- Trustworthy Generative Machine Learning 
+		- This topic is relevant but it's student-based seminar
+		- I don't want to do pre or listen to bad pre
+		
+- I've added my interested courses in the calendar
+
+
+
+
+
+--------------------------------------------
+Take away:
