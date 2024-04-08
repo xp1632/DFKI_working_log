@@ -1,0 +1,88 @@
+Issues 0104_0204_0304:
+-----------------------------------------
+1. We'll first do step 0: wrap-up pipeline parts without adding new features:
+
+- requirements of current pipeline
+- in code snippet, calling op, when a parameter is not required, please place `None` to take the place
+
+2. We'll continue to next step: 1 
+
+- we start with adding another node:
+- for example: threshold.otsu
+- and during that, we fix why it doesn't work for threshold.otsu
+
+- we'll test threshold.otsu tomorrow morning, as long as op matching works
+- it works
+ 
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. (v)Pipeline refactor in : https://github.com/Max-ChenFei/VPE_IP/issues/84
+
+2. Step 1 for pipeline
+
+
+
+
+(v)4. Follow-up on thesis stuffs
+	- (v) follow-up email to sabine 
+	- (v)after getting grade, print registration form and grade certificate, go to examination office
+		- if she's there, give the documents and talk about ungrade extra credits, second examiner
+		(v)- if not there, leave the documents with a email 
+	- (v)the booking system for examination office is not working while the study coordinator booking is working
+	
+	
+
+
+----------------------------------------------
+My thoughts:
+
+1. Registration of thesis and ungrade extra credits
+
+	- I'll contact lorang again tomorrow morning
+
+	- if Possible, I'll request for ungraded the extra credits I get
+	- by credits regulation https://www.uni-saarland.de/en/study/programmes/master/media-informatics.html
+	- And only keep these courses as graded
+
+	```
+	- **2 Core courses** : (Human Computer Interaction 1.3), (Image Processing and Computer Vision 3.0)  (18Credits)   
+	- **1 advanced lecture** (The Elements of Statistical Learning 3.0) (6Credits)
+	- **1 seminar** (Attentive User Interfaces 1.7) (7Credits)
+	- **1 MAD project** (Briefing Machine 1.0) (8Credits)
+	- **1 Master Seminar** (New Attempt in 2024,DFKI 1.0) (12Credits)
+	- **1 Master Thesis**
+	- **1 Internship Seminar**  (2.3) (5Credits) 
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+
+- Grand challenges in digital health by Patty Kostkova
+- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4419711/
+> This gap needs to be bridged by a joint multidisciplinary collaboration
+ between healthcare professionals/medical scientists and computer scientists/engineers; 
+
+---
+
+-  Interoperability should be built in from the start
+https://www.gov.uk/government/publications/using-information-technology-to-improve-the-nhs/making-it-work-harnessing-the-power-of-health-information-technology-to-improve-care-in-england
+
+---
+
+-  Health IT Systems must embrace user-centered design
+
+---
+
+### !!! How to do a good clinical digital health project from beginning?
+
+- https://www.gov.uk/government/publications/using-information-technology-to-improve-the-nhs/making-it-work-harnessing-the-power-of-health-information-technology-to-improve-care-in-england

@@ -1,0 +1,42 @@
+Issues 0404_0504:
+-----------------------------------------
+1. The most important part for our next step is to get a 
+
+`correct code snippet`
+
+2. Pipeline issues
+
+- More generalized pipeline is in https://github.com/xp1632/VPE_IP/issues/80
+
+- Generating code snippet in https://github.com/xp1632/VPE_IP/issues/88
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)0. Ask Fei about DFKI Contract person, just in case they send it to wrong address
+
+(v)1. Test `threshold.otsu`
+
+(v)2. Initial thought of tricky type in ImageJ
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
