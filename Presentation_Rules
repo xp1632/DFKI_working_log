@@ -32,3 +32,10 @@
 	- c.Do it several times, and form your own `spontaneous` scripts in mind
 	- d.Also, keep eye contact with audience to see if they're convinced or lost
 		- tell or omit the rest 20% dynamic content based on their reaction
+
+### [How to show complicated animation in the presentation? ]
+- A complex gif is hard to handle during the pre because we cannot control its speed or pause
+- What we could do is to show several `key frames`
+    - for a [0-15] gif, we could show its image at [0,5,9,15] 
+    - and we illustrate the information at frame 0, change in frame 5, xxx in frame 9....
+    - and we show a video to show the full process
