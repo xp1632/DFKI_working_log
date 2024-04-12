@@ -1,0 +1,11 @@
+- Clean Coding Rules, referring <Clean Code> by Robert C. Martin
+
+	1. Good Code is like a good book, which is easy and clear to read
+	
+	2. Only keep comments when it's necessary. By necessary, one case is unavoid magic code that needs detailed records; one case is the long comments that tells the functionality of a high level module as documentation.
+	
+	3. In other cases, use self-explain method name `read_image()` instead of `# read image` comments
+	
+	4. One function should only take one step depth in structure hierarchy just like a book should have Chapter 1 -> chapter 1.2
+	
+	5. Use unit test to decrease debugging time
