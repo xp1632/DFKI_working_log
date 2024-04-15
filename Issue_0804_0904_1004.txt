@@ -1,0 +1,115 @@
+Issues 0804_0904_1004:
+-----------------------------------------
+1. We first do code [snippet generation] for batch
+- I'll do it by its original component order 
+
+---
+ - What are the main differences for code snippet in batch?
+	- Before we are getting it from user, now we are providing it to pipeline
+	- We now possess some data instead of extraction from user input:
+		- import
+		- op_name
+		- parameter name
+		- parameter number   
+	- So some former functions would [not be needed] :
+		- import      ——[extract import]
+		- op_name     
+		- parameter name     ——[extract parameter]
+		- parameter number 	——[extract parameter]
+		
+	- Some new functions should be [added] :
+		v - import     ——[provide import]
+		v - input image   ——[get image value]:  currently we don't need input variables
+	    (-) op name		——[get op name] now fixed, later loop OpService
+		(-) 【prepare empty result image】   ——[check if require result image input]: lack multi-operation handling
+		(v)- 【import java class】    ——[check input variables type, jimport,+ default in mapping table] 
+		(v)- op calling  ——[provide op calling snippet by OpInfo,how to deal with multi-operation ops: update op_name_postfix in json]
+		- type conversion
+		- normalization for PIL
+		- display cell info
+		- add metadata for output     ----same string for all ops
+
+---
+
+ - We'll finish this code snippet part, then put it into v1
+ - then deleted the functions no longer needed
+		
+	
+---
+
+---
+
+- a. [import part] in batch:
+    - fixed string 
+
+- e. [import java class]
+
+	- how?
+	v - by detailed mapping table 
+	v - 10 left
+
+	  - ImgLabeling is a labeled numpy array,
+		- I don't 
+	  - Dimension
+	
+### `Tuple` Input problems in VP project
+
+---
+
+2. We've finished the inital version of code snippet generation
+in https://github.com/xp1632/VPE_IP/commit/a99d0e08458d529fd7f74f6a3f42367bb7354c32
+
+- Two problems left:
+
+- how to deal with Multi-operation under one op name
+- `Tuple` related processing code adding in `Format module in JSON generation`
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. `import java class` component in code snippet generation
+ 
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. while checking `ImageLabeling` java type in imagej
+
+	- I found in __init.py__ file and test_labeling.py
+	- we have ``
+
+
+(v) 2. Registration of thesis and ungrade extra credits
+
+	- I'll contact lorang again tomorrow morning
+
+	- if Possible, I'll request for ungraded the extra credits I get
+	- by credits regulation https://www.uni-saarland.de/en/study/programmes/master/media-informatics.html
+	- And only keep these courses as graded
+
+	```
+	- **2 Core courses** : (Human Computer Interaction 1.3), (Image Processing and Computer Vision 3.0)  (18Credits)   
+	- **1 advanced lecture** (The Elements of Statistical Learning 3.0) (6Credits)
+	- **1 seminar** (Attentive User Interfaces 1.7) (7Credits)
+	- **1 MAD project** (Briefing Machine 1.0) (8Credits)
+	- **1 Master Seminar** (New Attempt in 2024,DFKI 1.0) (12Credits)
+	- **1 Master Thesis**
+	- **1 Internship Seminar**  (2.3) (5Credits) 
+
+
+
+
+
+
+--------------------------------------------
+Take away:
