@@ -1,0 +1,151 @@
+Issues 1504_1604_1704:
+-----------------------------------------
+1. I am a little anxious right now 
+so I learnt something about scientific writing
+in https://github.com/xp1632/DFKI_working_log/issues/42
+
+2. This morning I checked two tutorial about academic Resume and cover letter
+	- https://github.com/xp1632/DFKI_working_log/issues/37
+	- https://github.com/xp1632/DFKI_working_log/issues/43
+	
+3. Today I'll spit out a CV as if I am a mentor in an education agency.  
+https://github.com/xp1632/DFKI_working_log/issues/37#issuecomment-2061960793
+- What to modify in the CV?
+
+- two pages, the second page is the project screenshot
+
+- I modify the content in a very rough style
+	- and leave the styles modification later
+
+- I'll also add more content for hiwi work and master thesis work
+	- and only slightly mention the two project before
+	- Skills part would be really long
+	- Education part I'll also list overall grade
+
+---
+
+- first academic CV in https://github.com/xp1632/DFKI_working_log/issues/37#issuecomment-2063586782
+
+- first cover letter in 
+https://github.com/xp1632/DFKI_working_log/issues/43
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+
+(v) 1. Thesis Template and add my information
+
+(v)2. Prepare scientific writing skills in  https://github.com/xp1632/DFKI_working_log/issues/42
+
+(v)3. first version of academic cv
+in https://github.com/xp1632/DFKI_working_log/issues/37#issuecomment-2063586782
+(v)4. first complete version of cover letter
+in 
+https://github.com/xp1632/DFKI_working_log/issues/43#issuecomment-2063584359
+
+5. fix postfix and multi-operation in code
+
+ 
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. 【Feedback from material science field】
+
+- His status
+	- Tif format support
+	- 3d view software from Franhofer https://www.3dflow.net/3df-zephyr-free/
+	- hard to show and share workflow even for a simple workflow
+---
+
+- Feedback for VP project
+	- documentation as comment for sharing 
+	- need to process a series of image in the image folder
+	- no clear helping information for handle name 
+	- need loop? yes
+
+	- now he's manually doing some functions he need 
+	- now he's using script to simulate the manual process of click and process, and he can not do anything while this script runs
+
+--- 
+
+- question about input data format: 
+	- want 3d images support
+	- but process with 3d images slice also works
+	
+---
+- His problem of segmentation:
+
+	- now he's doing a lot of manual work to adjust the parameters of segmentation
+
+	- want machine learning segementation features include instead of 
+	simple threshold 
+
+--------------------------------------------
+- Take away:
+
+
+
+
+
+---
+- P Email Draft
+
+- my version:
+
+Hi Philipp, Hi Tim,
+
+I am Ziwei He, a master student 
+
+I am writing to apply for an PhD position in your group. Attached is my CV and transcrpt, the following is my short cover letter.
+
+My strength: 
+
+	- Working in a structured and professional manner(git link)
+		- Just like the other works I did before joining this group, I treat hiwi work and master thesis also with a professional working attitude.
+		- Problems are figured out and researched to find several solutions
+		- Solutions are compared and a certain one is chosen for solid reasons
+		- I always arrange my work in a structured way
+		
+		
+	- Fast adaption to new research topic/new required skills
+		- I majored in Software Engineering in bachelor so I have foudations of programming skills for C, Python, Java
+		
+		- But before I started hiwi job for Chaldene Visual Programming Project in ASR group, I don't have much experience in Typescript, React framework, Html, Css, so I took a coursera Web Development  track provided by Meta company and learnt them. https://coursera.org/share/e1e074fd479a591f633559f898726172
+		
+		- Before doing master thesis of Integrating Fiji into Chaldene, I know nothing about Fiji, but I went through most of its related materials after starting the topic and now I know Fiji
+		
+		- When some new skills are needed in a new topic, I just figure out what I need to know, learn it and use it.
+		
+		
+	- Open to advices 
+	
+		- As a master student who lacks experience, I also met some problems I don't know how to deal with. Or some mistakes that I didn't notice myself.
+		- Gladly I learnt a lot via weekly team meeting with Tim, Fei, Christian,and Sunita. 
+		- I gathered and obsorbed their precious feedbacks on my thesis progress, which make me grow faster.
+		
+	- Good presentation skills
+	
+		- I believe presentation skills are also important for doing research.
+		- A PhD student would meet many occasions that she/he need to present their work.
+		- My trick is to prepare more and practice more.
+		- I got grade 1.0 for the presentation part in Course Human Computer Interaction and Attentive User Interface.
+		- And I really appreiciate your approbation on my thesis presentation.
+		
+	- Bring satisfactory outcome for both sides when doing interdisciplinart research.
+	
+		- `Integrating ImageJ image processing into Chaldene Visual Programming Syestem` , this topic is also a cross-section project between Material Science and Computer Science.
+		- When volunteering in AIMSE 2023, I also communicated with the researchers in material science field, and carefully recorded their needs.
+		- This is why I love bringing satisfactory outcome for in
+
+- project-orient research, under your supervision 
