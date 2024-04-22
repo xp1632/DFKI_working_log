@@ -1,0 +1,83 @@
+Issues 1104_1204:
+-----------------------------------------
+(v)1. format_required parameters
+
+ - modification in node spec class to deal with format_required_parameters
+ !(tuple problem later )- deal with (x,y) tuple parameter 
+ - slight refactory to put CodeSnippetGen into NodeSpecGen
+	- now we only take `op_name` ,`mapping_table`
+ 
+(v)2. Modification on CodeSnippetGen class to get multi code snippets
+	- get_op_info() method
+
+
+3. Modification on NodeSpecGen class to get multi json 
+
+	- in following cell, we have three jsons
+	- but it 
+	(!)- op Matching no longer needed
+	   - even for single operation, O
+
+(v)4. Refactor the codeSnippetGenerator and the paramterHandler into 
+Node spec class to be a part of its pipeline method 
+
+
+5. Teams meeting
+
+---
+Hi Tim, hi Fei, here's a short 【summary for today's thesis feedback】: 
+
+- start writing thesis next week 
+- overlapping with the final coding work in case we need to refresh our mind
+
+
+here's a short 【summary for other feedback】: 
+
+- Paper Writing:
+
+	- How to write `contribution` part in paper?
+		- first find related works who want to solve the same/similar problems
+		- illustrate the differences between our work and theirs
+		- emphasize our features and take a space in this area with our method
+
+- Clean Coding Rules, refering <Clean Code> by Robert C. Martin
+
+	1. Good Code is like a good book, which is easy and clear to read
+	
+	2. Only keep comments when it's necessary. By necessary, one case is unavoid magic code that needs detailed records; one case is the long comments that tells the functionality of a high level module as documentation.
+	
+	3. In other cases, use self-explain method name `read_image()` instead of `# read image` comments
+	
+	4. One function should only take one step depth in structure hierarchy just like a book should have Chapter 1 -> chapter 1.2
+	
+	5. Use unit test to decrease debugging time
+
+
+
+-------------------------------------------
+Main task today:
+
+v 1. Get input parameter,output parameter
+2. Multi operation problem
+
+3. Summary on team meeting
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. somepace in NodeSpec, we need to go through the OpInfo again
+	- and add its title to the json's different node items' name
+
+2. - Two problems left:
+
+- how to deal with Multi-operation under one op name
+- `Tuple` related processing code adding in `Format module in JSON generation`
+
+
+
+
+--------------------------------------------
+Take away:
+
