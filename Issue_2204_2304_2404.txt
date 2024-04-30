@@ -1,0 +1,225 @@
+Issues 2204_2304_2404:
+-----------------------------------------
+(v)1. We start by modifying class `CodeSnippetGen`
+
+(v)- we've changed the CodeSnippetGen's input from `op_name` to `op_info`
+
+1.1 We then modify class `NodeSpecGen` one by one 
+	(v)- and we should also consider moving out Op_Matching from ori class
+	(v)- we no longer need it
+	(v)- we start by changing the class input from op_name--> op_Info
+	- and modify the submethod based on its error message
+	
+	
+1.2 (v) Change json_template into `Op_name` level instead of `Nodes` level
+
+	-(v) now we add `Nodes` inside class NodeSpecGen layer at last
+	-(v) we want to put this `add layer` and `output json` component out of NodeSpecGen
+
+
+(v)1.4	Submethod `update_op_name`'s wrong`replace()`
+	is caused by Java_string_format, we change it into python string by 
+	`str()`
+	
+(v)1.5 We would like to add method_post_fix to node_title,node_name,node
+	(v)- We get post_fix from cInfo().getTitle()
+	(v)- and we split it with dot . or $ and only keep the last word
+	- when and how should we add the postfix?
+		(v)- we first try add the postfix to self.op_name in run()
+
+
+(v) 1.6 Remove Op Matching 
+	- Ori Op Matching provides `OpInfo`
+	- We no longer need matching while we are generating all methods
+	with different submethod
+
+(v)1.7 Change Json output structure:
+
+	- the name of json, should be only `filter` or `ImageJ_filter`
+	- because we'll put the nodes in the same namespace into one json
+	
+	- We start by giving a op list plugins in the same namespace
+	- we change the output json into one file with `namespace` name
+	
+	(v)- when we have multi-namespace op list	
+	(v)	- we first cut the list into different namespace categories
+		- then do the one-namespace-json
+
+(v)1.8 The ops grouped by namespace and output `namespace.json`
+	- but the json files are empty
+	- let's find out why
+	- it's caused by we remove the `filter` from `filter.median` when categorizing the op lists, so we can't find op_info based on wrong op_name
+	
+1.9 Now we have one successful coloc.json with node content
+	- but we met problems when generating `convert.bit` already
+	- the problem is from inside generator 
+	- we'll first test a short op list and see how it works
+		- when the op_list is `threshold.otsu` with 3 sub operations
+		- it works, why?
+		
+		
+		- what's different about `convert.bit`?
+		- I think it's caused by op name filtering
+			- one of the operation of `convert.bit` has all the types from
+			the mapping table
+			- so we put its op_name with all its operations in side
+			- Just as we presumed, `convert.bit` has three operations
+			- only the second one has all the supported datatype
+			- we should add a skip somewhere to skip upsupported 【operations】
+			- since we are taking op_info into class NodeSpecGen
+				- this is not hard
+			- extracted_parameters are extracted from codeSnippet
+			- So we check the codeSnippet
+	
+	- we found we missed a case that type not in the mapping table
+	- we should modify the op_calling_and_running() in class CodeSnippetGen
+
+(v)1.9.1 The problem in class CodeSnippetGen's op_calling_and_running()is 
+
+(x)- We don't have the if case for the input that is required but now in the mapping table list, so we didn't do anything, 
+	(v)- We need to add this case too, but it's not the reason for our integerType
+
+- on second check, integerType is in mapping table,
+	- we missed the case that a paramter is in the table 
+	- but didn't provide any specific usage or parameters
+		- for this kind of types, we provide datatype mapping
+		- but I think we should provide a parameter name for it
+		【！】 - it could lead to problem of `$formating`, check that as well
+		```
+		            if current_input_type in mapping_dict:
+                if mapping_dict[current_input_type]['parameter'] not in {None, 'None','process_image'}:
+                    needed_input_name.append(mapping_dict[current_input_type]['parameter'])  
+		```
+		- we check the `get_format_parameters` in class NodeSpecGen
+		- we use the `parameter` to provide formating` params
+		(v)- so we should provide parameter names
+		(v)- we updated the mapping excel file , adding `xxx_para` such as 
+			- `int_para`, `float_para` 
+			
+	```
+	'Available operations:
+	(BitType out?) =
+	net.imagej.ops.convert.ConvertTypes$IntegerToBit(
+		BitType out?,
+		IntegerType in)
+	(Img out?) =
+	net.imagej.ops.convert.ConvertImages$Bit(
+		Img out?,
+		IterableInterval in)
+	(BitType out?) =
+	net.imagej.ops.convert.ConvertTypes$ComplexToBit(
+		BitType out?,
+		ComplexType in)'
+		
+	```
+- My demanding code structure:
+
+for op_name_list
+  - categorizing the ops by namespace
+  - for namespace_op_list
+	  - for op_name    (add this layer later)
+			for  one opInfo (start from one_opname has multi opInfo)
+				- generate one codeSnippet
+				- generate one node specfication
+					- we put post_fix in a separate function
+					- and add it to self.op_name in run()
+			- put one node spec into one json's [nodes] section
+  - output filter.json
+
+-----
+1. It categorizes operations by namespace using the categorize_by_namespaces function.
+2. It creates a directory named “ImageJ_Package” if it doesn’t already exist.
+3. It iterates over each namespace and each operation within that namespace.
+4. For each operation, it creates a NodeSpecGeneration object and runs it to generate a JSON specification for the operation.
+5. It adds the generated JSON specification to final_json.
+6. After all operations in a namespace have been processed, it saves final_json to a JSON file in the “ImageJ_Package” directory and prints a message indicating that the file has been saved.
+7. It then clears final_json["nodes"] in preparation for the next namespace.
+
+---
+
+
+2. Thesis Bones
+
+- since other paper have a comic book
+- we can have a rough picture series , not just picture
+	- can also be word sequence to illustrate the content for specific 
+	chapter
+---
+- Since our final goal of paper is around 52 pages
+- we just need to adjust the percentage for each section 
+- and decide the length of each section
+
+---
+
+- What's the most important part for reviewers in my thesis?
+	- An overall abstract
+	- large pictures and image title
+	- Method (which is basically picture)
+	- Conclusion
+
+- What's the easiest to write part?
+	- should be background
+    - but I am not 100% sure
+	
+	
+- What's the least important part in the thesis?
+	- No idea, my head is empty
+---
+
+- Let's start by learning `How to write an abstract`:
+
+
+
+
+
+---
+
+3. Topics in Algorithmic data analysis
+
+- My first choice is the topic 2
+- but if I really don't understand, I'll choose topic 3 instead
+ 
+(v)- I've downloaded the material  
+   - we can check 
+
+---
+
+
+-------------------------------------------
+Main task today:
+
+(v)1. Modify the name of cover letter
+	(v)- add actual job title and its application details
+	(v)- add taking `Trustworthy AI` courses now
+	
+(v)2. Submit applications in respective systems
+	(v)- KL
+	(v)- Muechen
+	(v)- Aachen
+	(v)  - Juelich
+
+(v)2.5 Print DanGao's forms
+
+(v)3. Multi-Code Refactory
+
+4. Plan bones of paper based on slides
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- We need to spare 2.5h to do paper reading for Data Analysis courses
+
+[v]- As usual, we start a day by [finding] two new position applications
+
+[ ]- We need to scan our bachelor degree
+
+[ ] - Muenchen , Aachen
+
+
+
+--------------------------------------------
+Take away:

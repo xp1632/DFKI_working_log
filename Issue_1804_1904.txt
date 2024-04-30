@@ -1,0 +1,90 @@
+Issues 1804_1904:
+-----------------------------------------
+1. Let's put a pause for CV stuffs and get back to happppppy coding:
+
+2. Code: 
+
+- add postfix at last before final out-of-loop output json
+
+- unit test for error exception handling
+
+---
+
+- My demanding code structure:
+
+for op_name_list
+  - categorizing the ops by namespace
+  - for op_name    (add this layer later)
+ 		for  one opInfo (start from one_opname has multi opInfo)
+			- generate one codeSnippet
+			- generate one node specfication
+				- only add postfix after other updates :[filter_median_default]
+		- put one node spec into one json's [nodes] section
+  - output filter.json
+  
+---
+
+- start from outside loop is too hard for me
+- and the unit test thing is also quite disturbing 
+
+2.1 let's start from the inside, one most important part:
+
+```
+- Given one op_name   ---> three nodes with different postfix in one json
+
+```
+
+- **we need to modify:**
+
+(v)- 1. put the op_name --> op_Info outside of two classes
+- 2. replace the `Op_name` input of class CodeSnippetGen and NodeSpecGen
+		with `Op_info`   ----> multi-nodes for one op name json file 
+- 3. at last, a op_list with same namespace  : `filter_xxx_xxx`
+	---> op_name --->op_Info   ---->
+	all filter_xxx_xxx nodes should be in one json file
+
+---
+
+2.2 We start by modifying class `CodeSnippetGen`
+
+ (v)- we've changed the CodeSnippetGen's input from `op_name` to `op_info`
+
+2.3 We then modify class `NodeSpecGen` one by one 
+	- and we should also consider moving out Op_Matching from ori class
+	- we no longer need it
+	- we start by changing the class input from op_name--> op_Info
+	- and modify the submethod based on its error message
+	
+	- now we are dealing with submethod `update_op_name`'s wrong`replace()`
+
+
+-------------------------------------------
+Main task today:
+
+1. fix postfix and multi-operation in code
+
+
+
+----------------------------------------------
+My thoughts:
+
+- Team meeting:
+
+Hi Tim, hi Fei, here's a short summary of today's team meeting:
+
+【Tips for video】:
+
+- When preparing video materials for project, do not add the logos.
+- So this video could be used in many occcasions.
+- We only need to add the requiring logos in the slides not the video.
+
+
+2. - Two problems left:
+
+(v)- how to deal with Multi-operation under one op name
+- `Tuple` related processing code adding in `Format module in JSON generation`
+
+
+
+--------------------------------------------
+Take away:
