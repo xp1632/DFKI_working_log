@@ -1,0 +1,68 @@
+Issues 2504_2604:
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. (v) Citation and abstract video
+
+2. (v) Write a Preliminary abstract and 
+
+3. ()start collection of information pieces
+
+4. tutorial of Inkscape for figures
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1_Book_Elements of Causal Inference _peters17elements: 
+
+Chapter 6
+
+-1. the distribution of test and training data does not differ
+
+`However, in all these settings, it is crucial that the underlying distribution does not differ between training and testing, be it by interventions or other changes. `
+
+- 2.Causal reasoning:
+denotes the process of drawing conclusions from a causal model, similar to the way probability theory allows us to reason about the outcomes of random experiments.
+
+- 3. causal reasoning allows us to analyzethe effect of interventions or distribution changes.
+
+- 4. even full knowledge of P does not make the solution trivial, and
+we need additional assumptions
+
+- 5. A well-known topos holds that `correlation does not imply causation`;
+  statistical properties alone do not determine causal structures.
+  
+- 6. The random variables only **appear** tobe dependent.
+  - The random variables we observe are conditioned on others (often implicitly by a selection bias)
+  
+- 7. **observational distribution**, where the word “observational” refers to the fact that we are passively observing the system without intervening. 
+
+	- **intervention distributions** ： we interven on X or Y and see if the oberservation changes to see the causation direction
+	
+- 8. First, Figure 1.3 nicely illustrates Reichenbach’s common cause principle. The dependence between X and Y admits several causal explanations, and X and Y become independent if we condition on Z in the right-hand figure: The image and the label share no information that is not contained in the intention.
