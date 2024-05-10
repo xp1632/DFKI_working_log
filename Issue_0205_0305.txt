@@ -1,0 +1,73 @@
+Issues 0205_0305:
+-----------------------------------------
+1. Although a little irritated by messy organizations
+
+- I'll finish my part of work this week
+- which is finish
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)1. Daily applications 
+
+(v)2. Slides assembling into picture series for thesis
+
+3. Skeleton Outline of Method then Background
+
+4. Add __init__ and test Package import 
+
+(v)5. Group meeting summary
+
+----------------------------------------------
+My thoughts:
+
+1. Should I put the video link in the supplementary materials of thesis?
+	- I prefer not, because we'll send the thesis in papar format
+	- It's better if we have several screenshots to show the content in the video
+	- We don't need to squeeze the figures into one large one 
+		- just show it in seperate ones to take the pages :)
+
+
+2. We don't need a seperate motivation chapter
+- motivation should be stated in `Introduction`
+- and re-address in end of `Background`
+
+---
+
+- Hi Tim, hi Fei, here's a short summary of today's team meeting:
+
+【1. Comic Book method for writing paper】
+	- we can use a series of figures to sort out our minding before writing down the manuscript
+	- we tell the story of the paper only by the figures and its captions
+	- normally the figures in comic book should be finished at [publish-ready] level
+
+【2. How to find the limitation of ChatGPT/or other fancy stuffs】
+	- one failing case would be enough
+	- we can knock it down by claiming its unreliability
+
+【3. Generalized or Specific algorithm】
+	- `Is your method generalized for other xxx` 
+	- This is mostly the first question when presenting your work in image processing
+	- We make the decision of going more generalized or more specific only by our intention at the beginning, nothing good or bad
+
+
+
+--------------------------------------------
+Take away:
+
+- How to use Mendeley to cite papers and insert bibliography in Word
+
+	1. We find the paper by using google scholar extension in chrome
+	2. We import this paper to mendeley by click mendeley extension in chrome
+	3. We click the `Reference-->Mendeley Cite` in MS Word
+	4. Click `...` on Mendeley sidebar --> `Update from Library`
+	5. We click `insert citation` under the paper item
+	6. If we need a list of references in the end of paper
+	7. We click `...` on Mendeley sidebar ---> insert Bibliography

@@ -1,0 +1,97 @@
+Issues 0605_0805_0905:
+-----------------------------------------
+(v)1. Checked [Technical report], we found we are more similiar to this 
+	- because we'll also write technical details
+	- problems we met and how to improve it during our process in the thesis
+
+2. We check the figure slides for one time
+
+
+3. Write paragraph outline for method section
+	()- copy slides figures 
+	()- copy slides notes
+
+
+(v)4. I am so sick of making citations for non-paper right now,
+let's just highlight it and deal with it later
+
+
+(v)5. If it's hard to decide the location of some content component
+
+- just leave it with a red { ...} and a mark
+- we can always put it in a better place
+
+---
+
+(v)6.1 We figure out why package import doesn't work
+- lacking `__init__.json`
+
+6.2 We modify it in the generation 
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)1. Slides assembling into picture series for thesis
+
+()2. Put slides figures and slides section structures into thesis
+
+3. Paragraph Outline for `Method` section
+
+(v)4. Daily Application 
+	- When applying for medical informatics position
+		- My Strength is 
+		- my solid experience in Software engineering
+		- my interest of medical emerges from my family
+		- my positive attitude of learning Medical 
+		
+
+
+
+----------------------------------------------
+My thoughts:
+
+- I feel the differences between Presentation and Paper
+	- In pre we try to tell the story in a way that raises audience's interest and curiosuty
+	- In paper, we cut these shit and use all logic, everyone knows where's the answer is 
+	
+
+- Thus we only propose our question at the beginning
+	- call back during the chapter when we want to give the answer
+
+
+- I realized that I can not have `publish-ready figures` in advance
+as a shallow and innocent master student
+	- let's just get it through with a `figure` :) 
+
+
+- The main shortcoming of my final thesis paper could be `you have too many figures that are not for a paper`, but whatever, I can still argue I need this flowchart for the readers' better understanding
+
+- The main reason I do so, is that, it's so painful to write a long paper, how did I manage that during my bachelor? 
+	- I remembered that I found a relevant book for my bachelor topic, and write my story based on the book chapter structures
+	- The structure is always hard
+	- It is different for current situation, because I have a ready presenetation
+	- The suffering part is transferring what we want to express in a presentation to text-based paper
+	-But don't panic, you can do it (with the help of xxxxt and xxxxxy)
+	
+
+
+--------------------------------------------
+Take away:
+
+1. If the mendely extension for chrome is not functioning
+
+- try https://www.mendeley.com/
+- and add citation to your library there
+
+2. 
+**Figures draft online**: https://1drv.ms/p/s!Ai6__2xAomSdrpNKNgjhYYpJQlL8bQ?e=UUw4d0
+**Manuscript draft online**: https://1drv.ms/w/s!Ai6__2xAomSdro8mxTR3ZeRa6wIicQ?e=ClMxWc
+
+3. Stick to what you've got in the slides and just assembling the content
+- we can always improvise later when our creatity is needed then
+
+- image yourself as a stevedore, just move the goods in required section
+- put the goods in a tidy manner and just leave it as it is 
+

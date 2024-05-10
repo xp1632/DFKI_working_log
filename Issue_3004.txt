@@ -1,0 +1,102 @@
+Issues 3004:
+-----------------------------------------
+1. We summarize 
+	- how to write unsuccessful method in thesis
+	- in https://github.com/xp1632/DFKI_working_log/issues/47
+
+2. We opened all slides and start puting shits together
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)0. Wipe the old shit and get a clean butt
+
+(v)1. Check the Writing skills that we summarized
+https://github.com/xp1632/DFKI_working_log/issues/42
+
+(v)2. Finish the rest part of video for thesis figures
+
+---
+
+
+3. start copying your previous figures in a new ppt
+
+---
+
+v (1-4)
+(5-8)
+(Final Pre) --> This is already completed
+---
+
+
+3.1 `Method background` figures belong to `Method` not `Background`
+
+3.2 Do we need the information of custom plugin? 
+	- talk about it as **limitation**
+
+3.3 Do we need information of IJ1 plugins? 
+	- talk about it as **limitation**
+
+3.4 Calling ImageJ from commandline, I won't mention this in the thesis
+ - because this is not quite a way I want to elaborate
+
+
+
+---
+
+(v)4. Fast scan through the inkscape
+
+(v)5. Deal with DFKI cockpit stuffs and rent/TV chores
+
+---
+
+6. start collection of information pieces
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- One Problem left in Chaldene:
+- `Tuple` related processing code adding in `Format module in JSON generation`
+
+- One Problem left for pipeline
+- How should we test visual nodes?
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. We pack the ImageJ workflow related website here so we can close it
+
+and only care about writing:
+
+---
+
+- PyImageJ workflow example
+
+	- Puncta Segmentation: https://py.imagej.net/en/latest/Puncta-Segmentation.html
+
+	-(v) Segmentation workflow with ImageJ2 https://py.imagej.net/en/latest/Classic-Segmentation.html#segmentation-workflow-with-imagej2
+
+	- Blob detection
+	https://github.com/imagej/pyimagej/blob/a173d5a647ad0767ee72cc6e14732242286e7c9c/doc/examples/blob_detection_xvfb.py#L26
+
+----
+- ImaegJ Op : https://github.com/imagej/tutorials/blob/master/notebooks/1-Using-ImageJ/2-ImageJ-Ops.ipynb
+
+---
+- JSON online editor: https://jsoneditoronline.org/#right=local.zecole&left=local.carari
