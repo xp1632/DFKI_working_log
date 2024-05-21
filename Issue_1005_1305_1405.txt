@@ -1,0 +1,111 @@
+Issues 1005_1305_1405:
+-----------------------------------------
+1. We start by writing Initial Attempts
+
+- For each chapter,we have a rough paragraph outline
+- We take the other people's paper as reference
+
+2.Introductory paragraph at the beginning of each chapter
+
+- should be concise and serve as a high-level roadmap
+- guide the reader to the chapter where they could find more details
+
+
+2.1 we could write the method layer by layer
+
+(v)- Chapter 4 Method intro paragraph
+(v)- Chapter 4.1 Initial Integration Attempets intro paragraph
+		- here we tell the Chaldene mechanism 
+			- focus on how visual node `works` in backend
+			- the functionnatlities part is not our main focus
+			- we'll mention it in the background Chaldene
+			
+		- and how we divide the RQ 1 into sub questions
+(v)- Chapter 4.1.1 Running Java-based ImageJ in Jupyterlab 
+		- here we talk about the ImageJ gateway
+		
+		---
+		- (v) we decide to put the kernels in one chapter instead of listing out, there's nothing to say about the kernels
+		- then different kernels 
+			- for each kernel , we make one sentence of intro
+			- one sentence of pros and one sentence of cons
+
+(v)3. We figure out how to insert code snippet properly in MSword:
+
+https://github.com/xp1632/DFKI_working_log/issues/53
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)1. Limitation Section in Discussion
+(v)2. Conclusion 
+(v)4. Figure: Auto generation part- single node 1st organize
+
+	- we need images for auto `bacth` generation
+	- should we do it now? 
+	- My advice is to forget about the publish-ready shit
+		- just make a really quick image and put it there
+		- if it's really messy and we cannot stand it
+		- we'll edit it later, always polish works after it's roughly done
+	
+()5. Figure: Auto generation part- batch 
+	- we need some new figures here so we'll do it later
+	- the new figures are still built on top of old ones
+
+(v)6. Writing Method 4, 4.1, 4.1.1 
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- My only requirement for my thesis:
+is to tell the story clearly.
+- We just need to write down what we did and how we did it
+
+---
+
+- The website reference is a little annoying
+- let's just keep it as (website http:xxxxx) and do it later :)
+
+---
+
+- Should we talk about Java mechanism?
+	- I don't think it's relevant
+	- All Java kernel for jupyter is based on JShell otherwise it won't work
+	- But we need to state we've considered this constraint
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. Slight work in code side:
+- Add __init__.json 
+
+2. I got the first non-rejection follow-up information from Heidelberg
+
+	- keep doing it!
+	- also this means the original cv needs modification
+
+3. How to write reference for website using fucking mendeley when its
+chrome extension doesn't work
+
+- Add it manually to your library via:
+- https://www.mendeley.com/reference-manager/library/all-references
+
+3.2 Or we could search this website in 
+
+MsWord---> References -->Search ---> input the website link
+----> find the website ---> at the upper right of the website item -->
+ click + Cite
+ 
+4. When refer to a paper, we need to rephrase it or summarize it in our own words instead of using the same sentence

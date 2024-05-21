@@ -1,0 +1,64 @@
+Issues 1505_1605:
+-----------------------------------------
+1. 
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(v)1. Write 4.1.2 Handling Multi-languages Jupyter Kernels
+	- we should first write after we find a working multi-languages kernel
+	beakerx, we try to somehow let the imageJ works 
+	
+	
+	
+(v)2. Write 4.1.3 Reevaluation and change of Approach
+	- after investigating multi-kernenl doesn't work, we find to achieve the original 
+	- we face two options
+		1. develop a whole java code deserilization for Chaldene
+			and use ImageJ in an isolated Java Environment
+			- but this is just porting ImageJ functionanality from its 
+			software to another platform with additional efforts but not quite much usage
+		2. Find a new way out, how can we integrate while keeping compatibility with Chaldene as premise
+		- Propose our revised question, maybe with  `Python kernel` 
+
+3. Write 4.2.1 PyImageJ wrapper
+	- here we slightly talk about jgo etc of wrapping java code into python
+	- then we talk about the framework of pyimagej
+	- how it wrapped java execution inside of python kernel via jgo
+	
+	
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Figure: Auto generation part- batch 
+	- we need some new figures here so we'll do it later
+	- the new figures are still built on top of old ones
+
+2. We can try KL position again by https://vollmer.kl.dfki.de/
+
+
+
+--------------------------------------------
+Take away:
+
+- I am not sure if lacking a complete master certificate would influence my job application
+- we need to think about this decision carefully
+- Initial plan is to keep current pace and try to find a job
+- If we really can not find a job at July, we'll considering
+handing in the thesis and get a 4.0 certificate, and change the residence 
+permit into job visa
+
+
