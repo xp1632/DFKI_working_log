@@ -1,0 +1,55 @@
+Issues 2606_2706:
+-----------------------------------------
+1. We check our documentation about pipeline enchancement:
+https://github.com/xp1632/VPE_IP/issues/80
+
+- The first several paragraphs of 4.3.2 should be, why we want to modify the single pipeline, how we want to modify it, and what we want to get 
+
+https://github.com/xp1632/VPE_IP/issues/78#issuecomment-2027343270
+- here we can surely talk about behavior-driven development
+
+- here we also need to finalize the main challenges we want to solve in 
+
+
+2. Detailed challenges of generating code snippet 
+	- class and subclass issue caused by inaccurte API OpInfo
+	     - more detailed mapping table 
+		 - 
+	
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1. We start writing 4.3.2 Batch generation
+
+2. We'll do one or two applications this afternoon
+
+3. If we finish the content earlier, I recommend we take one hour to finish up the reference, in case we don't want to do it in the future.
+
+- or not, if you are sick of it 
+- tomorrow i'll still be here, or not hhhhhhha
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. Should we mention change of code structure？
+
+- I kind of don't know how to state it clearly 
+- maybe we could slightly mention it?  
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+- Limitation: IJ1 
+- Future : Pipeline Feasibility for Python Libraries
+

@@ -1,0 +1,111 @@
+Issues 2005_2105:
+-----------------------------------------
+(v)1. Pytorch project
+
+	- it turns out we don't need the stupid ibm cloud
+	- we use the wrong kernel at first so torchvision is not recognized 
+	- we changed into pyimagej kernel
+	
+- we then have some other package import problems
+- but no big deal
+
+
+1.1 after several attempts, we still can not install `h5py` normally
+
+- we noticed that it's not compulsory in the exercises, we just comment it and replace it in the future
+
+- we can use Pandas to replace it :
+Pandas: For simpler use cases, pandas has support for reading from and writing to HDF5 files using the read_hdf and to_hdf functions2.
+
+- but before giving up this method, let's try all the methods agagin
+
+1.2 I checked the forum for this course again and find out the staff suggested google colab, we'll see if we can do it here
+
+[google colab] this one sames to be working!!!
+
+- one training takes at least 45mins
+- we found it tooks forever for the model to run in CPU
+- we manage to run it on A100 GPU
+	- we find out the GPU RAM is 0 and find out we need to specify GPU 
+	manually for Pytorch 
+	
+	by 
+	
+```
+model = resnet18
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+model.to(device)
+
+```
+
+---
+
+(v)2. Job Pool collection and material modification
+- It's too stressful to do both today
+- Making an application pool is totalle enough for this morning
+
+
+2.1 We made a application google sheet to organize the postitions better
+
+2.2 We start by putting all links in the excel https://portal.mytum.de/jobs/index_html_en
+	- start from old notebook
+
+
+
+---
+
+3. Thesis writing: as usual we need a short intro paragraph at the beginning of 4.2
+- 
+
+
+3.1 Write 4.2.1 Java wrapper
+- I add one more sub chapter to talk about how could we wrap one language into another 
+- Here we only talk about JPype and Jython
+- of wrapping java code into python
+
+3.2 Write 4.2.2 PyImageJ wrapper
+	- despite language binding, we need more tailored integration for ImageJ ecosystem 
+	- then we talk about the framework of pyimagej
+	- how it wrapped java execution inside of python kernel via jgo
+	
+
+	
+-------------------------------------------
+Main task today:
+
+(v)1. Pytorch project
+
+2. start writing 4.2
+
+(v)3.2 Download pytorch certificate and copy its course description in take away
+
+3.3 Add pytorch in the resume's skills and cover letter
+
+4. If it's hard to get a tim reference, just use the original 
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. MyLens Ai to get timeline of a certain object
+https://mylens.ai/dashboard/ziweis-workspace-kCdOV2/story/the-development-of-imagej-software-nvtY6A
+
+
+
+()5. Figure: Auto generation part- batch 
+	- we need some new figures here so we'll do it later
+	- the new figures are still built on top of old ones
+
+--------------------------------------------
+Take away:
+
+- Description of AI project :
+https://www.coursera.org/account/accomplishments/verify/YJ3C7TEPJFS4
+1. Build a deep learning model to solve a real problem.
+
+2. Execute the process of creating a deep learning pipeline.
+
+3. Apply knowledge of deep learning to improve models using real data.
+
+4. Demonstrate ability to present and communicate outcomes of deep learning projects.

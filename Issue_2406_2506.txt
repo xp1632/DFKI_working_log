@@ -1,0 +1,59 @@
+Issues 2406_2506:
+-----------------------------------------
+
+1. Should we add CodeGenerator code into the paper?
+
+- what information does it provide? 
+- is it too long?
+- how to refer it?
+
+- it's too hard to explain the code in Chaldene clearly here, we'll state
+in text instead of using code
+
+
+
+2. I/O step
+
+- we first state what we want to do in this process, then we state the challenges and we solve it one by one. 
+
+- why do we need input handle and input parameter in the code snippet at the same time?
+
+- the second time we get paramters from ImageJ ops is to do Op matching
+
+
+2.1 Op Matching
+
+- should we include the Op matching java code from ImageJ 
+- we should provide the most core code of stating type match 
+- then describe a lot in text
+
+2.2 Java type mapping
+
+- we want to find the reference of Chaldene provided datatypes for handle
+- but I forget where it is 
+- we could check the issue of how we state the mapping table
+- it's really really hard to find reference for supported datatypes in Chadlene
+
+- I'll keep searching for 10 mins then just write down what I saw
+- here: types/Datatypes  ; not in Handle Types https://github.com/c3di/Visual-Programming-Language/blob/main/src/editor/types/DataType.ts
+
+-------------------------------------------
+Main task today:
+
+1. We start writing 4.3.1 Single Automation pipeline
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
