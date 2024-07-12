@@ -1,0 +1,42 @@
+Issues 1007:
+-----------------------------------------
+1. We'll first write discussion because we also need to mention our limitation in conlusion
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. We will first write Chapter Conclusion
+
+2. We watch the video of writing discussion
+
+3. We write discussion chapter
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. What's our comparision list of paper?
+
+https://github.com/xp1632/DFKI_working_log/issues/46#issuecomment-2219942247
+
+
+
+
+--------------------------------------------
+Take away:
+
+- Results (we describe the experiments we've done and observations that we made, we normally use figures to show our observations, figures as results have to be valid so the reader can test based on it)
+
+- Discussion (we put the result in a more general perspective, we compare the result we found in the literature , comments on agreements and disagreements, and future studies )

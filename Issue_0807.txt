@@ -1,0 +1,52 @@
+Issues 0807:
+-----------------------------------------
+1. What do we want to tell the reader in the intro?
+
+- what's this paper briefly about
+	- what's the research question behind 
+- brief background of both side
+- why this work important 
+
+- build the text from the result 
+
+2. We should start the page from ImageJ ,because chaldene is unknown
+
+	- we could refer to how we do the background in the slides
+	
+	
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+1. Watch Intro video
+
+2. Unlike previous chapter, we'll also do correct reference for Introduction chapter since it's a text-focused chapter
+(if it's really annoying, leave the placeholder for the reference)
+
+3. We'll have four paragraphs in Chapter 1
+
+- we first write the skeleton of each paragraph referring another master thesis
+
+- then we start by writing the first paragraph
+
+
+----------------------------------------------
+My thoughts:
+
+1. sadly we are going to use the word reference as it's more steady while mendeley is so stupid
+
+2. Good news is that, discussion and conclusion are normally short
+
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
