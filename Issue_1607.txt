@@ -1,0 +1,54 @@
+Issues 1607:
+-----------------------------------------
+1. What do we want to tell about ImageJ/Fiji?
+
+- again the recent imagej flattering paper
+
+- Large community of researchers in different research area.
+
+
+
+2. What do we want to tell about Chaldene
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. We start with Backgrounds for 2 days 
+
+v 2. We'll first write paragraph bones
+
+v - 2.1  imagej background 
+
+2.2 we'll check the chaldene documents to see if there are information that we can use
+
+3. Then related work for 1 days
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1. We noticed that some positions also require the master thesis
+- we can send it after first revision
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
