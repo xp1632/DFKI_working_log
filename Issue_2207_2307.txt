@@ -1,0 +1,101 @@
+Issues 2207_2307:
+-----------------------------------------
+1. The mouse is kind of annoying before but is working normally now
+
+- we'll start with the easy ones:
+- inserting references for Chapter 4 method and chapter 5 result
+
+- also figuring out the page head and foot
+
+- that's it for the forenoon
+
+
+1.1 we've finished the reference for the whole paper
+
+1.2 Now we are going to edit 4 places in the abstract
+
+- mention the non-computer science researcher at the begining and lead to image, refering to the paragraph in chapter Intro but a condensed version
+
+- simplify `what process`? how simplified?
+
+- not various integration methods, but state the polyglot Jupyter notebook explicitly
+
+- borrow some fancy words also from Intro chapter or maybe result chapter
+	- make sure use the best phraise in Abstract
+	
+
+2. Missing goals in 4.1.3
+
+We notice a missing point at the end of 4.1.3
+
+chapter 4.1.3 Furthermore, this approach fails to meet our goal of lowering the barriers for scientists confined to ImageJ by leveraging additional Python libraries
+
+- we use this reseason to change the RQ but we didn't mention it in abstract and intro
+
+- i can say this is the side contribution
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+1. Modify the content in abstract and intro
+
+2. Add reference in Result and Method
+
+
+3. When you are about to leave school, take the bachelor stuffs to lib
+and scan it to the usb
+
+- Or, we scanned it in dfki with high dpi
+
+4. We also want to write a letter by ourselves to examination office
+
+such as: 
+
+We hereby recoginized Ziwei He,2564549, studying Mediainformatics,
+have fulfilled all gradution requirements except for handing in final master thesis.
+
+Study Coordinator
+Saarland University 
+23. 07. 2024
+
+-
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+v - today, I'll scan the bachelor documents, first in dfki
+	- if it doesn't look good, then in lib before I leave school
+	
+
+v - tomorrow morning, i'll get a letter from study coordinator
+- and scan it, send it in both application system in lux and to adrian
+
+- if I didn't get a reply from examination office until afternoon.
+
+v - then book a termin of 25th and send an email to Adrian
+
+https://outlook.office365.com/book/PSekMINT@uni-saarland.de/
+
+
+
+--------------------------------------------
+Take away:
+
+- We'll give the new positions until Thursday because I like them better and they also reply in a fast manner
+
+
+- we'll submit the progress of thesis on Thursday
+
+- the first version is also the your presumed last version
+
+- only add the appendix in the final version? 
+	- or already add it 
+	
