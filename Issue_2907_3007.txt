@@ -1,0 +1,70 @@
+Issues 2907_3007:
+-----------------------------------------
+1. for a ten mins presentation：
+
+- the most important thing is to state things concise and clear
+- convey the motivation and method to your audience and leave the technical details in question
+
+- use more images than words 
+	- state the workflow paradiam
+	
+2. We plan to make a 7-page slides
+
+- what's the structure? 
+- I think the story part is complete in our proposal
+- but the techinical part of how to collect data and predict is missing
+- we should check the two deep learning + age paper and understand how did they do it, is there open dataset for us to try and what can we refer to
+
+
+3. Tech details from Paper Pyrkov18
+
+
+
+
+
+
+---
+
+The Proposal PowerPoint should focus on the research design process and should not typically exceed 14 slides total (not including references). The Proposal PowerPoint recommended organization follows:
+
+1-2 slides introducing the topic
+2-4 slides summarizing the background/literature (Chapter 2)
+5-8 slides describing the research questions and research design process (Chapter 3)
+Slide(s) with references 
+
+---
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+v 1. Cover Letter to Radbound University
+
+v 2. Most Rough structure of slides if have time, if not, leave this to tommorrow
+
+3. Read two tech papers and paste something useful but not too complicated in slides
+
+4. Interview question and answer list
+
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+
+
+
+
+
+
+
+
+--------------------------------------------
+Take away:
