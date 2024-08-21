@@ -1,0 +1,64 @@
+Issues 0708
+-----------------------------------------
+v 1.1 We noticed the `textual descrption` in the output cell is not linked to the name of node
+
+v - we can edit this in the template code generator
+
+v - we need to modify the display_image_information() in class Code SnippetGenerator in Batch_multiOperation file
+
+
+
+- 1.2 The description of node is not correctly linked
+
+v 1.4 The init.json file is missing when generate the library package
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+v 1. Preparation of documents/timestone for following weeks
+
+v 2. one human ai collaration application to the similar group in amsterdam
+
+v 3. Modify the code(description if possible) 
+
+and see where we could use in python version
+
+4. Acknowledgement and other stuffs in thesis paper's submission version
+	- what do we lack in the thesis paper?
+		v - Appendix of code
+		v - a statement
+		v - Acknowledgement
+	
+
+
+
+----------------------------------------------
+My thoughts:
+
+- What code should we include in the appendix of thesis?
+
+   - the oneNode one and the Batch_multiOperation one, 
+
+- what should we submit to the cloud system?
+
+	- the oneNode one and the Batch_multiOperation one, and the imageJ package
+	
+v - only batch one is enough, I am tired of modifying another file	
+
+- The work permit application for Luxembourg is normally 30 days
+
+
+
+
+
+
+--------------------------------------------
+Take away:
