@@ -1,0 +1,100 @@
+Issues 2608_2708
+-----------------------------------------
+1. We check carefully about the mismatch datatypes in Chaldene and Kornia
+
+- we first check the nodeSepc module for one node 
+- we noticed that the datatype in Kornia for kernel_size is `int`, in Chaldene is `integer`
+
+2. We need to change the update_inputs_info() in NodeSpec class
+and map the input type based on mapping_dict before assign it in JSON file
+
+- check the datatype for all input parameters in Kornia
+	- we check the input datatype for Kornia's method
+	- int--> integer, str-->string is enough for now
+	
+- our problem is `torch.Tensor` 
+
+
+
+3. By further checking Kornia's libaries, we found:
+
+ - first, not all methods have image input
+ - second, even some have image input, some are named `input`, some `image`
+ some `data`, some `tensor`,
+ though they all have datatype as 'Tensor', we cannot make sure which one is image
+ 
+ - we try to make the first 'Tensor' in input parameter's list as input image
+ 
+ - but we have guided_blur (https://kornia.readthedocs.io/en/latest/filters.html#kornia.filters.guided_blur)
+ 
+ - who put the guidance with Tensor datatype before input Tensor
+ 
+ ---
+ 
+ - however, to think things in a simpler way, the first parameter with Tensor datatype should be the input image in our case, no matter what input name it has 
+ 
+ 
+ - we should manually filter the rest node that doesn't fit this standard
+ 
+ 
+ ----
+ 
+ - and for those who doesn't have first parameter as Tensor, we pass it
+ - because it's not valuable for our usecase
+ 
+ ----
+ 
+ (v)- when should we do this filtering of ops?
+ - at the beginning of inspecting?
+ - I prefer here, because we shouldn't modify the generation part a lot for specific case
+ 
+ 
+ ---
+ 
+ - What about the kernel making nodes that takes kernel size?
+ - such as https://kornia.readthedocs.io/en/latest/filters.html#kornia.filters.get_gaussian_kernel2d
+ - again, we aim for ready to use ops, we'll consider these nodes later 
+ 
+
+----
+
+- All Tensors are considered as image in Chaldene.
+
+
+v 3. we need to give correct metadata in code snippet generation and json template
+
+4. the original read_image is not quite working
+	- we need to have a read_image that takes care of the dimension
+	
+- referring the https://kornia.readthedocs.io/en/latest/io.html
+- we keep the third input device as defautly cpu as it's an optional parameter
+
+
+
+-------------------------------------------
+Main task today:
+1. DFKI discharge chores before submission
+ v - excel table 
+ v - send the draft email to fb manager
+
+v 2. Financial certificate after this month dfki salary
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- How to deal with the correct metadata for image part?
+
+	 - this involves the img2img project, we need to talk with Fei for this part
+	 
+
+
+
+
+
+--------------------------------------------
+Take away:

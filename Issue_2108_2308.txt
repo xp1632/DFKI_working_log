@@ -1,0 +1,105 @@
+Issues 2108_2308
+-----------------------------------------
+1. What we've modified in CodeSnippetGenerator:
+
+- init() : remove mapping table, change op_info --> method str
+
+- create OpInfo class 
+(v)- we can have a op_info generation by our self to provide opinfo for children classes
+(x)- or we can pass function around , and use its __attribute__
+
+- we keep the mapping table and op_info part so we can keep most of the ori pipeline 
+
+- import_part()： we change the import_part() ---> one kornia import and one from module_path import method 
+
+- get_input_image(): we keep the ori functions for now
+
+- we delete the get_op_required_parameter() method since it's not needed now
+
+---
+
+- op_calling_and_running_()
+
+- this part is also important
+- originally we only `keep` the datatypes that are in the mapping table
+- now we want to keep the datatype as it is ,
+	- only change it when we find it match an item in the mapping table, such as tuple[int,int] --> any
+- actually we don't need to check data type here, originally we need to check specific usage, but now we don't need it anymore
+
+
+---
+
+- we don't keep the normalization part for PIL(), because this is not how we do for tensor
+
+---
+
+- we need to change the display part because now we're displaying tensor
+
+
+
+
+----
+2. Creat OpInfo for each Kornia method 
+- I prefer keep op_Info by creating one by ourselves,
+- check how we use OpInfo and creat these content for them in looping method name stage
+- the challenge caused by input with multiples type is also dealt with in the op_info generation part 
+	(v)- we choose the first datatype before `|`
+
+
+
+---
+
+3. Modify the NodeSpecGeneration
+
+- 5. extract_op_parameters in node specification, do we still need this? can we provide this via current op_info?
+
+
+
+4. Modify the outer layer of the pipeline
+
+
+
+
+
+
+5. keep the mapping table for `tuples` datatype  and tensor for different name in chaldene
+
+
+
+6. PIL view image part 
+
+
+-------------------------------------------
+Main task today:
+
+v 1. Find the correct import path for a certain method 
+- we can use __module__ of a python function to get its import path despite it located layers in the package
+
+2. Check which part of the former java pipeline is still useful
+- and where we should modify?
+
+v - we first wrap up library inspector
+
+
+3. In python library, we still have some type conversion issues
+
+such as Tensor ---> Numpy, PIL
+
+- to keep things simple, we still convert Tensor to numpy and deal with img2img later
+- however, we want to keep the correct type for output 
+- so we keep tensor as tensor
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+- How to deal with the multi-datatype for one 
+	- keep the second one, (why not the first one, because the first one is normally tuple, chaldene doesn't support it)
+
+
+
+
+--------------------------------------------
+Take away:
