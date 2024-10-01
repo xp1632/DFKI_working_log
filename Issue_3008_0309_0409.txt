@@ -1,0 +1,237 @@
+Issues 3008_0309_0409
+-----------------------------------------
+v 1. Get 4.0 certificate
+
+2. Take course - Fine Tuning Large Language Models
+
+https://learn.deeplearning.ai/courses/finetuning-large-language-models/lesson/1/introduction
+
+---
+
+### 2.1 why finetuning LLM:
+
+- to let a model of general purpose such as GPT-4  --> more specific usecase Copilot
+- steers the model to more consistent output
+
+---
+
+
+### 2.2 what finetuning brings?
+
+- a model who can learn new information
+- requires more high-quality data, domain-specific knowledge
+- your own LLM that reduces unwanted information
+
+
+----
+
+
+- Check [Pytorch], [Huggingface], [Llama Library]
+
+----
+
+
+### 2.3 Where does finetuning fit in?
+
+- Stage 1: Pretraining to get a base model
+		- pretraining from a model that have zero knowledge
+		- get giant corpus of text data (The Pile dataset)
+		- after self-supervised learning
+		- the model learns language and knowledge 
+		- but not fully useful for a chatbot usage to provide valid information
+		
+		
+- Stage 2: Finetuning of training further
+
+		- update the entire model, not just part of it
+		- Behavior change: model will learn to focus and respond more consistently
+		- Gain Knowledge: Increase knowledge of new specific concepts
+
+---
+
+### 2.4 Task to finetuning
+	- Extraction of texts --->get keywords
+	- or Expansion of information  ----> writing such as emails, code
+- Task clarity is key indicator of success 
+
+---
+
+### 2.5 Steps in First time finetuning
+
+- Pick one task that a large LLM is doing ~OK
+- get ~1000 better than okay inputs and outputs pairs of the task
+- finetune a small LLM on this data
+
+---
+
+
+### 2.6 Instruction-finetuning
+
+- teaches models to behave more like a chatbot
+- Instruction-finetuning datatsets:  customer support conversations, FAQs
+- If we don't have Q&A data, we can turn non-Q&A data to Q&A via LLM generation pipiline such asa 'Alpaca'
+
+
+2.6.1 Two types of instruction prompt templates
+
+- prompt_template_with_input that takes both instruction and inputs, 
+     - inputs are further context for the instruction
+- prompt_template_without_input
+
+---
+
+### 2.7 Data prepration for training:
+
+- Better data means:   high quality， diversity, real, more
+- Step 1: collect instruction-response pairs
+- Step 2: concatenate pairs, [add prompt template]
+- Step 3: tokenize data: which turns text into numbers via encoding depending on the word frequency 
+- Step 4: spilt into train/test
+
+- `AutoTokenizer` Code :
+
+```
+import pandas as pd
+import datasets
+
+from pprint import pprint
+from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("EleutherAI/pythia-70m")
+text = "Hi, how are you?"
+encoded_text = tokenizer(text)["input_ids"]
+// encoded_text : [12764, 13, 849, 403, 368, 32]
+
+decoded_text = tokenizer.decode(encoded_text)
+print("Decoded tokens back into text: ", decoded_text)
+// Decoded tokens back into text:  Hi, how are you?
+
+list_texts = ["Hi, how are you?", "I'm good", "Yes"]
+encoded_texts = tokenizer(list_texts)
+print("Encoded several texts: ", encoded_texts["input_ids"])
+// Encoded several texts:  [[12764, 13, 849, 403, 368, 32], [42, 1353, 1175], [4374]]
+
+```
+
+- Padding(Add 0)/Trucncation(Cut short) the token to get the same length
+
+```
+encoded_texts_both = tokenizer(list_texts, max_length=3, truncation=True, padding=True)
+print("Using both padding and truncation: ", encoded_texts_both["input_ids"])
+
+// Using both padding and truncation:  [[403, 368, 32], [42, 1353, 1175], [4374, 0, 0]]
+
+```
+
+---
+
+ 
+### 2.8 Training dataset
+
+- Same as other neural network
+- Calculate loss and update weights of LLM parameters
+
+- Step 1: Load json dataset 
+- Step 2: Set up model, training config, tokenizer
+- Step 3: Inference of model , the inference is just letting the current model to give result based on 
+
+```
+
+def inference(text, model, tokenizer, max_input_tokens=1000, max_output_tokens=100):
+  # Tokenize
+  input_ids = tokenizer.encode(
+          text,
+          return_tensors="pt",
+          truncation=True,
+          max_length=max_input_tokens
+  )
+
+  # Generate
+  device = model.device
+  generated_tokens_with_prompt = model.generate(
+    input_ids=input_ids.to(device),
+    max_length=max_output_tokens
+  )
+
+  # Decode
+  generated_text_with_prompt = tokenizer.batch_decode(generated_tokens_with_prompt, skip_special_tokens=True)
+
+  # Strip the prompt
+  generated_text_answer = generated_text_with_prompt[0][len(text):]
+
+  return generated_text_answer
+
+```
+
+- Step 4: start training 
+	- After setting the model parameters, steps,flops
+	- we start training with total_steps= 3
+	
+```
+trainer = Trainer(
+    model=base_model,
+    model_flops=model_flops,
+    total_steps=max_steps,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=test_dataset,
+)
+```
+	- after 3 steps, the model is not fully trained 
+	- this slightly-fine tuned model doesn't provide great result
+	- thus we further train the entire dataset twice and get a better result
+
+
+
+- 2.8.1 **we can use `moderation` in training dataset to avoid off-topic questions**
+- such as `Q: can you laugh? A: Let's keep this conversation relevant to coding`
+
+---
+
+### 2.9 Evaluation and iteration
+
+- **How to evaluate generative models?**
+	- [Method 1]: a high-quality, accurate, Not seen in training data test dataset that evaluated by a domain expert
+	- [Method 2]: Benchmarks Evaluation Suite that covers different areas, such as `ARC` for school; `HellaSwag` for common sense; `MMLU` for computer science and more;`TruthfulQA` for falsehoods result 
+	- [Method 3]: Error Analysis : understand base model behaviour and categorize errors, iterate on data to fix the problems. Common errors are : `misspelling`, `too long`, `repetitive`
+
+- I think the benchmark evaluation suite is a good start
+
+
+
+-------------------------------------------
+Main task today:
+1. Finetuning coursera course
+
+v 2. send examination office the diploma form
+	- Ask Fei if I can use his address then c/o
+	- we use DFKI address and Fei Chen due to security reasons
+
+3. prepare the cloud version application materials if we haven't submitted the files by 11th
+
+	- the cover letter is aimed at LLM and visual computing
+	- or bring the keyboard, ipad, mouse, and converter with you just in case
+	
+	
+
+	
+
+
+
+
+
+
+----------------------------------------------
+My thoughts:
+
+1
+
+Ziwei He 
+c/o Fei Chen
+Beethovenstr.47 
+66125, Saarbrücken
+
+
+
+--------------------------------------------
+Take away:
