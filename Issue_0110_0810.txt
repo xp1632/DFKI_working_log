@@ -1,0 +1,100 @@
+Issues 0110_0810
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+Main task today:
+
+(-)1. Summarizing gist of Paper 2: traditional lcp and llm-integrated lcp 
+
+2. Interview questions :
+
+
+- Introduction of myself in both english and german 
+- Hello, I am Ziwei He. I am a master graduate from Saarland University with a major in Media Computer Science. My research interests include visual programming, computer vision, and deep learning.
+
+
+- Guten Morgen Professor Tim Dahmen, guten morgen Dr. Miriam Ho(ao)mmel
+- Nun (nu:n) möchte ich mich kurz vorstellen
+- Ich bin Ziwei He. Ich habe meinen Masterabschluss an der Universität des Saarlandes mit dem Schwerpunkt Medieninformatik gemacht. Meine Forschungsinteressen umfassen visuelle (vizu`aelε) Programmierung (progra`mi:ruŋ), Computer Vision (vi`zio:n) und Deep Learning.
+
+
+   - why do you want to pursue a phd? 
+   
+		- if I answer this question with the most standard and professional attitude, I would say: I want to deepen my expertise and experience in this field, and provide better solutions for scientists who have image-processing needs but are not equipped with a certain level of programming knowledge
+		
+		- if i choose to answer this question from personal side, I would say: I am highly inspired by my friends around me who have finished their PhDs. One of them mentioned the word `Doktorvater` in the acknowledgment of his doctor thesis. He thanked his supervisor and explained the coincidence between `Doktorvater` in German as a doctoral supervisor and the ancient Chinese saying `like teacher, like father`. He also thanked the support from his collegues and us as his friends. Doing a PhD is like fighting a long war, walking a long road, and I feel quite honored for them and my future self. 
+	   
+	   
+   - currently Tim doesn't have Phd supervision right
+       - that's not a problem for me, I am happy that we have a mutual goal, you are aiming at the phd supervision and I am aiming at the phd degree, we are on the same path
+   
+   - what's your plan of this topic?
+   
+		- Recently, I’ve been reading papers in the low-code programming field, especially the intersection of visual programming and programming by natural languages.
+		- I have identified a niche where I can contribute.
+
+		- Although current AI-powered tools such as ChatGPT and Copilot can generate programs from users’ natural language instructions, a barrier still exists for end users, such as scientists from non-computer science backgrounds.
+		
+		-It’s hard for them to understand and customize the generated code without a certain level of programming knowledge. However, when they choose to use existing visual programming platforms, which can provide more intuitive workflows and encapsulated visual modules, they find that their requirements are still not fully fulfilled due to the limitations of the APIs that these platforms have.
+		
+		-How can we provide a better solution for scientists who have domain knowledge and `know` `what` they want but don’t know `how` to accomplish it with solely natural language instructions or visual modules? That’s what I want to research.
+		
+	
+   
+
+()3. start with the generative AI course and build some thoughts
+
+4. paper 8
+
+5. Course 1 : IBM Machine Learning Professional Certificate , we'll continue this course and finish it to an end certificate
+
+
+----------------------------------------------
+My thoughts:
+
+### Arivis Hub in Zeiss
+
+1. I think about mentioning the dl+optics+Zeiss research a little,
+but I find out that I don't understand the photonics things
+
+- I think mentioning the `arivis Hub`, (orginally called Vision Hub)is already enough:
+https://www.zeiss.com/microscopy/en/products/software/arivis-hub.html
+
+
+
+
+
+
+--------------------------------------------
+Take away:
+
+1. How to open copilot in with chats panel:
+
+
+- in private mode of chrome, open:
+https://copilot.microsoft.com/copilot/?showconv=1&setlang=en&sid=0CA159420DBF6ED4319E4C510C726F1D&wlexpsignin=1
+
+or  https://copilot.microsoft.com/copilot/
+
+
+2. Lingoda code : ADFLEX15
+
+
+3. App for learning German:
+
+- Busuu (have business german involved and less animation)
+- DW Learn German
+- Slow German
+
+
+
